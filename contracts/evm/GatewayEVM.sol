@@ -2,7 +2,13 @@
 pragma solidity 0.8.26;
 
 import { INotSupportedMethods } from "../../contracts/Errors.sol";
-import { RevertContext, RevertOptions, Revertable } from "../../contracts/Revert.sol";
+import {
+    MAX_REVERT_GAS_LIMIT,
+    RevertContext,
+    RevertGasLimitExceeded,
+    RevertOptions,
+    Revertable
+} from "../../contracts/Revert.sol";
 import { ZetaConnectorBase } from "./ZetaConnectorBase.sol";
 import { IERC20Custody } from "./interfaces/IERC20Custody.sol";
 import { Callable, IGatewayEVM, MessageContext } from "./interfaces/IGatewayEVM.sol";
@@ -261,7 +267,9 @@ contract GatewayEVM is
     function deposit(address receiver, RevertOptions calldata revertOptions) external payable whenNotPaused {
         if (msg.value == 0) revert InsufficientETHAmount();
         if (receiver == address(0)) revert ZeroAddress();
-        if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) {
+            revert PayloadSizeExceeded(revertOptions.revertMessage.length, MAX_PAYLOAD_SIZE);
+        }
 
         // Check if this is a subsequent action (action index > 0)
         uint256 currentIndex = _getNextActionIndex();
@@ -327,7 +335,9 @@ contract GatewayEVM is
     {
         if (amount == 0) revert InsufficientERC20Amount();
         if (receiver == address(0)) revert ZeroAddress();
-        if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) {
+            revert PayloadSizeExceeded(revertOptions.revertMessage.length, MAX_PAYLOAD_SIZE);
+        }
 
         uint256 feeCharged = _processFee();
         _validateChargedFeeForERC20(feeCharged);
@@ -354,7 +364,9 @@ contract GatewayEVM is
     {
         if (msg.value == 0) revert InsufficientETHAmount();
         if (receiver == address(0)) revert ZeroAddress();
-        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) {
+            revert PayloadSizeExceeded(payload.length + revertOptions.revertMessage.length, MAX_PAYLOAD_SIZE);
+        }
 
         // Check if this is a subsequent action (action index > 0)
         uint256 currentIndex = _getNextActionIndex();
@@ -424,7 +436,9 @@ contract GatewayEVM is
     {
         if (amount == 0) revert InsufficientERC20Amount();
         if (receiver == address(0)) revert ZeroAddress();
-        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) {
+            revert PayloadSizeExceeded(payload.length + revertOptions.revertMessage.length, MAX_PAYLOAD_SIZE);
+        }
 
         uint256 feeCharged = _processFee();
         _validateChargedFeeForERC20(feeCharged);
@@ -449,7 +463,9 @@ contract GatewayEVM is
     {
         if (revertOptions.callOnRevert) revert CallOnRevertNotSupported();
         if (receiver == address(0)) revert ZeroAddress();
-        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) {
+            revert PayloadSizeExceeded(payload.length + revertOptions.revertMessage.length, MAX_PAYLOAD_SIZE);
+        }
 
         uint256 feeCharged = _processFee();
         _validateChargedFeeForERC20(feeCharged);

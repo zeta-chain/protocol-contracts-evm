@@ -140,3 +140,9 @@ event UpdatedGatewayTSSAddress(address oldTSSAddress, address newTSSAddress);
 |`oldTSSAddress`|`address`|old tss address|
 |`newTSSAddress`|`address`|new tss address|
 
+### UpdatedAdditionalActionFee
+
+```solidity
+event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
+```
+

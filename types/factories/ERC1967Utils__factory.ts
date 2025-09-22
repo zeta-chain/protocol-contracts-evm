@@ -13,51 +13,6 @@ import type { ERC1967Utils, ERC1967UtilsInterface } from "../ERC1967Utils";
 
 const _abi = [
   {
-    type: "event",
-    name: "AdminChanged",
-    inputs: [
-      {
-        name: "previousAdmin",
-        type: "address",
-        indexed: false,
-        internalType: "address",
-      },
-      {
-        name: "newAdmin",
-        type: "address",
-        indexed: false,
-        internalType: "address",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "BeaconUpgraded",
-    inputs: [
-      {
-        name: "beacon",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "Upgraded",
-    inputs: [
-      {
-        name: "implementation",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-    ],
-    anonymous: false,
-  },
-  {
     type: "error",
     name: "ERC1967InvalidAdmin",
     inputs: [
@@ -98,7 +53,7 @@ const _abi = [
 ] as const;
 
 const _bytecode =
-  "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220720a4ac31324727457afa0ccb50e7b00af66c14da2e1657fc82288be02f06fa264736f6c634300081a0033";
+  "0x60556032600b8282823980515f1a607314602657634e487b7160e01b5f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea264697066735822122027aeb13eab0b487628dd3f9b05a6b0cb3625c061cd235953f9da355b60d4763164736f6c634300081a0033";
 
 type ERC1967UtilsConstructorParams =
   | [signer?: Signer]

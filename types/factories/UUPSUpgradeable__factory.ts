@@ -108,7 +108,7 @@ const _abi = [
   },
   {
     type: "error",
-    name: "FailedInnerCall",
+    name: "FailedCall",
     inputs: [],
   },
   {

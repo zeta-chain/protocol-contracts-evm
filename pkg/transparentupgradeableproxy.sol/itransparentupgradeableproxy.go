@@ -31,7 +31,7 @@ var (
 
 // ITransparentUpgradeableProxyMetaData contains all meta data concerning the ITransparentUpgradeableProxy contract.
 var ITransparentUpgradeableProxyMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"upgradeToAndCall\",\"inputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[],\"stateMutability\":\"payable\"},{\"type\":\"event\",\"name\":\"AdminChanged\",\"inputs\":[{\"name\":\"previousAdmin\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"newAdmin\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"BeaconUpgraded\",\"inputs\":[{\"name\":\"beacon\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Upgraded\",\"inputs\":[{\"name\":\"implementation\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false}]",
+	ABI: "[{\"type\":\"function\",\"name\":\"upgradeToAndCall\",\"inputs\":[{\"name\":\"newImplementation\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[],\"stateMutability\":\"payable\"},{\"type\":\"event\",\"name\":\"AdminChanged\",\"inputs\":[{\"name\":\"previousAdmin\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"newAdmin\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"BeaconUpgraded\",\"inputs\":[{\"name\":\"beacon\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Upgraded\",\"inputs\":[{\"name\":\"implementation\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"}],\"anonymous\":false}]",
 }
 
 // ITransparentUpgradeableProxyABI is the input ABI used to generate the binding from.
@@ -182,23 +182,23 @@ func (_ITransparentUpgradeableProxy *ITransparentUpgradeableProxyTransactorRaw) 
 
 // UpgradeToAndCall is a paid mutator transaction binding the contract method 0x4f1ef286.
 //
-// Solidity: function upgradeToAndCall(address , bytes ) payable returns()
-func (_ITransparentUpgradeableProxy *ITransparentUpgradeableProxyTransactor) UpgradeToAndCall(opts *bind.TransactOpts, arg0 common.Address, arg1 []byte) (*types.Transaction, error) {
-	return _ITransparentUpgradeableProxy.contract.Transact(opts, "upgradeToAndCall", arg0, arg1)
+// Solidity: function upgradeToAndCall(address newImplementation, bytes data) payable returns()
+func (_ITransparentUpgradeableProxy *ITransparentUpgradeableProxyTransactor) UpgradeToAndCall(opts *bind.TransactOpts, newImplementation common.Address, data []byte) (*types.Transaction, error) {
+	return _ITransparentUpgradeableProxy.contract.Transact(opts, "upgradeToAndCall", newImplementation, data)
 }
 
 // UpgradeToAndCall is a paid mutator transaction binding the contract method 0x4f1ef286.
 //
-// Solidity: function upgradeToAndCall(address , bytes ) payable returns()
-func (_ITransparentUpgradeableProxy *ITransparentUpgradeableProxySession) UpgradeToAndCall(arg0 common.Address, arg1 []byte) (*types.Transaction, error) {
-	return _ITransparentUpgradeableProxy.Contract.UpgradeToAndCall(&_ITransparentUpgradeableProxy.TransactOpts, arg0, arg1)
+// Solidity: function upgradeToAndCall(address newImplementation, bytes data) payable returns()
+func (_ITransparentUpgradeableProxy *ITransparentUpgradeableProxySession) UpgradeToAndCall(newImplementation common.Address, data []byte) (*types.Transaction, error) {
+	return _ITransparentUpgradeableProxy.Contract.UpgradeToAndCall(&_ITransparentUpgradeableProxy.TransactOpts, newImplementation, data)
 }
 
 // UpgradeToAndCall is a paid mutator transaction binding the contract method 0x4f1ef286.
 //
-// Solidity: function upgradeToAndCall(address , bytes ) payable returns()
-func (_ITransparentUpgradeableProxy *ITransparentUpgradeableProxyTransactorSession) UpgradeToAndCall(arg0 common.Address, arg1 []byte) (*types.Transaction, error) {
-	return _ITransparentUpgradeableProxy.Contract.UpgradeToAndCall(&_ITransparentUpgradeableProxy.TransactOpts, arg0, arg1)
+// Solidity: function upgradeToAndCall(address newImplementation, bytes data) payable returns()
+func (_ITransparentUpgradeableProxy *ITransparentUpgradeableProxyTransactorSession) UpgradeToAndCall(newImplementation common.Address, data []byte) (*types.Transaction, error) {
+	return _ITransparentUpgradeableProxy.Contract.UpgradeToAndCall(&_ITransparentUpgradeableProxy.TransactOpts, newImplementation, data)
 }
 
 // ITransparentUpgradeableProxyAdminChangedIterator is returned from FilterAdminChanged and is used to iterate over the raw logs and unpacked data for AdminChanged events raised by the ITransparentUpgradeableProxy contract.

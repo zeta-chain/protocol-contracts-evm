@@ -14,12 +14,12 @@ const _abi = [
     name: "upgradeToAndCall",
     inputs: [
       {
-        name: "",
+        name: "newImplementation",
         type: "address",
         internalType: "address",
       },
       {
-        name: "",
+        name: "data",
         type: "bytes",
         internalType: "bytes",
       },

@@ -216,7 +216,7 @@ contract GatewayEVMUpgradeTest is
         if (amount == 0) revert InsufficientERC20Amount();
         if (to == address(0)) revert ZeroAddress();
         // Approve the target contract to spend the tokens
-        if (!_resetApproval(token, to)) revert ApprovalFailed(token, to);
+        if (!_resetApproval(token, to)) revert ApprovalFailed();
         // Approve token to spender
         IERC20(token).forceApprove(to, amount);
         // Execute the call on the target contract

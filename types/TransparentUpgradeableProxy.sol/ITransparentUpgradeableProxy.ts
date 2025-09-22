@@ -121,7 +121,7 @@ export interface ITransparentUpgradeableProxy extends BaseContract {
   ): Promise<this>;
 
   upgradeToAndCall: TypedContractMethod<
-    [arg0: AddressLike, arg1: BytesLike],
+    [newImplementation: AddressLike, data: BytesLike],
     [void],
     "payable"
   >;
@@ -133,7 +133,7 @@ export interface ITransparentUpgradeableProxy extends BaseContract {
   getFunction(
     nameOrSignature: "upgradeToAndCall"
   ): TypedContractMethod<
-    [arg0: AddressLike, arg1: BytesLike],
+    [newImplementation: AddressLike, data: BytesLike],
     [void],
     "payable"
   >;
