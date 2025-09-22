@@ -109,7 +109,6 @@ contract GatewayEVM is
         _unpause();
     }
 
-
     /// @notice Update the additional action fee.
     /// @dev Only callable by admin role. This allows for fee adjustments based on network conditions.
     /// @dev Setting fee to 0 disables additional action fees entirely.
@@ -291,7 +290,7 @@ contract GatewayEVM is
         payable
         whenNotPaused
     {
-        if (amount== 0) revert InsufficientETHAmount();
+        if (amount == 0) revert InsufficientETHAmount();
         if (receiver == address(0)) revert ZeroAddress();
         if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
 

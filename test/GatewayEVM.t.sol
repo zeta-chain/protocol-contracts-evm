@@ -821,7 +821,7 @@ contract GatewayEVMInboundTest is
 
         vm.expectRevert(abi.encodeWithSelector(IncorrectValueProvided.selector, amount + 1, amount));
         gateway.depositAndCall{ value: amount }(destination, amount + 1, payload, revertOptions);
-    }   
+    }
 
     function testCallWithPayload() public {
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);

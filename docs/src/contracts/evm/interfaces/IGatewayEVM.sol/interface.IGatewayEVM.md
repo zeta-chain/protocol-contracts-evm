@@ -135,11 +135,35 @@ function deposit(address receiver, RevertOptions calldata revertOptions) externa
 
 ### deposit
 
+Deposits ETH to the TSS address with specified amount.
+
+
+```solidity
+function deposit(address receiver, uint256 amount, RevertOptions calldata revertOptions) external payable;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|Address of the receiver.|
+|`amount`|`uint256`|Amount of ETH to deposit.|
+|`revertOptions`|`RevertOptions`|Revert options.|
+
+
+### deposit
+
 Deposits ERC20 tokens to the custody or connector contract.
 
 
 ```solidity
-function deposit(address receiver, uint256 amount, address asset, RevertOptions calldata revertOptions) external;
+function deposit(
+    address receiver,
+    uint256 amount,
+    address asset,
+    RevertOptions calldata revertOptions
+)
+    external
+    payable;
 ```
 **Parameters**
 
@@ -176,6 +200,31 @@ function depositAndCall(
 
 ### depositAndCall
 
+Deposits ETH to the TSS address and calls an omnichain smart contract with specified amount.
+
+
+```solidity
+function depositAndCall(
+    address receiver,
+    uint256 amount,
+    bytes calldata payload,
+    RevertOptions calldata revertOptions
+)
+    external
+    payable;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|Address of the receiver.|
+|`amount`|`uint256`|Amount of ETH to deposit.|
+|`payload`|`bytes`|Calldata to pass to the call.|
+|`revertOptions`|`RevertOptions`|Revert options.|
+
+
+### depositAndCall
+
 Deposits ERC20 tokens to the custody or connector contract and calls an omnichain smart contract.
 
 
@@ -187,7 +236,8 @@ function depositAndCall(
     bytes calldata payload,
     RevertOptions calldata revertOptions
 )
-    external;
+    external
+    payable;
 ```
 **Parameters**
 
@@ -206,7 +256,7 @@ Calls an omnichain smart contract without asset transfer.
 
 
 ```solidity
-function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions) external;
+function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions) external payable;
 ```
 **Parameters**
 

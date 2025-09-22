@@ -101,3 +101,66 @@ Error indicating payload size exceeded in external functions.
 error PayloadSizeExceeded();
 ```
 
+### FeeTransferFailed
+Error thrown when fee transfer to TSS address fails.
+
+*This error occurs when the low-level call to transfer fees fails.*
+
+
+```solidity
+error FeeTransferFailed();
+```
+
+### InsufficientFee
+Error thrown when insufficient fee is provided for additional actions.
+
+
+```solidity
+error InsufficientFee(uint256 required, uint256 provided);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`required`|`uint256`|The fee amount required for the action.|
+|`provided`|`uint256`|The fee amount actually provided by the caller.|
+
+### ExcessETHProvided
+Error thrown when excess ETH is sent for non-ETH operations.
+
+
+```solidity
+error ExcessETHProvided(uint256 required, uint256 provided);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`required`|`uint256`|The fee amount required for the action.|
+|`provided`|`uint256`|The ETH amount actually provided by the caller.|
+
+### AdditionalActionDisabled
+Error thrown when additional action functionality is disabled (fee set to 0).
+
+
+```solidity
+error AdditionalActionDisabled();
+```
+
+### IncorrectValueProvided
+Error thrown when msg.value doesn't match expected amount + fee.
+
+
+```solidity
+error IncorrectValueProvided(uint256 expected, uint256 provided);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`expected`|`uint256`|The expected value (amount + fee).|
+|`provided`|`uint256`|The actual msg.value provided.|
+

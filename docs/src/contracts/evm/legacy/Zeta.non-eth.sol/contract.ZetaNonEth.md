@@ -64,8 +64,6 @@ function mint(address mintee, uint256 value, bytes32 internalSendHash) external 
 
 ### burnFrom
 
-*Only Connector can mint. Minting requires burning the equivalent amount on another chain*
-
 
 ```solidity
 function burnFrom(address account, uint256 amount) public override(ZetaNonEthInterface, ERC20Burnable);

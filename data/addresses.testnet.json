@@ -42,6 +42,20 @@
     "type": "gateway"
   },
   {
+    "address": "0x07fe085d0af54eceb1af1cf73bed92afefdb8364",
+    "category": "omnichain",
+    "chain_id": 1001,
+    "chain_name": "kaia_testnet",
+    "type": "erc20Custody"
+  },
+  {
+    "address": "0x17c57f0b20ff169f779aceb320c8d7297d8cb1de",
+    "category": "omnichain",
+    "chain_id": 1001,
+    "chain_name": "kaia_testnet",
+    "type": "gateway"
+  },
+  {
     "address": "0x239e96c8f17C85c30100AC26F635Ea15f23E9c67",
     "category": "messaging",
     "chain_id": 7001,
@@ -98,9 +112,22 @@
     "chain_name": "zeta_testnet",
     "coin_type": "gas",
     "decimals": 18,
-    "description": "ZetaChain ZRC20 sETH on Ethereum Sepolia",
+    "description": "ZetaChain ZRC20 ETH on Ethereum Sepolia",
     "foreign_chain_id": "11155111",
-    "symbol": "sETH.SEPOLIA",
+    "symbol": "ETH.ETHSEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x0ca762FA958194795320635c11fF0C45C6412958",
+    "asset": "0x6B513B40eBc0B4D7B197730476ed3324346F2822",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 UPKRW on Arbitrum Sepolia",
+    "foreign_chain_id": "421614",
+    "symbol": "UPKRW.ARBSEP",
     "type": "zrc20"
   },
   {
@@ -126,7 +153,20 @@
     "decimals": 18,
     "description": "ZetaChain ZRC20 ETH on Base Sepolia",
     "foreign_chain_id": "84532",
-    "symbol": "ETH.BASESEPOLIA",
+    "symbol": "ETH.BASESEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x2Db395976CDb9eeFCc8920F4F2f0736f1D575794",
+    "asset": "0x2254a33Ee9F600ed6574FAA9Ad8ED1Dc4a44820e",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 KBKRW on Kaia Kairos",
+    "foreign_chain_id": "1001",
+    "symbol": "KBKRW.KAIROS",
     "type": "zrc20"
   },
   {
@@ -137,7 +177,7 @@
     "chain_name": "zeta_testnet",
     "coin_type": "gas",
     "decimals": 9,
-    "description": "ZetaChain ZRC20 SUI Testnet SUI",
+    "description": "ZetaChain ZRC20 SUI on Sui Testnet",
     "foreign_chain_id": "103",
     "symbol": "SUI.SUI",
     "type": "zrc20"
@@ -150,7 +190,7 @@
     "chain_name": "zeta_testnet",
     "coin_type": "erc20",
     "decimals": 6,
-    "description": "ZetaChain ZRC20 USDC-Dev on Arbitrum Sepolia",
+    "description": "ZetaChain ZRC20 USDC on Arbitrum Sepolia",
     "foreign_chain_id": "421614",
     "symbol": "USDC.ARBSEP",
     "type": "zrc20"
@@ -202,7 +242,7 @@
     "chain_name": "zeta_testnet",
     "coin_type": "erc20",
     "decimals": 6,
-    "description": "ZetaChain ZRC20 USDC-Dev on Avalanche Fuji C-Chain",
+    "description": "ZetaChain ZRC20 USDC on Avalanche Fuji C-Chain",
     "foreign_chain_id": "43113",
     "symbol": "USDC.FUJI",
     "type": "zrc20"
@@ -217,7 +257,7 @@
     "decimals": 9,
     "description": "ZetaChain ZRC20 SOL on Solana Devnet",
     "foreign_chain_id": "901",
-    "symbol": "SOL.SOLANA",
+    "symbol": "SOL.SOL",
     "type": "zrc20"
   },
   {
@@ -230,7 +270,7 @@
     "decimals": 6,
     "description": "ZetaChain ZRC20 USDC on Ethereum Sepolia",
     "foreign_chain_id": "11155111",
-    "symbol": "USDC.SEPOLIA",
+    "symbol": "USDC.ETHSEP",
     "type": "zrc20"
   },
   {
@@ -243,7 +283,7 @@
     "decimals": 6,
     "description": "ZetaChain ZRC20 USDC on Base Sepolia",
     "foreign_chain_id": "84532",
-    "symbol": "USDC.BASESEPOLIA",
+    "symbol": "USDC.BASESEP",
     "type": "zrc20"
   },
   {
@@ -254,7 +294,7 @@
     "chain_name": "zeta_testnet",
     "coin_type": "erc20",
     "decimals": 6,
-    "description": "ZetaChain ZRC20 USDC-Dev on Solana devnet",
+    "description": "ZetaChain ZRC20 USDC on Solana Devnet",
     "foreign_chain_id": "901",
     "symbol": "USDC.SOL",
     "type": "zrc20"
@@ -286,6 +326,19 @@
     "type": "zrc20"
   },
   {
+    "address": "0xe1A4f44b12eb72DC6da556Be9Ed1185141d7C23c",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 18,
+    "description": "ZetaChain ZRC20 Kaia Kairos Testnet KAIA",
+    "foreign_chain_id": "1001",
+    "symbol": "KAIA.KAIROS",
+    "type": "zrc20"
+  },
+  {
     "address": "0xe573a6e11f8506620F123DBF930222163D46BCB6",
     "asset": "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
     "category": "omnichain",
@@ -309,6 +362,32 @@
     "description": "ZetaChain ZRC20 USDC on Sui Testnet",
     "foreign_chain_id": "103",
     "symbol": "USDC.SUI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xE8d7796535F1cd63F0fe8D631E68eACe6839869B",
+    "asset": "0x6B513B40eBc0B4D7B197730476ed3324346F2822",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 HanaKRW on Avalanche Fuji C-Chain",
+    "foreign_chain_id": "43113",
+    "symbol": "HanaKRW.FUJI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xEb646191FcCb5Bfc1e7A121D3847590aAc840a53",
+    "asset": "0x90fDDe887468D282090D12208d6e171e1632008c",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 TSKRW on Kaia Kairos",
+    "foreign_chain_id": "1001",
+    "symbol": "TSKRW.KAIROS",
     "type": "zrc20"
   },
   {
