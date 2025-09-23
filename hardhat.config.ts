@@ -9,7 +9,16 @@ const config: HardhatUserConfig = {
   networks: {
     ...getHardhatConfigNetworks(),
   },
-  solidity: "0.8.26",
+  solidity: {
+    version: "0.8.26",
+    settings: {
+      evmVersion: "cancun",
+      optimizer: {
+        enabled: true,
+        runs: 10000
+      }
+    }
+  }
 };
 
 task("upgradeProposal", "Create Safe upgrade proposals for GatewayEVM")
