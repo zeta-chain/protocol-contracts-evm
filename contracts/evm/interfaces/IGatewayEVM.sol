@@ -70,6 +70,10 @@ interface IGatewayEVMEvents {
     /// @param oldTSSAddress old tss address
     /// @param newTSSAddress new tss address
     event UpdatedGatewayTSSAddress(address oldTSSAddress, address newTSSAddress);
+
+    /// @notice Emitted when additional action fee for multi-deposits is updated
+    /// @param oldFeeWei old fee in wei
+    /// @param newFeeWei new fee in wei
     event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 }
 
