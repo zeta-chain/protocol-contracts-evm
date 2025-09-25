@@ -270,6 +270,22 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
         RevertContext calldata revertContext
     )
         external;
+
+    /// @notice Returns the maximum message size.
+    /// @return The maximum message size.
+    function getMaxMessageSize() external pure returns (uint256);
+
+    /// @notice Returns the minimum gas limit allowed.
+    /// @return The minimum gas limit.
+    function getMinGasLimit() external pure returns (uint256);
+
+    /// @notice Returns the maximum gas limit allowed.
+    /// @return The maximum gas limit.
+    function getMaxGasLimit() external pure returns (uint256);
+
+    /// @notice Returns the maximum revert gas limit allowed.
+    /// @return The maximum revert gas limit.
+    function getMaxRevertGasLimit() external pure returns (uint256);
 }
 
 /// @notice CallOptions struct passed to call and withdrawAndCall functions.

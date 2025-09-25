@@ -649,6 +649,12 @@ contract GatewayZEVMUpgradeTest is
         return GatewayZEVMValidations.MIN_GAS_LIMIT;
     }
 
+    /// @notice Returns the maximum gas limit allowed.
+    /// @return The maximum gas limit.
+    function getMaxGasLimit() external pure returns (uint256) {
+        return GatewayZEVMValidations.MAX_GAS_LIMIT;
+    }
+
     /// @notice Returns the maximum revert gas limit allowed.
     /// @return The maximum revert gas limit.
     function getMaxRevertGasLimit() external pure returns (uint256) {
