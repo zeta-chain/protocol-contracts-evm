@@ -295,9 +295,9 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testWithdrawZRC20WithCustomGasLimitFailsIfGasLimitTooHigh() public {
         uint256 amount = 1;
-        uint256 highGasLimit = gateway.getMaxGasLimit() + 1;
+        uint256 gasLimitTooHigh = gateway.getMaxGasLimit() + 1;
         vm.expectRevert(InvalidGasLimit.selector);
-        gateway.withdraw(abi.encodePacked(addr1), amount, address(zrc20), highGasLimit, revertOptions);
+        gateway.withdraw(abi.encodePacked(addr1), amount, address(zrc20), gasLimitTooHigh, revertOptions);
     }
 
     function testWithdrawAndCallZRC20FailsIfReceiverIsZeroAddress() public {
@@ -386,14 +386,14 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testWithdrawAndCallZRC20FailsIfGasLimitTooHigh() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
-        uint256 highGasLimit = gateway.getMaxGasLimit() + 1;
+        uint256 gasLimitTooHigh = gateway.getMaxGasLimit() + 1;
         vm.expectRevert(InvalidGasLimit.selector);
         gateway.withdrawAndCall(
             abi.encodePacked(addr1),
             1,
             address(zrc20),
             message,
-            CallOptions({ gasLimit: highGasLimit, isArbitraryCall: false }),
+            CallOptions({ gasLimit: gasLimitTooHigh, isArbitraryCall: false }),
             revertOptions
         );
     }
@@ -923,14 +923,14 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         uint256 amount = 1;
         uint256 chainId = 1;
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
-        uint256 highGasLimit = gateway.getMaxGasLimit() + 1;
+        uint256 gasLimitTooHigh = gateway.getMaxGasLimit() + 1;
 
         vm.expectRevert(InvalidGasLimit.selector);
         gateway.withdrawAndCall{ value: amount }(
             abi.encodePacked(addr1),
             chainId,
             message,
-            CallOptions({ gasLimit: highGasLimit, isArbitraryCall: true }),
+            CallOptions({ gasLimit: gasLimitTooHigh, isArbitraryCall: true }),
             revertOptions
         );
     }
@@ -994,14 +994,14 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testCallWithCallOptsFailsIfGasLimitTooHigh() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
-        uint256 highGasLimit = gateway.getMaxGasLimit() + 1;
+        uint256 gasLimitTooHigh = gateway.getMaxGasLimit() + 1;
 
         vm.expectRevert(InvalidGasLimit.selector);
         gateway.call(
             abi.encodePacked(addr1),
             address(zrc20),
             message,
-            CallOptions({ gasLimit: highGasLimit, isArbitraryCall: true }),
+            CallOptions({ gasLimit: gasLimitTooHigh, isArbitraryCall: true }),
             revertOptions
         );
     }
