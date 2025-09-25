@@ -75,6 +75,9 @@ interface IGatewayZEVMEvents {
 /// @title IGatewayZEVMErrors
 /// @notice Interface for the errors used in the GatewayZEVM contract.
 interface IGatewayZEVMErrors {
+    /// @notice Error indicating a empty address was provided.
+    error EmptyAddress();
+
     /// @notice Error indicating a withdrawal failure.
     /// @param token The address of the token that failed to withdraw.
     /// @param recipient The address that was supposed to receive the tokens.
@@ -122,8 +125,8 @@ interface IGatewayZEVMErrors {
     /// @notice Error indicating that only WZETA or the protocol address can call the function.
     error OnlyWZETAOrProtocol();
 
-    /// @notice Error indicating an insufficient gas limit.
-    error InsufficientGasLimit();
+    /// @notice Error indicating an invalid gas limit.
+    error InvalidGasLimit();
 
     /// @notice Error indicating message size exceeded in external functions.
     /// @param provided The size of the message that was provided.

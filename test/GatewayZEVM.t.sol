@@ -32,7 +32,6 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
     RevertOptions revertOptions;
     CallOptions callOptions;
 
-    error EmptyAddress();
     error LowBalance();
     error ZETANotSupported();
 
@@ -244,7 +243,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
     function testWithdrawZRC20WithCustomGasLimitFailsIfGasLimitTooLow() public {
         uint256 amount = 1;
         uint256 lowGasLimit = MIN_GAS_LIMIT - 1;
-        vm.expectRevert(InsufficientGasLimit.selector);
+        vm.expectRevert(InvalidGasLimit.selector);
         gateway.withdraw(abi.encodePacked(addr1), amount, address(zrc20), lowGasLimit, revertOptions);
     }
 
@@ -321,7 +320,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testWithdrawAndCallZRC20FailsIfGasLimitIsZero() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
-        vm.expectRevert(InsufficientGasLimit.selector);
+        vm.expectRevert(InvalidGasLimit.selector);
         gateway.withdrawAndCall(
             abi.encodePacked(addr1),
             1,
@@ -354,7 +353,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testWithdrawAndCallZRC20FailsIfGasLimitIsBelowMin() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
-        vm.expectRevert(InsufficientGasLimit.selector);
+        vm.expectRevert(InvalidGasLimit.selector);
         gateway.withdrawAndCall(
             abi.encodePacked(addr1),
             1,
@@ -456,7 +455,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
     function testWithdrawAndCallZRC20WithCallOptsFailsIfGasLimitIsZero() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
         callOptions.gasLimit = 0;
-        vm.expectRevert(InsufficientGasLimit.selector);
+        vm.expectRevert(InvalidGasLimit.selector);
         gateway.withdrawAndCall(abi.encodePacked(addr1), 1, address(zrc20), message, callOptions, revertOptions);
     }
 
@@ -895,7 +894,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
         callOptions.gasLimit = 0;
 
-        vm.expectRevert(InsufficientGasLimit.selector);
+        vm.expectRevert(InvalidGasLimit.selector);
         gateway.withdrawAndCall{ value: amount }(abi.encodePacked(addr1), chainId, message, callOptions, revertOptions);
     }
 
@@ -945,14 +944,14 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
     function testCallWithCallOptsFailsIfGasLimitIsZero() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
         callOptions.gasLimit = 0;
-        vm.expectRevert(InsufficientGasLimit.selector);
+        vm.expectRevert(InvalidGasLimit.selector);
         gateway.call(abi.encodePacked(addr1), address(zrc20), message, callOptions, revertOptions);
     }
 
     function testCallWithCallOptsFailsIfGasLimitIsBelowMin() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
         callOptions.gasLimit = MIN_GAS_LIMIT - 1;
-        vm.expectRevert(InsufficientGasLimit.selector);
+        vm.expectRevert(InvalidGasLimit.selector);
         gateway.call(abi.encodePacked(addr1), address(zrc20), message, callOptions, revertOptions);
     }
 
@@ -1011,7 +1010,6 @@ contract GatewayZEVMOutboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors
     event ContextDataRevert(RevertContext revertContext);
     event ContextDataAbort(AbortContext abortContext);
 
-    error EmptyAddress();
     error EnforcedPause();
     error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);
 
