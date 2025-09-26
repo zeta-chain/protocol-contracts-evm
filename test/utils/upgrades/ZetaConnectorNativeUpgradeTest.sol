@@ -15,12 +15,7 @@ contract ZetaConnectorNativeUpgradeTest is ZetaConnectorBase {
     /// @dev Modified event for testing upgrade.
     event WithdrawnV2(address indexed to, uint256 amount);
 
-    function initialize(
-        address gateway_,
-        address zetaToken_,
-        address tssAddress_,
-        address admin_
-    )
+    function initialize(address gateway_, address zetaToken_, address tssAddress_, address admin_)
         public
         override
         initializer
@@ -43,12 +38,7 @@ contract ZetaConnectorNativeUpgradeTest is ZetaConnectorBase {
     /// @param amount The amount of tokens to withdraw.
     /// @param data The calldata to pass to the contract call.
     /// @dev This function can only be called by the TSS address.
-    function withdrawAndCall(
-        MessageContext calldata messageContext,
-        address to,
-        uint256 amount,
-        bytes calldata data
-    )
+    function withdrawAndCall(MessageContext calldata messageContext, address to, uint256 amount, bytes calldata data)
         external
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
@@ -69,12 +59,7 @@ contract ZetaConnectorNativeUpgradeTest is ZetaConnectorBase {
     /// @param data The calldata to pass to the contract call.
     /// @dev This function can only be called by the TSS address.
     /// @param revertContext Revert context to pass to onRevert.
-    function withdrawAndRevert(
-        address to,
-        uint256 amount,
-        bytes calldata data,
-        RevertContext calldata revertContext
-    )
+    function withdrawAndRevert(address to, uint256 amount, bytes calldata data, RevertContext calldata revertContext)
         external
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)

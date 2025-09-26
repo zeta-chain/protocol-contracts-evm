@@ -57,11 +57,9 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
         zetaToken = new WETH9();
 
-        proxy = payable(
-            Upgrades.deployUUPSProxy(
+        proxy = payable(Upgrades.deployUUPSProxy(
                 "GatewayZEVM.sol", abi.encodeCall(GatewayZEVM.initialize, (address(zetaToken), owner))
-            )
-        );
+            ));
         gateway = GatewayZEVM(proxy);
 
         address expectedRegistryAddress = 0x7CCE3Eb018bf23e1FE2a32692f2C77592D110394;
@@ -598,9 +596,9 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
                 RevertGasLimitExceeded.selector, revertOptionsExcessiveGas.onRevertGasLimit, MAX_REVERT_GAS_LIMIT
             )
         );
-        gateway.withdrawAndCall{ value: amount }(
-            abi.encodePacked(addr1), chainId, message, callOptions, revertOptionsExcessiveGas
-        );
+        gateway.withdrawAndCall{
+            value: amount
+        }(abi.encodePacked(addr1), chainId, message, callOptions, revertOptionsExcessiveGas);
     }
 
     function testWithdrawZETA() public {
@@ -621,7 +619,8 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         key = "protocolFlatFee";
         bytes memory protocolFlatFeeValue = abi.encode(3);
 
-        uint256 gasFee = abi.decode(gasLimitValue, (uint256)) * systemContract.gasPriceByChainId(chainId)
+        uint256 gasFee =
+            abi.decode(gasLimitValue, (uint256)) * systemContract.gasPriceByChainId(chainId)
             + abi.decode(protocolFlatFeeValue, (uint256));
 
         // Update metadata
@@ -830,7 +829,8 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         key = "protocolFlatFee";
         bytes memory protocolFlatFeeValue = abi.encode(3);
 
-        uint256 gasFee = callOptions.gasLimit * systemContract.gasPriceByChainId(chainId)
+        uint256 gasFee =
+            callOptions.gasLimit * systemContract.gasPriceByChainId(chainId)
             + abi.decode(protocolFlatFeeValue, (uint256));
 
         // Update metadata
@@ -1025,11 +1025,9 @@ contract GatewayZEVMOutboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors
 
         zetaToken = new WETH9();
 
-        proxy = payable(
-            Upgrades.deployUUPSProxy(
+        proxy = payable(Upgrades.deployUUPSProxy(
                 "GatewayZEVM.sol", abi.encodeCall(GatewayZEVM.initialize, (address(zetaToken), owner))
-            )
-        );
+            ));
         gateway = GatewayZEVM(proxy);
 
         address expectedRegistryAddress = 0x7CCE3Eb018bf23e1FE2a32692f2C77592D110394;

@@ -185,9 +185,9 @@ interface IBaseRegistryErrors {
 /// @title ICoreRegistry
 /// @notice Interface for the BaseRegistry contract.
 interface IBaseRegistry is IBaseRegistryErrors, IBaseRegistryEvents {
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
     // Chain Management Functions
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
 
     /// @notice Changes status of the chain to activated/deactivated.
     /// @param chainId The ID of the chain to activate.
@@ -201,9 +201,9 @@ interface IBaseRegistry is IBaseRegistryErrors, IBaseRegistryEvents {
     /// @param value The new value for the metadata.
     function updateChainMetadata(uint256 chainId, string calldata key, bytes calldata value) external;
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
     // Contract Registration and Management Functions
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
 
     /// @notice Registers a new contract address for a specific chain.
     /// @param chainId The ID of the chain where the contract is deployed.
@@ -226,9 +226,9 @@ interface IBaseRegistry is IBaseRegistryErrors, IBaseRegistryEvents {
 
     function setContractActive(uint256 chainId, string calldata contractType, bool active) external;
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
     // ZRC20 Token Management Functions
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
 
     /// @notice Registers a new ZRC20 token in the registry.
     /// @param address_ The address of the ZRC20 token on ZetaChain.
@@ -250,9 +250,9 @@ interface IBaseRegistry is IBaseRegistryErrors, IBaseRegistryEvents {
     /// @param active Whether the token should be active.
     function setZRC20TokenActive(address address_, bool active) external;
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
     // Registry Query Functions
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
 
     /// @notice Gets information about a specific chain.
     /// @param chainId The ID of the chain.
@@ -271,10 +271,7 @@ interface IBaseRegistry is IBaseRegistryErrors, IBaseRegistryEvents {
     /// @param contractType The type of the contract.
     /// @return active Whether the contract is active.
     /// @return addressBytes The address of the contract.
-    function getContractInfo(
-        uint256 chainId,
-        string calldata contractType
-    )
+    function getContractInfo(uint256 chainId, string calldata contractType)
         external
         view
         returns (bool active, bytes memory addressBytes);
@@ -284,11 +281,7 @@ interface IBaseRegistry is IBaseRegistryErrors, IBaseRegistryEvents {
     /// @param contractType The type of the contract.
     /// @param key The configuration key to retrieve.
     /// @return The value of the requested configuration.
-    function getContractConfiguration(
-        uint256 chainId,
-        string calldata contractType,
-        string calldata key
-    )
+    function getContractConfiguration(uint256 chainId, string calldata contractType, string calldata key)
         external
         view
         returns (bytes memory);
@@ -317,10 +310,7 @@ interface IBaseRegistry is IBaseRegistryErrors, IBaseRegistryEvents {
     /// @param originChainId The ID of the foreign chain.
     /// @param originAddress The address or identifier of the asset on its native chain.
     /// @return The address of the corresponding ZRC20 token on ZetaChain.
-    function getZRC20AddressByForeignAsset(
-        uint256 originChainId,
-        bytes calldata originAddress
-    )
+    function getZRC20AddressByForeignAsset(uint256 originChainId, bytes calldata originAddress)
         external
         view
         returns (address);

@@ -216,8 +216,8 @@ contract GatewayZEVMUpgradeTest is
     /// @return protocolFlatFee The protocol flat fee.
     function _getProtocolFlatFeeFromRegistry(uint256 chainId) private view returns (uint256 protocolFlatFee) {
         // fetch protocolFlatFee for the external chain
-        try ICoreRegistry(registry).getChainMetadata(chainId, "protocolFlatFee") returns (bytes memory _protocolFlatFee)
-        {
+        try ICoreRegistry(registry)
+            .getChainMetadata(chainId, "protocolFlatFee") returns (bytes memory _protocolFlatFee) {
             if (_protocolFlatFee.length > 0) {
                 protocolFlatFee = abi.decode(_protocolFlatFee, (uint256));
             } else {
@@ -234,10 +234,7 @@ contract GatewayZEVMUpgradeTest is
     /// @return gasFee The gas fee for the withdrawal.
     /// @return protocolFlatFee The protocol flat fee.
     /// @return gasLimit_ The gas limit used for the withdrawal.
-    function _computeAndPayFeesForZETAWithdrawals(
-        uint256 chainId,
-        uint256 gasLimit
-    )
+    function _computeAndPayFeesForZETAWithdrawals(uint256 chainId, uint256 gasLimit)
         private
         returns (uint256 gasFee, uint256 protocolFlatFee, uint256 gasLimit_)
     {
@@ -274,12 +271,7 @@ contract GatewayZEVMUpgradeTest is
     /// @param amount The amount of tokens to withdraw.
     /// @param zrc20 The address of the ZRC20 token.
     /// @param revertOptions Revert options.
-    function withdraw(
-        bytes memory receiver,
-        uint256 amount,
-        address zrc20,
-        RevertOptions calldata revertOptions
-    )
+    function withdraw(bytes memory receiver, uint256 amount, address zrc20, RevertOptions calldata revertOptions)
         external
         whenNotPaused
     {
@@ -375,11 +367,7 @@ contract GatewayZEVMUpgradeTest is
     //// @param receiver The receiver address on the external chain.
     //// @param chainId Chain id of the external chain.
     //// @param revertOptions Revert options.
-    function withdraw(
-        bytes memory receiver,
-        uint256 chainId,
-        RevertOptions calldata revertOptions
-    )
+    function withdraw(bytes memory receiver, uint256 chainId, RevertOptions calldata revertOptions)
         external
         payable
         whenNotPaused
@@ -545,11 +533,7 @@ contract GatewayZEVMUpgradeTest is
     /// @param context The context of the cross-chain call.
     /// @param target The target contract to call.
     /// @param message The calldata to pass to the contract call.
-    function depositAndCall(
-        MessageContext calldata context,
-        address target,
-        bytes calldata message
-    )
+    function depositAndCall(MessageContext calldata context, address target, bytes calldata message)
         external
         payable
         nonReentrant
@@ -564,10 +548,7 @@ contract GatewayZEVMUpgradeTest is
     /// @notice Revert a user-specified contract on ZEVM.
     /// @param target The target contract to call.
     /// @param revertContext Revert context to pass to onRevert.
-    function executeRevert(
-        address target,
-        RevertContext calldata revertContext
-    )
+    function executeRevert(address target, RevertContext calldata revertContext)
         external
         nonReentrant
         onlyProtocol
@@ -582,12 +563,7 @@ contract GatewayZEVMUpgradeTest is
     /// @param amount The amount of tokens to revert.
     /// @param target The target contract to call.
     /// @param revertContext Revert context to pass to onRevert.
-    function depositAndRevert(
-        address zrc20,
-        uint256 amount,
-        address target,
-        RevertContext calldata revertContext
-    )
+    function depositAndRevert(address zrc20, uint256 amount, address target, RevertContext calldata revertContext)
         external
         nonReentrant
         onlyProtocol
@@ -604,10 +580,7 @@ contract GatewayZEVMUpgradeTest is
     /// @notice Deposit native ZETA and revert a user-specified contract on ZEVM.
     /// @param target The target contract to call.
     /// @param revertContext Revert context to pass to onRevert.
-    function depositAndRevert(
-        address target,
-        RevertContext calldata revertContext
-    )
+    function depositAndRevert(address target, RevertContext calldata revertContext)
         external
         payable
         nonReentrant
@@ -624,10 +597,7 @@ contract GatewayZEVMUpgradeTest is
     /// the assets are deposited to the target contract even if onAbort reverts.
     /// @param target The target contract to call.
     /// @param abortContext Abort context to pass to onAbort.
-    function executeAbort(
-        address target,
-        AbortContext calldata abortContext
-    )
+    function executeAbort(address target, AbortContext calldata abortContext)
         external
         nonReentrant
         onlyProtocol

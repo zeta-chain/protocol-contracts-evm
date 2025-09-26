@@ -137,11 +137,7 @@ contract GatewayEVMUpgradeTest is
     /// @dev This function can only be called by the TSS address and it is payable.
     /// @param destination Address to call.
     /// @param data Calldata to pass to the call.
-    function executeRevert(
-        address destination,
-        bytes calldata data,
-        RevertContext calldata revertContext
-    )
+    function executeRevert(address destination, bytes calldata data, RevertContext calldata revertContext)
         public
         payable
         nonReentrant
@@ -162,11 +158,7 @@ contract GatewayEVMUpgradeTest is
     /// @param destination Address to call.
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
-    function execute(
-        MessageContext calldata messageContext,
-        address destination,
-        bytes calldata data
-    )
+    function execute(MessageContext calldata messageContext, address destination, bytes calldata data)
         external
         payable
         nonReentrant
@@ -292,11 +284,7 @@ contract GatewayEVMUpgradeTest is
     /// @param amount Amount of ETH to deposit (excluding fees).
     /// @param revertOptions Revert options.
     /// @dev msg.value must equal amount + required fee for the action.
-    function deposit(
-        address receiver,
-        uint256 amount,
-        RevertOptions calldata revertOptions
-    )
+    function deposit(address receiver, uint256 amount, RevertOptions calldata revertOptions)
         external
         payable
         whenNotPaused
@@ -318,12 +306,7 @@ contract GatewayEVMUpgradeTest is
     /// @param amount Amount of tokens to deposit.
     /// @param asset Address of the ERC20 token.
     /// @param revertOptions Revert options.
-    function deposit(
-        address receiver,
-        uint256 amount,
-        address asset,
-        RevertOptions calldata revertOptions
-    )
+    function deposit(address receiver, uint256 amount, address asset, RevertOptions calldata revertOptions)
         external
         payable
         whenNotPaused
@@ -344,11 +327,7 @@ contract GatewayEVMUpgradeTest is
     /// @param revertOptions Revert options.
     /// @dev This function only works for the first action in a transaction (backward compatibility).
     /// @dev For subsequent actions, use the overloaded version with amount parameter.
-    function depositAndCall(
-        address receiver,
-        bytes calldata payload,
-        RevertOptions calldata revertOptions
-    )
+    function depositAndCall(address receiver, bytes calldata payload, RevertOptions calldata revertOptions)
         external
         payable
         whenNotPaused
@@ -428,11 +407,7 @@ contract GatewayEVMUpgradeTest is
     /// @param receiver Address of the receiver.
     /// @param payload Calldata to pass to the call.
     /// @param revertOptions Revert options.
-    function call(
-        address receiver,
-        bytes calldata payload,
-        RevertOptions calldata revertOptions
-    )
+    function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions)
         external
         payable
         whenNotPaused
@@ -545,11 +520,7 @@ contract GatewayEVMUpgradeTest is
     /// @param destination Address to call.
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
-    function _executeAuthenticatedCall(
-        MessageContext calldata messageContext,
-        address destination,
-        bytes calldata data
-    )
+    function _executeAuthenticatedCall(MessageContext calldata messageContext, address destination, bytes calldata data)
         private
         returns (bytes memory)
     {

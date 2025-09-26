@@ -94,11 +94,7 @@ library GatewayZEVMValidations {
     /// @param receiver The receiver address
     /// @param amount The amount to withdraw
     /// @param revertOptions The revert options
-    function validateWithdrawalParams(
-        bytes memory receiver,
-        uint256 amount,
-        RevertOptions calldata revertOptions
-    )
+    function validateWithdrawalParams(bytes memory receiver, uint256 amount, RevertOptions calldata revertOptions)
         internal
         pure
     {
@@ -163,12 +159,7 @@ library GatewayZEVMValidations {
     /// @param target The target address
     /// @param protocolAddress The protocol address
     /// @param contractAddress The contract address
-    function validateZetaDepositParams(
-        uint256 amount,
-        address target,
-        address protocolAddress,
-        address contractAddress
-    )
+    function validateZetaDepositParams(uint256 amount, address target, address protocolAddress, address contractAddress)
         internal
         pure
     {

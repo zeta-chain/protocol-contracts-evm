@@ -143,12 +143,7 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
     /// @param amount The amount of tokens to withdraw.
     /// @param zrc20 The address of the ZRC20 token.
     /// @param revertOptions Revert options.
-    function withdraw(
-        bytes memory receiver,
-        uint256 amount,
-        address zrc20,
-        RevertOptions calldata revertOptions
-    )
+    function withdraw(bytes memory receiver, uint256 amount, address zrc20, RevertOptions calldata revertOptions)
         external;
 
     /// @notice Withdraw ZETA tokens to an external chain.
@@ -260,12 +255,7 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
     /// @param amount The amount of tokens to revert.
     /// @param target The target contract to call.
     /// @param revertContext Revert context to pass to onRevert.
-    function depositAndRevert(
-        address zrc20,
-        uint256 amount,
-        address target,
-        RevertContext calldata revertContext
-    )
+    function depositAndRevert(address zrc20, uint256 amount, address target, RevertContext calldata revertContext)
         external;
 }
 

@@ -160,11 +160,7 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param destination Address to call.
     /// @param data Calldata to pass to the call.
     /// @param revertContext Revert context to pass to onRevert.
-    function executeRevert(
-        address destination,
-        bytes calldata data,
-        RevertContext calldata revertContext
-    )
+    function executeRevert(address destination, bytes calldata data, RevertContext calldata revertContext)
         external
         payable;
 
@@ -174,11 +170,7 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param destination Address to call.
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
-    function execute(
-        MessageContext calldata messageContext,
-        address destination,
-        bytes calldata data
-    )
+    function execute(MessageContext calldata messageContext, address destination, bytes calldata data)
         external
         payable
         returns (bytes memory);
@@ -214,12 +206,7 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param amount Amount of tokens to deposit.
     /// @param asset Address of the ERC20 token.
     /// @param revertOptions Revert options.
-    function deposit(
-        address receiver,
-        uint256 amount,
-        address asset,
-        RevertOptions calldata revertOptions
-    )
+    function deposit(address receiver, uint256 amount, address asset, RevertOptions calldata revertOptions)
         external
         payable;
 
@@ -227,11 +214,7 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param receiver Address of the receiver.
     /// @param payload Calldata to pass to the call.
     /// @param revertOptions Revert options.
-    function depositAndCall(
-        address receiver,
-        bytes calldata payload,
-        RevertOptions calldata revertOptions
-    )
+    function depositAndCall(address receiver, bytes calldata payload, RevertOptions calldata revertOptions)
         external
         payable;
 

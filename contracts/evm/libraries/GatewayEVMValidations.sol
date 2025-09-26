@@ -61,11 +61,7 @@ library GatewayEVMValidations {
     /// @param receiver The receiver address.
     /// @param amount The amount to deposit.
     /// @param revertOptions The revert options.
-    function validateDepositParams(
-        address receiver,
-        uint256 amount,
-        RevertOptions calldata revertOptions
-    )
+    function validateDepositParams(address receiver, uint256 amount, RevertOptions calldata revertOptions)
         internal
         pure
     {
@@ -99,11 +95,7 @@ library GatewayEVMValidations {
     /// @param receiver The receiver address.
     /// @param payload The payload to send.
     /// @param revertOptions The revert options.
-    function validateCallParams(
-        address receiver,
-        bytes calldata payload,
-        RevertOptions calldata revertOptions
-    )
+    function validateCallParams(address receiver, bytes calldata payload, RevertOptions calldata revertOptions)
         internal
         pure
     {
