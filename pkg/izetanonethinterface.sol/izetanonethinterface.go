@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package zetanonethinterface
+package izetanonethinterface
 
 import (
 	"errors"
@@ -29,113 +29,113 @@ var (
 	_ = abi.ConvertType
 )
 
-// ZetaNonEthInterfaceMetaData contains all meta data concerning the ZetaNonEthInterface contract.
-var ZetaNonEthInterfaceMetaData = &bind.MetaData{
+// IZetaNonEthInterfaceMetaData contains all meta data concerning the IZetaNonEthInterface contract.
+var IZetaNonEthInterfaceMetaData = &bind.MetaData{
 	ABI: "[{\"type\":\"function\",\"name\":\"allowance\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"spender\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"approve\",\"inputs\":[{\"name\":\"spender\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"balanceOf\",\"inputs\":[{\"name\":\"account\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"burnFrom\",\"inputs\":[{\"name\":\"account\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"mint\",\"inputs\":[{\"name\":\"mintee\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"internalSendHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"totalSupply\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"name\":\"to\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferFrom\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Approval\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"spender\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Transfer\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false}]",
 }
 
-// ZetaNonEthInterfaceABI is the input ABI used to generate the binding from.
-// Deprecated: Use ZetaNonEthInterfaceMetaData.ABI instead.
-var ZetaNonEthInterfaceABI = ZetaNonEthInterfaceMetaData.ABI
+// IZetaNonEthInterfaceABI is the input ABI used to generate the binding from.
+// Deprecated: Use IZetaNonEthInterfaceMetaData.ABI instead.
+var IZetaNonEthInterfaceABI = IZetaNonEthInterfaceMetaData.ABI
 
-// ZetaNonEthInterface is an auto generated Go binding around an Ethereum contract.
-type ZetaNonEthInterface struct {
-	ZetaNonEthInterfaceCaller     // Read-only binding to the contract
-	ZetaNonEthInterfaceTransactor // Write-only binding to the contract
-	ZetaNonEthInterfaceFilterer   // Log filterer for contract events
+// IZetaNonEthInterface is an auto generated Go binding around an Ethereum contract.
+type IZetaNonEthInterface struct {
+	IZetaNonEthInterfaceCaller     // Read-only binding to the contract
+	IZetaNonEthInterfaceTransactor // Write-only binding to the contract
+	IZetaNonEthInterfaceFilterer   // Log filterer for contract events
 }
 
-// ZetaNonEthInterfaceCaller is an auto generated read-only Go binding around an Ethereum contract.
-type ZetaNonEthInterfaceCaller struct {
+// IZetaNonEthInterfaceCaller is an auto generated read-only Go binding around an Ethereum contract.
+type IZetaNonEthInterfaceCaller struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// ZetaNonEthInterfaceTransactor is an auto generated write-only Go binding around an Ethereum contract.
-type ZetaNonEthInterfaceTransactor struct {
+// IZetaNonEthInterfaceTransactor is an auto generated write-only Go binding around an Ethereum contract.
+type IZetaNonEthInterfaceTransactor struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// ZetaNonEthInterfaceFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
-type ZetaNonEthInterfaceFilterer struct {
+// IZetaNonEthInterfaceFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
+type IZetaNonEthInterfaceFilterer struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// ZetaNonEthInterfaceSession is an auto generated Go binding around an Ethereum contract,
+// IZetaNonEthInterfaceSession is an auto generated Go binding around an Ethereum contract,
 // with pre-set call and transact options.
-type ZetaNonEthInterfaceSession struct {
-	Contract     *ZetaNonEthInterface // Generic contract binding to set the session for
-	CallOpts     bind.CallOpts        // Call options to use throughout this session
-	TransactOpts bind.TransactOpts    // Transaction auth options to use throughout this session
+type IZetaNonEthInterfaceSession struct {
+	Contract     *IZetaNonEthInterface // Generic contract binding to set the session for
+	CallOpts     bind.CallOpts         // Call options to use throughout this session
+	TransactOpts bind.TransactOpts     // Transaction auth options to use throughout this session
 }
 
-// ZetaNonEthInterfaceCallerSession is an auto generated read-only Go binding around an Ethereum contract,
+// IZetaNonEthInterfaceCallerSession is an auto generated read-only Go binding around an Ethereum contract,
 // with pre-set call options.
-type ZetaNonEthInterfaceCallerSession struct {
-	Contract *ZetaNonEthInterfaceCaller // Generic contract caller binding to set the session for
-	CallOpts bind.CallOpts              // Call options to use throughout this session
+type IZetaNonEthInterfaceCallerSession struct {
+	Contract *IZetaNonEthInterfaceCaller // Generic contract caller binding to set the session for
+	CallOpts bind.CallOpts               // Call options to use throughout this session
 }
 
-// ZetaNonEthInterfaceTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
+// IZetaNonEthInterfaceTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
 // with pre-set transact options.
-type ZetaNonEthInterfaceTransactorSession struct {
-	Contract     *ZetaNonEthInterfaceTransactor // Generic contract transactor binding to set the session for
-	TransactOpts bind.TransactOpts              // Transaction auth options to use throughout this session
+type IZetaNonEthInterfaceTransactorSession struct {
+	Contract     *IZetaNonEthInterfaceTransactor // Generic contract transactor binding to set the session for
+	TransactOpts bind.TransactOpts               // Transaction auth options to use throughout this session
 }
 
-// ZetaNonEthInterfaceRaw is an auto generated low-level Go binding around an Ethereum contract.
-type ZetaNonEthInterfaceRaw struct {
-	Contract *ZetaNonEthInterface // Generic contract binding to access the raw methods on
+// IZetaNonEthInterfaceRaw is an auto generated low-level Go binding around an Ethereum contract.
+type IZetaNonEthInterfaceRaw struct {
+	Contract *IZetaNonEthInterface // Generic contract binding to access the raw methods on
 }
 
-// ZetaNonEthInterfaceCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
-type ZetaNonEthInterfaceCallerRaw struct {
-	Contract *ZetaNonEthInterfaceCaller // Generic read-only contract binding to access the raw methods on
+// IZetaNonEthInterfaceCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
+type IZetaNonEthInterfaceCallerRaw struct {
+	Contract *IZetaNonEthInterfaceCaller // Generic read-only contract binding to access the raw methods on
 }
 
-// ZetaNonEthInterfaceTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
-type ZetaNonEthInterfaceTransactorRaw struct {
-	Contract *ZetaNonEthInterfaceTransactor // Generic write-only contract binding to access the raw methods on
+// IZetaNonEthInterfaceTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
+type IZetaNonEthInterfaceTransactorRaw struct {
+	Contract *IZetaNonEthInterfaceTransactor // Generic write-only contract binding to access the raw methods on
 }
 
-// NewZetaNonEthInterface creates a new instance of ZetaNonEthInterface, bound to a specific deployed contract.
-func NewZetaNonEthInterface(address common.Address, backend bind.ContractBackend) (*ZetaNonEthInterface, error) {
-	contract, err := bindZetaNonEthInterface(address, backend, backend, backend)
+// NewIZetaNonEthInterface creates a new instance of IZetaNonEthInterface, bound to a specific deployed contract.
+func NewIZetaNonEthInterface(address common.Address, backend bind.ContractBackend) (*IZetaNonEthInterface, error) {
+	contract, err := bindIZetaNonEthInterface(address, backend, backend, backend)
 	if err != nil {
 		return nil, err
 	}
-	return &ZetaNonEthInterface{ZetaNonEthInterfaceCaller: ZetaNonEthInterfaceCaller{contract: contract}, ZetaNonEthInterfaceTransactor: ZetaNonEthInterfaceTransactor{contract: contract}, ZetaNonEthInterfaceFilterer: ZetaNonEthInterfaceFilterer{contract: contract}}, nil
+	return &IZetaNonEthInterface{IZetaNonEthInterfaceCaller: IZetaNonEthInterfaceCaller{contract: contract}, IZetaNonEthInterfaceTransactor: IZetaNonEthInterfaceTransactor{contract: contract}, IZetaNonEthInterfaceFilterer: IZetaNonEthInterfaceFilterer{contract: contract}}, nil
 }
 
-// NewZetaNonEthInterfaceCaller creates a new read-only instance of ZetaNonEthInterface, bound to a specific deployed contract.
-func NewZetaNonEthInterfaceCaller(address common.Address, caller bind.ContractCaller) (*ZetaNonEthInterfaceCaller, error) {
-	contract, err := bindZetaNonEthInterface(address, caller, nil, nil)
+// NewIZetaNonEthInterfaceCaller creates a new read-only instance of IZetaNonEthInterface, bound to a specific deployed contract.
+func NewIZetaNonEthInterfaceCaller(address common.Address, caller bind.ContractCaller) (*IZetaNonEthInterfaceCaller, error) {
+	contract, err := bindIZetaNonEthInterface(address, caller, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &ZetaNonEthInterfaceCaller{contract: contract}, nil
+	return &IZetaNonEthInterfaceCaller{contract: contract}, nil
 }
 
-// NewZetaNonEthInterfaceTransactor creates a new write-only instance of ZetaNonEthInterface, bound to a specific deployed contract.
-func NewZetaNonEthInterfaceTransactor(address common.Address, transactor bind.ContractTransactor) (*ZetaNonEthInterfaceTransactor, error) {
-	contract, err := bindZetaNonEthInterface(address, nil, transactor, nil)
+// NewIZetaNonEthInterfaceTransactor creates a new write-only instance of IZetaNonEthInterface, bound to a specific deployed contract.
+func NewIZetaNonEthInterfaceTransactor(address common.Address, transactor bind.ContractTransactor) (*IZetaNonEthInterfaceTransactor, error) {
+	contract, err := bindIZetaNonEthInterface(address, nil, transactor, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &ZetaNonEthInterfaceTransactor{contract: contract}, nil
+	return &IZetaNonEthInterfaceTransactor{contract: contract}, nil
 }
 
-// NewZetaNonEthInterfaceFilterer creates a new log filterer instance of ZetaNonEthInterface, bound to a specific deployed contract.
-func NewZetaNonEthInterfaceFilterer(address common.Address, filterer bind.ContractFilterer) (*ZetaNonEthInterfaceFilterer, error) {
-	contract, err := bindZetaNonEthInterface(address, nil, nil, filterer)
+// NewIZetaNonEthInterfaceFilterer creates a new log filterer instance of IZetaNonEthInterface, bound to a specific deployed contract.
+func NewIZetaNonEthInterfaceFilterer(address common.Address, filterer bind.ContractFilterer) (*IZetaNonEthInterfaceFilterer, error) {
+	contract, err := bindIZetaNonEthInterface(address, nil, nil, filterer)
 	if err != nil {
 		return nil, err
 	}
-	return &ZetaNonEthInterfaceFilterer{contract: contract}, nil
+	return &IZetaNonEthInterfaceFilterer{contract: contract}, nil
 }
 
-// bindZetaNonEthInterface binds a generic wrapper to an already deployed contract.
-func bindZetaNonEthInterface(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := ZetaNonEthInterfaceMetaData.GetAbi()
+// bindIZetaNonEthInterface binds a generic wrapper to an already deployed contract.
+func bindIZetaNonEthInterface(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
+	parsed, err := IZetaNonEthInterfaceMetaData.GetAbi()
 	if err != nil {
 		return nil, err
 	}
@@ -146,46 +146,46 @@ func bindZetaNonEthInterface(address common.Address, caller bind.ContractCaller,
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _ZetaNonEthInterface.Contract.ZetaNonEthInterfaceCaller.contract.Call(opts, result, method, params...)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _IZetaNonEthInterface.Contract.IZetaNonEthInterfaceCaller.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.ZetaNonEthInterfaceTransactor.contract.Transfer(opts)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.IZetaNonEthInterfaceTransactor.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.ZetaNonEthInterfaceTransactor.contract.Transact(opts, method, params...)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.IZetaNonEthInterfaceTransactor.contract.Transact(opts, method, params...)
 }
 
 // Call invokes the (constant) contract method with params as input values and
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _ZetaNonEthInterface.Contract.contract.Call(opts, result, method, params...)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _IZetaNonEthInterface.Contract.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.contract.Transfer(opts)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.contract.Transact(opts, method, params...)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.contract.Transact(opts, method, params...)
 }
 
 // Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
 // Solidity: function allowance(address owner, address spender) view returns(uint256)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceCaller) Allowance(opts *bind.CallOpts, owner common.Address, spender common.Address) (*big.Int, error) {
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceCaller) Allowance(opts *bind.CallOpts, owner common.Address, spender common.Address) (*big.Int, error) {
 	var out []interface{}
-	err := _ZetaNonEthInterface.contract.Call(opts, &out, "allowance", owner, spender)
+	err := _IZetaNonEthInterface.contract.Call(opts, &out, "allowance", owner, spender)
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -200,23 +200,23 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceCaller) Allowance(opts *bind.Call
 // Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
 // Solidity: function allowance(address owner, address spender) view returns(uint256)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceSession) Allowance(owner common.Address, spender common.Address) (*big.Int, error) {
-	return _ZetaNonEthInterface.Contract.Allowance(&_ZetaNonEthInterface.CallOpts, owner, spender)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceSession) Allowance(owner common.Address, spender common.Address) (*big.Int, error) {
+	return _IZetaNonEthInterface.Contract.Allowance(&_IZetaNonEthInterface.CallOpts, owner, spender)
 }
 
 // Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
 // Solidity: function allowance(address owner, address spender) view returns(uint256)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceCallerSession) Allowance(owner common.Address, spender common.Address) (*big.Int, error) {
-	return _ZetaNonEthInterface.Contract.Allowance(&_ZetaNonEthInterface.CallOpts, owner, spender)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceCallerSession) Allowance(owner common.Address, spender common.Address) (*big.Int, error) {
+	return _IZetaNonEthInterface.Contract.Allowance(&_IZetaNonEthInterface.CallOpts, owner, spender)
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address account) view returns(uint256)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceCaller) BalanceOf(opts *bind.CallOpts, account common.Address) (*big.Int, error) {
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceCaller) BalanceOf(opts *bind.CallOpts, account common.Address) (*big.Int, error) {
 	var out []interface{}
-	err := _ZetaNonEthInterface.contract.Call(opts, &out, "balanceOf", account)
+	err := _IZetaNonEthInterface.contract.Call(opts, &out, "balanceOf", account)
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -231,23 +231,23 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceCaller) BalanceOf(opts *bind.Call
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address account) view returns(uint256)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceSession) BalanceOf(account common.Address) (*big.Int, error) {
-	return _ZetaNonEthInterface.Contract.BalanceOf(&_ZetaNonEthInterface.CallOpts, account)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceSession) BalanceOf(account common.Address) (*big.Int, error) {
+	return _IZetaNonEthInterface.Contract.BalanceOf(&_IZetaNonEthInterface.CallOpts, account)
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address account) view returns(uint256)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceCallerSession) BalanceOf(account common.Address) (*big.Int, error) {
-	return _ZetaNonEthInterface.Contract.BalanceOf(&_ZetaNonEthInterface.CallOpts, account)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceCallerSession) BalanceOf(account common.Address) (*big.Int, error) {
+	return _IZetaNonEthInterface.Contract.BalanceOf(&_IZetaNonEthInterface.CallOpts, account)
 }
 
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceCaller) TotalSupply(opts *bind.CallOpts) (*big.Int, error) {
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceCaller) TotalSupply(opts *bind.CallOpts) (*big.Int, error) {
 	var out []interface{}
-	err := _ZetaNonEthInterface.contract.Call(opts, &out, "totalSupply")
+	err := _IZetaNonEthInterface.contract.Call(opts, &out, "totalSupply")
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -262,125 +262,125 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceCaller) TotalSupply(opts *bind.Ca
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceSession) TotalSupply() (*big.Int, error) {
-	return _ZetaNonEthInterface.Contract.TotalSupply(&_ZetaNonEthInterface.CallOpts)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceSession) TotalSupply() (*big.Int, error) {
+	return _IZetaNonEthInterface.Contract.TotalSupply(&_IZetaNonEthInterface.CallOpts)
 }
 
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceCallerSession) TotalSupply() (*big.Int, error) {
-	return _ZetaNonEthInterface.Contract.TotalSupply(&_ZetaNonEthInterface.CallOpts)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceCallerSession) TotalSupply() (*big.Int, error) {
+	return _IZetaNonEthInterface.Contract.TotalSupply(&_IZetaNonEthInterface.CallOpts)
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address spender, uint256 value) returns(bool)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactor) Approve(opts *bind.TransactOpts, spender common.Address, value *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.contract.Transact(opts, "approve", spender, value)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactor) Approve(opts *bind.TransactOpts, spender common.Address, value *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.contract.Transact(opts, "approve", spender, value)
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address spender, uint256 value) returns(bool)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceSession) Approve(spender common.Address, value *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.Approve(&_ZetaNonEthInterface.TransactOpts, spender, value)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceSession) Approve(spender common.Address, value *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.Approve(&_IZetaNonEthInterface.TransactOpts, spender, value)
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address spender, uint256 value) returns(bool)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactorSession) Approve(spender common.Address, value *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.Approve(&_ZetaNonEthInterface.TransactOpts, spender, value)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactorSession) Approve(spender common.Address, value *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.Approve(&_IZetaNonEthInterface.TransactOpts, spender, value)
 }
 
 // BurnFrom is a paid mutator transaction binding the contract method 0x79cc6790.
 //
 // Solidity: function burnFrom(address account, uint256 amount) returns()
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactor) BurnFrom(opts *bind.TransactOpts, account common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.contract.Transact(opts, "burnFrom", account, amount)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactor) BurnFrom(opts *bind.TransactOpts, account common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.contract.Transact(opts, "burnFrom", account, amount)
 }
 
 // BurnFrom is a paid mutator transaction binding the contract method 0x79cc6790.
 //
 // Solidity: function burnFrom(address account, uint256 amount) returns()
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceSession) BurnFrom(account common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.BurnFrom(&_ZetaNonEthInterface.TransactOpts, account, amount)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceSession) BurnFrom(account common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.BurnFrom(&_IZetaNonEthInterface.TransactOpts, account, amount)
 }
 
 // BurnFrom is a paid mutator transaction binding the contract method 0x79cc6790.
 //
 // Solidity: function burnFrom(address account, uint256 amount) returns()
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactorSession) BurnFrom(account common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.BurnFrom(&_ZetaNonEthInterface.TransactOpts, account, amount)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactorSession) BurnFrom(account common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.BurnFrom(&_IZetaNonEthInterface.TransactOpts, account, amount)
 }
 
 // Mint is a paid mutator transaction binding the contract method 0x1e458bee.
 //
 // Solidity: function mint(address mintee, uint256 value, bytes32 internalSendHash) returns()
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactor) Mint(opts *bind.TransactOpts, mintee common.Address, value *big.Int, internalSendHash [32]byte) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.contract.Transact(opts, "mint", mintee, value, internalSendHash)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactor) Mint(opts *bind.TransactOpts, mintee common.Address, value *big.Int, internalSendHash [32]byte) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.contract.Transact(opts, "mint", mintee, value, internalSendHash)
 }
 
 // Mint is a paid mutator transaction binding the contract method 0x1e458bee.
 //
 // Solidity: function mint(address mintee, uint256 value, bytes32 internalSendHash) returns()
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceSession) Mint(mintee common.Address, value *big.Int, internalSendHash [32]byte) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.Mint(&_ZetaNonEthInterface.TransactOpts, mintee, value, internalSendHash)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceSession) Mint(mintee common.Address, value *big.Int, internalSendHash [32]byte) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.Mint(&_IZetaNonEthInterface.TransactOpts, mintee, value, internalSendHash)
 }
 
 // Mint is a paid mutator transaction binding the contract method 0x1e458bee.
 //
 // Solidity: function mint(address mintee, uint256 value, bytes32 internalSendHash) returns()
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactorSession) Mint(mintee common.Address, value *big.Int, internalSendHash [32]byte) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.Mint(&_ZetaNonEthInterface.TransactOpts, mintee, value, internalSendHash)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactorSession) Mint(mintee common.Address, value *big.Int, internalSendHash [32]byte) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.Mint(&_IZetaNonEthInterface.TransactOpts, mintee, value, internalSendHash)
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
 // Solidity: function transfer(address to, uint256 value) returns(bool)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactor) Transfer(opts *bind.TransactOpts, to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.contract.Transact(opts, "transfer", to, value)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactor) Transfer(opts *bind.TransactOpts, to common.Address, value *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.contract.Transact(opts, "transfer", to, value)
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
 // Solidity: function transfer(address to, uint256 value) returns(bool)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceSession) Transfer(to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.Transfer(&_ZetaNonEthInterface.TransactOpts, to, value)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceSession) Transfer(to common.Address, value *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.Transfer(&_IZetaNonEthInterface.TransactOpts, to, value)
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
 // Solidity: function transfer(address to, uint256 value) returns(bool)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactorSession) Transfer(to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.Transfer(&_ZetaNonEthInterface.TransactOpts, to, value)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactorSession) Transfer(to common.Address, value *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.Transfer(&_IZetaNonEthInterface.TransactOpts, to, value)
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 value) returns(bool)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactor) TransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.contract.Transact(opts, "transferFrom", from, to, value)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactor) TransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, value *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.contract.Transact(opts, "transferFrom", from, to, value)
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 value) returns(bool)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceSession) TransferFrom(from common.Address, to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.TransferFrom(&_ZetaNonEthInterface.TransactOpts, from, to, value)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceSession) TransferFrom(from common.Address, to common.Address, value *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.TransferFrom(&_IZetaNonEthInterface.TransactOpts, from, to, value)
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 value) returns(bool)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceTransactorSession) TransferFrom(from common.Address, to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _ZetaNonEthInterface.Contract.TransferFrom(&_ZetaNonEthInterface.TransactOpts, from, to, value)
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceTransactorSession) TransferFrom(from common.Address, to common.Address, value *big.Int) (*types.Transaction, error) {
+	return _IZetaNonEthInterface.Contract.TransferFrom(&_IZetaNonEthInterface.TransactOpts, from, to, value)
 }
 
-// ZetaNonEthInterfaceApprovalIterator is returned from FilterApproval and is used to iterate over the raw logs and unpacked data for Approval events raised by the ZetaNonEthInterface contract.
-type ZetaNonEthInterfaceApprovalIterator struct {
-	Event *ZetaNonEthInterfaceApproval // Event containing the contract specifics and raw log
+// IZetaNonEthInterfaceApprovalIterator is returned from FilterApproval and is used to iterate over the raw logs and unpacked data for Approval events raised by the IZetaNonEthInterface contract.
+type IZetaNonEthInterfaceApprovalIterator struct {
+	Event *IZetaNonEthInterfaceApproval // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -394,7 +394,7 @@ type ZetaNonEthInterfaceApprovalIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *ZetaNonEthInterfaceApprovalIterator) Next() bool {
+func (it *IZetaNonEthInterfaceApprovalIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -403,7 +403,7 @@ func (it *ZetaNonEthInterfaceApprovalIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(ZetaNonEthInterfaceApproval)
+			it.Event = new(IZetaNonEthInterfaceApproval)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -418,7 +418,7 @@ func (it *ZetaNonEthInterfaceApprovalIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(ZetaNonEthInterfaceApproval)
+		it.Event = new(IZetaNonEthInterfaceApproval)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -434,19 +434,19 @@ func (it *ZetaNonEthInterfaceApprovalIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *ZetaNonEthInterfaceApprovalIterator) Error() error {
+func (it *IZetaNonEthInterfaceApprovalIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *ZetaNonEthInterfaceApprovalIterator) Close() error {
+func (it *IZetaNonEthInterfaceApprovalIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// ZetaNonEthInterfaceApproval represents a Approval event raised by the ZetaNonEthInterface contract.
-type ZetaNonEthInterfaceApproval struct {
+// IZetaNonEthInterfaceApproval represents a Approval event raised by the IZetaNonEthInterface contract.
+type IZetaNonEthInterfaceApproval struct {
 	Owner   common.Address
 	Spender common.Address
 	Value   *big.Int
@@ -456,7 +456,7 @@ type ZetaNonEthInterfaceApproval struct {
 // FilterApproval is a free log retrieval operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
 // Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) FilterApproval(opts *bind.FilterOpts, owner []common.Address, spender []common.Address) (*ZetaNonEthInterfaceApprovalIterator, error) {
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceFilterer) FilterApproval(opts *bind.FilterOpts, owner []common.Address, spender []common.Address) (*IZetaNonEthInterfaceApprovalIterator, error) {
 
 	var ownerRule []interface{}
 	for _, ownerItem := range owner {
@@ -467,17 +467,17 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) FilterApproval(opts *bi
 		spenderRule = append(spenderRule, spenderItem)
 	}
 
-	logs, sub, err := _ZetaNonEthInterface.contract.FilterLogs(opts, "Approval", ownerRule, spenderRule)
+	logs, sub, err := _IZetaNonEthInterface.contract.FilterLogs(opts, "Approval", ownerRule, spenderRule)
 	if err != nil {
 		return nil, err
 	}
-	return &ZetaNonEthInterfaceApprovalIterator{contract: _ZetaNonEthInterface.contract, event: "Approval", logs: logs, sub: sub}, nil
+	return &IZetaNonEthInterfaceApprovalIterator{contract: _IZetaNonEthInterface.contract, event: "Approval", logs: logs, sub: sub}, nil
 }
 
 // WatchApproval is a free log subscription operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
 // Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *ZetaNonEthInterfaceApproval, owner []common.Address, spender []common.Address) (event.Subscription, error) {
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *IZetaNonEthInterfaceApproval, owner []common.Address, spender []common.Address) (event.Subscription, error) {
 
 	var ownerRule []interface{}
 	for _, ownerItem := range owner {
@@ -488,7 +488,7 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) WatchApproval(opts *bin
 		spenderRule = append(spenderRule, spenderItem)
 	}
 
-	logs, sub, err := _ZetaNonEthInterface.contract.WatchLogs(opts, "Approval", ownerRule, spenderRule)
+	logs, sub, err := _IZetaNonEthInterface.contract.WatchLogs(opts, "Approval", ownerRule, spenderRule)
 	if err != nil {
 		return nil, err
 	}
@@ -498,8 +498,8 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) WatchApproval(opts *bin
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(ZetaNonEthInterfaceApproval)
-				if err := _ZetaNonEthInterface.contract.UnpackLog(event, "Approval", log); err != nil {
+				event := new(IZetaNonEthInterfaceApproval)
+				if err := _IZetaNonEthInterface.contract.UnpackLog(event, "Approval", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -523,18 +523,18 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) WatchApproval(opts *bin
 // ParseApproval is a log parse operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
 // Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) ParseApproval(log types.Log) (*ZetaNonEthInterfaceApproval, error) {
-	event := new(ZetaNonEthInterfaceApproval)
-	if err := _ZetaNonEthInterface.contract.UnpackLog(event, "Approval", log); err != nil {
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceFilterer) ParseApproval(log types.Log) (*IZetaNonEthInterfaceApproval, error) {
+	event := new(IZetaNonEthInterfaceApproval)
+	if err := _IZetaNonEthInterface.contract.UnpackLog(event, "Approval", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// ZetaNonEthInterfaceTransferIterator is returned from FilterTransfer and is used to iterate over the raw logs and unpacked data for Transfer events raised by the ZetaNonEthInterface contract.
-type ZetaNonEthInterfaceTransferIterator struct {
-	Event *ZetaNonEthInterfaceTransfer // Event containing the contract specifics and raw log
+// IZetaNonEthInterfaceTransferIterator is returned from FilterTransfer and is used to iterate over the raw logs and unpacked data for Transfer events raised by the IZetaNonEthInterface contract.
+type IZetaNonEthInterfaceTransferIterator struct {
+	Event *IZetaNonEthInterfaceTransfer // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -548,7 +548,7 @@ type ZetaNonEthInterfaceTransferIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *ZetaNonEthInterfaceTransferIterator) Next() bool {
+func (it *IZetaNonEthInterfaceTransferIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -557,7 +557,7 @@ func (it *ZetaNonEthInterfaceTransferIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(ZetaNonEthInterfaceTransfer)
+			it.Event = new(IZetaNonEthInterfaceTransfer)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -572,7 +572,7 @@ func (it *ZetaNonEthInterfaceTransferIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(ZetaNonEthInterfaceTransfer)
+		it.Event = new(IZetaNonEthInterfaceTransfer)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -588,19 +588,19 @@ func (it *ZetaNonEthInterfaceTransferIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *ZetaNonEthInterfaceTransferIterator) Error() error {
+func (it *IZetaNonEthInterfaceTransferIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *ZetaNonEthInterfaceTransferIterator) Close() error {
+func (it *IZetaNonEthInterfaceTransferIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// ZetaNonEthInterfaceTransfer represents a Transfer event raised by the ZetaNonEthInterface contract.
-type ZetaNonEthInterfaceTransfer struct {
+// IZetaNonEthInterfaceTransfer represents a Transfer event raised by the IZetaNonEthInterface contract.
+type IZetaNonEthInterfaceTransfer struct {
 	From  common.Address
 	To    common.Address
 	Value *big.Int
@@ -610,7 +610,7 @@ type ZetaNonEthInterfaceTransfer struct {
 // FilterTransfer is a free log retrieval operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) FilterTransfer(opts *bind.FilterOpts, from []common.Address, to []common.Address) (*ZetaNonEthInterfaceTransferIterator, error) {
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceFilterer) FilterTransfer(opts *bind.FilterOpts, from []common.Address, to []common.Address) (*IZetaNonEthInterfaceTransferIterator, error) {
 
 	var fromRule []interface{}
 	for _, fromItem := range from {
@@ -621,17 +621,17 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) FilterTransfer(opts *bi
 		toRule = append(toRule, toItem)
 	}
 
-	logs, sub, err := _ZetaNonEthInterface.contract.FilterLogs(opts, "Transfer", fromRule, toRule)
+	logs, sub, err := _IZetaNonEthInterface.contract.FilterLogs(opts, "Transfer", fromRule, toRule)
 	if err != nil {
 		return nil, err
 	}
-	return &ZetaNonEthInterfaceTransferIterator{contract: _ZetaNonEthInterface.contract, event: "Transfer", logs: logs, sub: sub}, nil
+	return &IZetaNonEthInterfaceTransferIterator{contract: _IZetaNonEthInterface.contract, event: "Transfer", logs: logs, sub: sub}, nil
 }
 
 // WatchTransfer is a free log subscription operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *ZetaNonEthInterfaceTransfer, from []common.Address, to []common.Address) (event.Subscription, error) {
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *IZetaNonEthInterfaceTransfer, from []common.Address, to []common.Address) (event.Subscription, error) {
 
 	var fromRule []interface{}
 	for _, fromItem := range from {
@@ -642,7 +642,7 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) WatchTransfer(opts *bin
 		toRule = append(toRule, toItem)
 	}
 
-	logs, sub, err := _ZetaNonEthInterface.contract.WatchLogs(opts, "Transfer", fromRule, toRule)
+	logs, sub, err := _IZetaNonEthInterface.contract.WatchLogs(opts, "Transfer", fromRule, toRule)
 	if err != nil {
 		return nil, err
 	}
@@ -652,8 +652,8 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) WatchTransfer(opts *bin
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(ZetaNonEthInterfaceTransfer)
-				if err := _ZetaNonEthInterface.contract.UnpackLog(event, "Transfer", log); err != nil {
+				event := new(IZetaNonEthInterfaceTransfer)
+				if err := _IZetaNonEthInterface.contract.UnpackLog(event, "Transfer", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -677,9 +677,9 @@ func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) WatchTransfer(opts *bin
 // ParseTransfer is a log parse operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
-func (_ZetaNonEthInterface *ZetaNonEthInterfaceFilterer) ParseTransfer(log types.Log) (*ZetaNonEthInterfaceTransfer, error) {
-	event := new(ZetaNonEthInterfaceTransfer)
-	if err := _ZetaNonEthInterface.contract.UnpackLog(event, "Transfer", log); err != nil {
+func (_IZetaNonEthInterface *IZetaNonEthInterfaceFilterer) ParseTransfer(log types.Log) (*IZetaNonEthInterfaceTransfer, error) {
+	event := new(IZetaNonEthInterfaceTransfer)
+	if err := _IZetaNonEthInterface.contract.UnpackLog(event, "Transfer", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
