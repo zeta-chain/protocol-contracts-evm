@@ -16,6 +16,11 @@ const _abi = [
   },
   {
     type: "error",
+    name: "EmptyAddress",
+    inputs: [],
+  },
+  {
+    type: "error",
     name: "FailedZetaSent",
     inputs: [
       {
@@ -58,7 +63,7 @@ const _abi = [
   },
   {
     type: "error",
-    name: "InsufficientGasLimit",
+    name: "InvalidGasLimit",
     inputs: [],
   },
   {

@@ -1,7 +1,7 @@
 
 
 ## GatewayEVM
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/GatewayEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/GatewayEVM.sol)
 
 The GatewayEVM contract is the endpoint to call smart contracts on external chains.
 
@@ -728,7 +728,7 @@ function _getNextActionIndex() internal returns (uint256 currentIndex);
 
 
 ## GatewayZEVM
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/GatewayZEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/GatewayZEVM.sol)
 
 The GatewayZEVM contract is the endpoint to call smart contracts on omnichain.
 
@@ -1446,6 +1446,21 @@ function getMinGasLimit() external pure returns (uint256);
 |`<none>`|`uint256`|The minimum gas limit.|
 
 
+#### getMaxGasLimit
+
+Returns the maximum gas limit allowed.
+
+
+```solidity
+function getMaxGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum gas limit.|
+
+
 #### getMaxRevertGasLimit
 
 Returns the maximum revert gas limit allowed.
@@ -1464,7 +1479,7 @@ function getMaxRevertGasLimit() external pure returns (uint256);
 
 
 ## INotSupportedMethods
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/Errors.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/Errors.sol)
 
 Interface for contracts that with non supported methods.
 
@@ -1479,7 +1494,7 @@ error CallOnRevertNotSupported();
 
 
 ## ERC20Custody
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/ERC20Custody.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/ERC20Custody.sol)
 
 Holds the ERC20 tokens deposited on ZetaChain and includes functionality to call a contract.
 
@@ -1762,7 +1777,7 @@ function deposit(
 
 
 ## IERC20Custody
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IERC20Custody.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IERC20Custody.sol)
 
 
 ### Functions
@@ -1854,7 +1869,7 @@ function withdrawAndRevert(
 
 
 ## IERC20CustodyErrors
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IERC20Custody.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IERC20Custody.sol)
 
 Interface for the errors used in the ERC20 custody contract.
 
@@ -1887,7 +1902,7 @@ error LegacyMethodsNotSupported();
 
 
 ## IERC20CustodyEvents
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IERC20Custody.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IERC20Custody.sol)
 
 Interface for the events emitted by the ERC20 custody contract.
 
@@ -2000,7 +2015,7 @@ event UpdatedCustodyTSSAddress(address oldTSSAddress, address newTSSAddress);
 
 
 ## Callable
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IGatewayEVM.sol)
 
 Interface implemented by contracts receiving authenticated calls.
 
@@ -2016,7 +2031,7 @@ function onCall(MessageContext calldata context, bytes calldata message) externa
 
 
 ## IGatewayEVM
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IGatewayEVM.sol)
 
 Interface for the GatewayEVM contract.
 
@@ -2284,7 +2299,7 @@ function call(address receiver, bytes calldata payload, RevertOptions calldata r
 
 
 ## IGatewayEVMErrors
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IGatewayEVM.sol)
 
 Interface for the errors used in the GatewayEVM contract.
 
@@ -2464,7 +2479,7 @@ error IncorrectValueProvided(uint256 expected, uint256 provided);
 
 
 ## IGatewayEVMEvents
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IGatewayEVM.sol)
 
 Interface for the events emitted by the GatewayEVM contract.
 
@@ -2614,7 +2629,7 @@ event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 
 
 ## MessageContext
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IGatewayEVM.sol)
 
 Message context passed to execute function.
 
@@ -2634,7 +2649,7 @@ struct MessageContext {
 
 
 ## IRegistry
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IRegistry.sol)
 
 
 ### Structs
@@ -2666,7 +2681,7 @@ struct ContractConfigEntry {
 
 
 ## IZetaConnectorEvents
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IZetaConnector.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IZetaConnector.sol)
 
 Interface for the events emitted by the ZetaConnector contracts.
 
@@ -2738,7 +2753,7 @@ event UpdatedZetaConnectorTSSAddress(address oldTSSAddress, address newTSSAddres
 
 
 ## IZetaNonEthNew
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/interfaces/IZetaNonEthNew.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/interfaces/IZetaNonEthNew.sol)
 
 IZetaNonEthNew is a mintable / burnable version of IERC20.
 
@@ -2784,7 +2799,7 @@ function mint(address mintee, uint256 value, bytes32 internalSendHash) external;
 
 
 ## ConnectorErrors
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ConnectorErrors.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ConnectorErrors.sol)
 
 *Interface with connector custom errors*
 
@@ -2829,7 +2844,7 @@ error ExceedsMaxSupply(uint256 maxSupply);
 
 
 ## IZetaNonEthInterface
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/IZetaNonEthInterface.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/IZetaNonEthInterface.sol)
 
 *IZetaNonEthInterface.sol is a mintable / burnable version of IERC20*
 
@@ -2852,7 +2867,7 @@ function mint(address mintee, uint256 value, bytes32 internalSendHash) external;
 
 
 ## ZetaConnectorBase
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaConnector.base.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaConnector.base.sol)
 
 *Main abstraction of ZetaConnector.
 This contract manages interactions between TSS and different chains.
@@ -3090,7 +3105,7 @@ event PauserAddressUpdated(address callerAddress, address newTssAddress);
 
 
 ## ZetaConnectorEth
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaConnector.eth.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaConnector.eth.sol)
 
 *ETH implementation of ZetaConnector.
 This contract manages interactions between TSS and different chains.
@@ -3176,7 +3191,7 @@ function onRevert(
 
 
 ## ZetaConnectorNonEth
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaConnector.non-eth.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaConnector.non-eth.sol)
 
 *Non ETH implementation of ZetaConnector.
 This contract manages interactions between TSS and different chains.
@@ -3286,7 +3301,7 @@ event MaxSupplyUpdated(address callerAddress, uint256 newMaxSupply);
 
 
 ## ZetaErrors
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaErrors.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaErrors.sol)
 
 *Common custom errors*
 
@@ -3331,7 +3346,7 @@ error ZetaTransferError();
 
 
 ## ZetaEth
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaEth.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaEth.sol)
 
 Ethereum is the origin and native chain of the ZETA token deployment (native)
 
@@ -3349,7 +3364,7 @@ constructor(address creator, uint256 initialSupply);
 
 
 ## ZetaCommonErrors
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaInterfaces.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaInterfaces.sol)
 
 
 ### Errors
@@ -3362,7 +3377,7 @@ error InvalidAddress();
 
 
 ## ZetaConnector
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaInterfaces.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaInterfaces.sol)
 
 
 ### Functions
@@ -3378,7 +3393,7 @@ function send(ZetaInterfaces.SendInput calldata input) external;
 
 
 ## ZetaInterfaces
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaInterfaces.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaInterfaces.sol)
 
 
 ### Structs
@@ -3429,7 +3444,7 @@ struct ZetaRevert {
 
 
 ## ZetaReceiver
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaInterfaces.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaInterfaces.sol)
 
 
 ### Functions
@@ -3455,7 +3470,7 @@ function onZetaRevert(ZetaInterfaces.ZetaRevert calldata zetaRevert) external;
 
 
 ## ZetaTokenConsumer
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaInterfaces.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaInterfaces.sol)
 
 *ZetaTokenConsumer makes it easier to handle the following situations:
 - Getting Zeta using native coin (to pay for destination gas while using `connector.send`)
@@ -3550,7 +3565,7 @@ event ZetaExchangedForToken(address token, uint256 amountIn, uint256 amountOut);
 
 
 ## ZetaNonEth
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/legacy/ZetaNonEth.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/legacy/ZetaNonEth.sol)
 
 On non-native (non-Ethereum) chains, ZETA tokens are minted and burned after the initial deployment on
 Ethereum.
@@ -3654,7 +3669,7 @@ event ConnectorAddressUpdated(address callerAddress, address newConnectorAddress
 
 
 ## GatewayEVMValidations
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/libraries/GatewayEVMValidations.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/libraries/GatewayEVMValidations.sol)
 
 Library containing validation functions for GatewayEVM contract.
 
@@ -3831,7 +3846,7 @@ function validateCallParams(
 
 
 ## Registry
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/Registry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/Registry.sol)
 
 Satellite registry contract for connected chains, receiving updates from CoreRegistry.
 
@@ -4174,7 +4189,7 @@ function bootstrapZRC20Tokens(ZRC20Info[] calldata tokens) external onlyRole(REG
 
 
 ## ZetaConnectorBase
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/ZetaConnectorBase.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/ZetaConnectorBase.sol)
 
 Abstract base contract for ZetaConnector.
 
@@ -4341,7 +4356,7 @@ error ZeroAddress();
 
 
 ## ZetaConnectorNative
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/ZetaConnectorNative.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/ZetaConnectorNative.sol)
 
 Implementation of ZetaConnectorBase for native token handling.
 
@@ -4460,7 +4475,7 @@ function deposit(uint256 amount) external override whenNotPaused;
 
 
 ## ZetaConnectorNonNative
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/evm/ZetaConnectorNonNative.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/evm/ZetaConnectorNonNative.sol)
 
 Implementation of ZetaConnectorBase for non-native token handling.
 
@@ -4650,7 +4665,7 @@ error ExceedsMaxSupply();
 
 
 ## BaseRegistry
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/BaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/BaseRegistry.sol)
 
 
 ### State Variables
@@ -5224,7 +5239,7 @@ function _removeFromActiveChains(uint256 chainId) private;
 
 
 ## IBaseRegistry
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/interfaces/IBaseRegistry.sol)
 
 Interface for the BaseRegistry contract.
 
@@ -5587,7 +5602,7 @@ function getAllZRC20Tokens() external view returns (ZRC20Info[] memory);
 
 
 ## IBaseRegistryErrors
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/interfaces/IBaseRegistry.sol)
 
 Interface for the errors used by the BaseRegistry contract.
 
@@ -5721,7 +5736,7 @@ error ZRC20SymbolAlreadyInUse(string symbol);
 
 
 ## IBaseRegistryEvents
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/interfaces/IBaseRegistry.sol)
 
 Interface for the events emitted by the BaseRegistry contract.
 
@@ -5873,7 +5888,7 @@ event RegistryManagerChanged(address oldRegistryManager, address newRegistryMana
 
 
 ## ChainInfo
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/interfaces/IBaseRegistry.sol)
 
 Structure that contains information about a chain.
 
@@ -5891,7 +5906,7 @@ struct ChainInfo {
 
 
 ## ChainInfoDTO
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/interfaces/IBaseRegistry.sol)
 
 Structure that contains information about a chain, used for data retrieving.
 
@@ -5908,7 +5923,7 @@ struct ChainInfoDTO {
 
 
 ## ContractIdentifier
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/interfaces/IBaseRegistry.sol)
 
 Each entry consists of: chainId (uint256) and contractType (string)
 
@@ -5923,7 +5938,7 @@ struct ContractIdentifier {
 
 
 ## ContractInfo
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/interfaces/IBaseRegistry.sol)
 
 Structure that contains information about a contract registered in the system.
 
@@ -5940,7 +5955,7 @@ struct ContractInfo {
 
 
 ## ContractInfoDTO
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/interfaces/IBaseRegistry.sol)
 
 Structure that contains information about a contract registered in the system, used for data retrieving.
 
@@ -5957,7 +5972,7 @@ struct ContractInfoDTO {
 
 
 ## ZRC20Info
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/helpers/interfaces/IBaseRegistry.sol)
 
 Structure that contains information about a ZRC20 token.
 
@@ -5977,7 +5992,7 @@ struct ZRC20Info {
 
 
 ## Constants
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/Revert.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/Revert.sol)
 
 #### MAX_REVERT_GAS_LIMIT
 
@@ -5988,7 +6003,7 @@ uint256 constant MAX_REVERT_GAS_LIMIT = 2_000_000;
 
 
 ## RevertGasLimitExceeded
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/Revert.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/Revert.sol)
 
 Error indicating revert gas limit exceeds maximum allowed
 
@@ -6007,7 +6022,7 @@ error RevertGasLimitExceeded(uint256 provided, uint256 maximum);
 
 
 ## Abortable
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/Revert.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/Revert.sol)
 
 Interface for contracts that support abortable calls.
 
@@ -6031,7 +6046,7 @@ function onAbort(AbortContext calldata abortContext) external;
 
 
 ## Revertable
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/Revert.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/Revert.sol)
 
 Interface for contracts that support revertable calls.
 
@@ -6055,7 +6070,7 @@ function onRevert(RevertContext calldata revertContext) external payable;
 
 
 ## AbortContext
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/Revert.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/Revert.sol)
 
 Struct containing abort context passed to onAbort.
 
@@ -6085,7 +6100,7 @@ struct AbortContext {
 
 
 ## RevertContext
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/Revert.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/Revert.sol)
 
 Struct containing revert context passed to onRevert.
 
@@ -6111,7 +6126,7 @@ struct RevertContext {
 
 
 ## RevertOptions
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/Revert.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/Revert.sol)
 
 Struct containing revert options
 
@@ -6139,7 +6154,7 @@ struct RevertOptions {
 
 
 ## CoreRegistry
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/CoreRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/CoreRegistry.sol)
 
 Central registry for ZetaChain, managing chain info, ZRC20 data, and contract addresses across all chains.
 
@@ -6542,7 +6557,7 @@ function _sendCrossChainMessage(uint256 targetChainId, bytes memory message) pri
 
 
 ## ICoreRegistry
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/ICoreRegistry.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/ICoreRegistry.sol)
 
 
 ### Functions
@@ -6556,7 +6571,7 @@ function gatewayZEVM() external returns (address);
 
 
 ## IGatewayZEVM
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/IGatewayZEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/IGatewayZEVM.sol)
 
 Interface for the GatewayZEVM contract.
 
@@ -6827,15 +6842,83 @@ function depositAndRevert(
 |`revertContext`|`RevertContext`|Revert context to pass to onRevert.|
 
 
+#### getMaxMessageSize
+
+Returns the maximum message size.
+
+
+```solidity
+function getMaxMessageSize() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum message size.|
+
+
+#### getMinGasLimit
+
+Returns the minimum gas limit allowed.
+
+
+```solidity
+function getMinGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The minimum gas limit.|
+
+
+#### getMaxGasLimit
+
+Returns the maximum gas limit allowed.
+
+
+```solidity
+function getMaxGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum gas limit.|
+
+
+#### getMaxRevertGasLimit
+
+Returns the maximum revert gas limit allowed.
+
+
+```solidity
+function getMaxRevertGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum revert gas limit.|
+
+
 
 
 ## IGatewayZEVMErrors
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/IGatewayZEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/IGatewayZEVM.sol)
 
 Interface for the errors used in the GatewayZEVM contract.
 
 
 ### Errors
+#### EmptyAddress
+Error indicating a empty address was provided.
+
+
+```solidity
+error EmptyAddress();
+```
+
 #### WithdrawalFailed
 Error indicating a withdrawal failure.
 
@@ -6963,12 +7046,12 @@ Error indicating that only WZETA or the protocol address can call the function.
 error OnlyWZETAOrProtocol();
 ```
 
-#### InsufficientGasLimit
-Error indicating an insufficient gas limit.
+#### InvalidGasLimit
+Error indicating an invalid gas limit.
 
 
 ```solidity
-error InsufficientGasLimit();
+error InvalidGasLimit();
 ```
 
 #### MessageSizeExceeded
@@ -6997,7 +7080,7 @@ error ZeroGasPrice();
 
 
 ## IGatewayZEVMEvents
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/IGatewayZEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/IGatewayZEVM.sol)
 
 Interface for the events emitted by the GatewayZEVM contract.
 
@@ -7100,7 +7183,7 @@ event WithdrawnAndCalled(
 
 
 ## CallOptions
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/IGatewayZEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/IGatewayZEVM.sol)
 
 CallOptions struct passed to call and withdrawAndCall functions.
 
@@ -7122,7 +7205,7 @@ struct CallOptions {
 
 
 ## ISystem
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/ISystem.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/ISystem.sol)
 
 Interface for the System contract.
 
@@ -7175,7 +7258,7 @@ function gasZetaPoolByChainId(uint256 chainID) external view returns (address);
 
 
 ## IWETH9
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/IWZETA.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/IWZETA.sol)
 
 Interface for the Weth9 contract.
 
@@ -7265,7 +7348,7 @@ event Withdrawal(address indexed src, uint256 wad);
 
 
 ## CoinType
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/IZRC20.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/IZRC20.sol)
 
 *Coin types for ZRC20. Zeta value should not be used.*
 
@@ -7281,7 +7364,7 @@ enum CoinType {
 
 
 ## IZRC20
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/IZRC20.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/IZRC20.sol)
 
 Interface for the ZRC20 token contract.
 
@@ -7408,7 +7491,7 @@ function setSymbol(string memory newSymbol) external;
 
 
 ## IZRC20Metadata
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/IZRC20.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/IZRC20.sol)
 
 Interface for the ZRC20 metadata.
 
@@ -7438,7 +7521,7 @@ function decimals() external view returns (uint8);
 
 
 ## ZRC20Events
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/IZRC20.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/IZRC20.sol)
 
 Interface for the ZRC20 events.
 
@@ -7495,7 +7578,7 @@ event UpdatedProtocolFlatFee(uint256 protocolFlatFee);
 
 
 ## UniversalContract
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/UniversalContract.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/UniversalContract.sol)
 
 Abstract contract for contracts that can receive cross-chain calls on ZetaChain.
 
@@ -7586,7 +7669,7 @@ error Unauthorized();
 
 
 ## zContract
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/UniversalContract.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/UniversalContract.sol)
 
 **Note:**
 deprecated: should be removed once v2 SystemContract is not used anymore.
@@ -7604,7 +7687,7 @@ function onCrossChainCall(zContext calldata context, address zrc20, uint256 amou
 
 
 ## MessageContext
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/UniversalContract.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/UniversalContract.sol)
 
 Provides contextual information when executing a cross-chain call on ZetaChain.
 
@@ -7622,7 +7705,7 @@ struct MessageContext {
 
 
 ## zContext
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/interfaces/UniversalContract.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/interfaces/UniversalContract.sol)
 
 **Note:**
 deprecated: should be removed once v2 SystemContract is not used anymore.
@@ -7640,7 +7723,7 @@ struct zContext {
 
 
 ## ZetaConnectorZEVM
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/legacy/ZetaConnectorZEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/legacy/ZetaConnectorZEVM.sol)
 
 
 ### State Variables
@@ -7839,7 +7922,7 @@ error WrongValue();
 
 
 ## ZetaInterfaces
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/legacy/ZetaConnectorZEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/legacy/ZetaConnectorZEVM.sol)
 
 
 ### Structs
@@ -7890,7 +7973,7 @@ struct ZetaRevert {
 
 
 ## ZetaReceiver
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/legacy/ZetaConnectorZEVM.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/legacy/ZetaConnectorZEVM.sol)
 
 
 ### Functions
@@ -7916,7 +7999,7 @@ function onZetaRevert(ZetaInterfaces.ZetaRevert calldata zetaRevert) external;
 
 
 ## GatewayZEVMValidations
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/libraries/GatewayZEVMValidations.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/libraries/GatewayZEVMValidations.sol)
 
 Library containing validation functions for GatewayZEVM contract
 
@@ -7939,6 +8022,15 @@ Minimum gas limit constant
 
 ```solidity
 uint256 internal constant MIN_GAS_LIMIT = 100_000;
+```
+
+
+#### MAX_GAS_LIMIT
+Maximum gas limit constant
+
+
+```solidity
+uint256 internal constant MAX_GAS_LIMIT = 2_500_000;
 ```
 
 
@@ -8192,19 +8284,10 @@ function validateZetaDepositParams(
 |`contractAddress`|`address`|The contract address|
 
 
-### Errors
-#### EmptyAddress
-Error indicating a empty address was provided.
-
-
-```solidity
-error EmptyAddress();
-```
-
 
 
 ## SystemContract
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/SystemContract.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/SystemContract.sol)
 
 *The system contract it's called by the protocol to interact with the blockchain.
 Also includes a lot of tools to make easier to interact with ZetaChain.*
@@ -8481,7 +8564,7 @@ event SetConnectorZEVM(address);
 
 
 ## SystemContractErrors
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/SystemContract.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/SystemContract.sol)
 
 *Custom errors for SystemContract*
 
@@ -8520,7 +8603,7 @@ error ZeroAddress();
 
 
 ## WETH9
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/WZETA.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/WZETA.sol)
 
 
 ### State Variables
@@ -8637,7 +8720,7 @@ event Withdrawal(address indexed src, uint256 wad);
 
 
 ## ZRC20
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/ZRC20.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/ZRC20.sol)
 
 
 ### State Variables
@@ -9167,7 +9250,7 @@ function updateProtocolFlatFee(uint256 protocolFlatFee_) external onlyFungible;
 
 
 ## ZRC20Errors
-[Git Source](https://github.com/zeta-chain/protocol-contracts/blob/main/contracts/zevm/ZRC20.sol)
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/508d2c278acf0f8a7284e61aebc761228430b757/contracts/zevm/ZRC20.sol)
 
 *Custom errors for ZRC20*
 
