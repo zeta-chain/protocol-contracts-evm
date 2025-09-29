@@ -75,41 +75,26 @@ interface IGatewayZEVMEvents {
 /// @title IGatewayZEVMErrors
 /// @notice Interface for the errors used in the GatewayZEVM contract.
 interface IGatewayZEVMErrors {
-    /// @notice Error indicating a empty address was provided.
-    error EmptyAddress();
-
     /// @notice Error indicating a withdrawal failure.
-    /// @param token The address of the token that failed to withdraw.
-    /// @param recipient The address that was supposed to receive the tokens.
-    /// @param amount The amount of tokens that failed to withdraw.
-    error WithdrawalFailed(address token, address recipient, uint256 amount);
+    error WithdrawalFailed();
 
-    /// @notice Error indicating an insufficient token amount.
-    error InsufficientAmount();
+    /// @notice Error indicating an insufficient ZRC20 token amount.
+    error InsufficientZRC20Amount();
+
+    /// @notice Error indicating an insufficient zeta amount.
+    error InsufficientZetaAmount();
 
     /// @notice Error indicating a failure to burn ZRC20 tokens.
-    /// @param zrc20 The address of the ZRC20 token that failed to burn.
-    /// @param amount The amount of tokens that failed to burn.
-    error ZRC20BurnFailed(address zrc20, uint256 amount);
+    error ZRC20BurnFailed();
 
     /// @notice Error indicating a failure to transfer ZRC20 tokens.
-    /// @param zrc20 The address of the ZRC20 token that failed to transfer.
-    /// @param from The address sending the tokens.
-    /// @param to The address receiving the tokens.
-    /// @param amount The amount of tokens that failed to transfer.
-    error ZRC20TransferFailed(address zrc20, address from, address to, uint256 amount);
+    error ZRC20TransferFailed();
 
     /// @notice Error indicating a failure to deposit ZRC20 tokens.
-    /// @param zrc20 The address of the ZRC20 token that failed to deposit.
-    /// @param to The address that was supposed to receive the deposit.
-    /// @param amount The amount of tokens that failed to deposit.
-    error ZRC20DepositFailed(address zrc20, address to, uint256 amount);
+    error ZRC20DepositFailed();
 
     /// @notice Error indicating a failure to transfer gas fee.
-    /// @param token The address of the token used for gas fee.
-    /// @param to The address that was supposed to receive the gas fee.
-    /// @param amount The amount of gas fee that failed to transfer.
-    error GasFeeTransferFailed(address token, address to, uint256 amount);
+    error GasFeeTransferFailed();
 
     /// @notice Error indicating that the caller is not the protocol account.
     error CallerIsNotProtocol();
@@ -118,23 +103,16 @@ interface IGatewayZEVMErrors {
     error InvalidTarget();
 
     /// @notice Error indicating a failure to send ZETA tokens.
-    /// @param recipient The address that was supposed to receive the ZETA tokens.
-    /// @param amount The amount of ZETA tokens that failed to send.
-    error FailedZetaSent(address recipient, uint256 amount);
+    error FailedZetaSent();
 
     /// @notice Error indicating that only WZETA or the protocol address can call the function.
     error OnlyWZETAOrProtocol();
 
-    /// @notice Error indicating an invalid gas limit.
-    error InvalidGasLimit();
+    /// @notice Error indicating an insufficient gas limit.
+    error InsufficientGasLimit();
 
     /// @notice Error indicating message size exceeded in external functions.
-    /// @param provided The size of the message that was provided.
-    /// @param maximum The maximum allowed message size.
-    error MessageSizeExceeded(uint256 provided, uint256 maximum);
-
-    /// @notice Error indicating an invalid gas price.
-    error ZeroGasPrice();
+    error MessageSizeExceeded();
 }
 
 /// @title IGatewayZEVM
@@ -156,8 +134,15 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
 
     /// @notice Withdraw ZETA tokens to an external chain.
     /// @param receiver The receiver address on the external chain.
+    /// @param amount The amount of tokens to withdraw.
     /// @param revertOptions Revert options.
-    function withdraw(bytes memory receiver, uint256 chainId, RevertOptions calldata revertOptions) external payable;
+    function withdraw(
+        bytes memory receiver,
+        uint256 amount,
+        uint256 chainId,
+        RevertOptions calldata revertOptions
+    )
+        external;
 
     /// @notice Withdraw ZRC20 tokens and call a smart contract on an external chain.
     /// @param receiver The receiver address on the external chain.
@@ -178,19 +163,20 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
 
     /// @notice Withdraw ZETA tokens and call a smart contract on an external chain.
     /// @param receiver The receiver address on the external chain.
+    /// @param amount The amount of tokens to withdraw.
     /// @param chainId Chain id of the external chain.
     /// @param message The calldata to pass to the contract call.
     /// @param callOptions Call options including gas limit and arbirtrary call flag.
     /// @param revertOptions Revert options.
     function withdrawAndCall(
         bytes memory receiver,
+        uint256 amount,
         uint256 chainId,
         bytes calldata message,
         CallOptions calldata callOptions,
         RevertOptions calldata revertOptions
     )
-        external
-        payable;
+        external;
 
     /// @notice Call a smart contract on an external chain without asset transfer.
     /// @param receiver The receiver address on the external chain.
@@ -212,10 +198,6 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
     /// @param amount The amount of tokens to deposit.
     /// @param target The target address to receive the deposited tokens.
     function deposit(address zrc20, uint256 amount, address target) external;
-
-    /// @notice Deposit native ZETA.
-    /// @param target The target address to receive the ZETA.
-    function deposit(address target) external payable;
 
     /// @notice Execute a user-specified contract on ZEVM.
     /// @param context The context of the cross-chain call.
@@ -247,11 +229,18 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
     )
         external;
 
-    /// @notice Deposit native ZETA and call a user-specified contract on ZEVM.
+    /// @notice Deposit ZETA and call a user-specified contract on ZEVM.
     /// @param context The context of the cross-chain call.
+    /// @param amount The amount of tokens to transfer.
     /// @param target The target contract to call.
     /// @param message The calldata to pass to the contract call.
-    function depositAndCall(MessageContext calldata context, address target, bytes calldata message) external payable;
+    function depositAndCall(
+        MessageContext calldata context,
+        uint256 amount,
+        address target,
+        bytes calldata message
+    )
+        external;
 
     /// @notice Revert a user-specified contract on ZEVM.
     /// @param target The target contract to call.
@@ -270,22 +259,6 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
         RevertContext calldata revertContext
     )
         external;
-
-    /// @notice Returns the maximum message size.
-    /// @return The maximum message size.
-    function getMaxMessageSize() external pure returns (uint256);
-
-    /// @notice Returns the minimum gas limit allowed.
-    /// @return The minimum gas limit.
-    function getMinGasLimit() external pure returns (uint256);
-
-    /// @notice Returns the maximum gas limit allowed.
-    /// @return The maximum gas limit.
-    function getMaxGasLimit() external pure returns (uint256);
-
-    /// @notice Returns the maximum revert gas limit allowed.
-    /// @return The maximum revert gas limit.
-    function getMaxRevertGasLimit() external pure returns (uint256);
 }
 
 /// @notice CallOptions struct passed to call and withdrawAndCall functions.
