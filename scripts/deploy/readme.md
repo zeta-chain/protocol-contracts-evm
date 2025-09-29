@@ -62,6 +62,36 @@ forge script scripts/deploy/deterministic/DeployERC20Custody.s.sol \
   --broadcast
 ```
 
+**ZetaConnector**
+
+In addition to the previous environment variables, the following environment variable must be set:
+
+- `ZETA_CONNECTOR_ADMIN_ADDRESS_EVM`: address of the admin
+
+Once setup, the contract can be deployed:
+
+```
+For Ethereum, where ZETA token is initially deployed, we are using ZetaConnectorNative.
+
+forge script scripts/deploy/deterministic/DeployZetaConnectorNative.s.sol \
+  --private-key <PRIVATE_KEY> \
+  --rpc-url <RPC_URL> \
+  --verify \
+  --etherscan-api-key <ETHERSCAN_API_KEY> \
+  --chain-id 1 \
+  --broadcast
+
+For all other connected EVMs, we are using ZetaConnectorNonNative.
+
+forge script scripts/deploy/deterministic/DeployZetaConnectorNonNative.s.sol \
+  --private-key <PRIVATE_KEY> \
+  --rpc-url <RPC_URL> \
+  --verify \
+  --etherscan-api-key <ETHERSCAN_API_KEY> \
+  --chain-id <CHAIN_ID> \
+  --broadcast
+```
+
 ## Deploying the protocol contracts on ZetaChain
 
 Since ZRC20s are deployed by the protocol, only the `GatewayZEVM` contract needs to be deployed manually on ZetaChain.
@@ -92,7 +122,7 @@ The implementation contracts don't require environment variables or paramters to
 
 **GatewayEVM**
 
-Deploy a wew implementation of the GatewayEVM:
+Deploy a new implementation of the GatewayEVM:
 
 ```
 forge script scripts/deploy/deterministic/DeployGatewayEVMImplementation.s.sol \
@@ -106,7 +136,7 @@ forge script scripts/deploy/deterministic/DeployGatewayEVMImplementation.s.sol \
 
 **ERC20Custody**
 
-Deploy a wew implementation of the ERC20Custody:
+Deploy a new implementation of the ERC20Custody:
 
 ```
 forge script scripts/deploy/deterministic/DeployERC20CustodyImplementation.s.sol \
@@ -120,7 +150,7 @@ forge script scripts/deploy/deterministic/DeployERC20CustodyImplementation.s.sol
 
 **GatewayZEVM**
 
-Deploy a wew implementation of the GatewayZEVM:
+Deploy a new implementation of the GatewayZEVM:
 
 ```
 forge script scripts/deploy/deterministic/DeployGatewayZEVMImplementation.s.sol \
