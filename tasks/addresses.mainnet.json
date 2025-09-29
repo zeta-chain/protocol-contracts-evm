@@ -5,5 +5,12 @@
     "chain_id": 7000,
     "chain_name": "zeta_mainnet",
     "type": "gateway"
+  },
+  {
+    "address": "0x9b30CfbACD3504252F82263F72D6acf62bf733C2",
+    "category": "omnichain",
+    "chain_id": 7000,
+    "chain_name": "zeta_mainnet",
+    "type": "uniswapV3Router"
   }
 ]
