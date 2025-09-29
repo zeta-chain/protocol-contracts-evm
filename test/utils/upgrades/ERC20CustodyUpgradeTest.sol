@@ -63,6 +63,7 @@ contract ERC20CustodyUpgradeTest is
         tssAddress = tssAddress_;
         _grantRole(DEFAULT_ADMIN_ROLE, admin_);
         _grantRole(PAUSER_ROLE, admin_);
+        _grantRole(PAUSER_ROLE, tssAddress_);
         _grantRole(WITHDRAWER_ROLE, tssAddress_);
         _grantRole(WHITELISTER_ROLE, admin_);
         _grantRole(WHITELISTER_ROLE, tssAddress_);
