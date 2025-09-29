@@ -17,7 +17,6 @@ contract ZetaConnectorNonNative is ZetaConnectorBase {
     /// @notice Max supply for minting.
     uint256 public maxSupply;
 
-    /// @notice Initializer for ZetaConnectorNonNative.
     function initialize(
         address gateway_,
         address zetaToken_,
@@ -30,8 +29,7 @@ contract ZetaConnectorNonNative is ZetaConnectorBase {
     {
         super.initialize(gateway_, zetaToken_, tssAddress_, admin_);
 
-        // Total ZETA supply: 2.1 billion tokens (2,100,000,000 * 10^18 wei)
-        maxSupply = 2_100_000_000_000_000_000_000_000_000;
+        maxSupply = type(uint256).max;
     }
 
     /// @notice Set max supply for minting.
@@ -53,6 +51,7 @@ contract ZetaConnectorNonNative is ZetaConnectorBase {
         bytes32 internalSendHash
     )
         external
+        override
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
         whenNotPaused
@@ -76,6 +75,7 @@ contract ZetaConnectorNonNative is ZetaConnectorBase {
         bytes32 internalSendHash
     )
         external
+        override
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
         whenNotPaused
@@ -104,6 +104,7 @@ contract ZetaConnectorNonNative is ZetaConnectorBase {
         RevertContext calldata revertContext
     )
         external
+        override
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
         whenNotPaused
@@ -119,7 +120,7 @@ contract ZetaConnectorNonNative is ZetaConnectorBase {
 
     /// @notice Handle received tokens and burn them.
     /// @param amount The amount of tokens received.
-    function deposit(uint256 amount) external override whenNotPaused {
+    function receiveTokens(uint256 amount) external override whenNotPaused {
         IZetaNonEthNew(zetaToken).burnFrom(msg.sender, amount);
     }
 
