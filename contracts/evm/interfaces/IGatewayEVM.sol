@@ -70,11 +70,6 @@ interface IGatewayEVMEvents {
     /// @param oldTSSAddress old tss address
     /// @param newTSSAddress new tss address
     event UpdatedGatewayTSSAddress(address oldTSSAddress, address newTSSAddress);
-
-    /// @notice Emitted when additional action fee for multi-deposits is updated
-    /// @param oldFeeWei old fee in wei
-    /// @param newFeeWei new fee in wei
-    event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 }
 
 /// @title IGatewayEVMErrors
@@ -86,16 +81,17 @@ interface IGatewayEVMErrors {
     /// @notice Error for failed deposit.
     error DepositFailed();
 
-    /// @notice Error for insufficient token amount.
-    error InsufficientEVMAmount();
+    /// @notice Error for insufficient ETH amount.
+    error InsufficientETHAmount();
+
+    /// @notice Error for insufficient ERC20 token amount.
+    error InsufficientERC20Amount();
 
     /// @notice Error for zero address input.
     error ZeroAddress();
 
     /// @notice Error for failed token approval.
-    /// @param token The address of the token for which approval failed.
-    /// @param spender The address that was supposed to be approved to spend the tokens.
-    error ApprovalFailed(address token, address spender);
+    error ApprovalFailed();
 
     /// @notice Error for already initialized custody.
     error CustodyInitialized();
@@ -104,8 +100,7 @@ interface IGatewayEVMErrors {
     error ConnectorInitialized();
 
     /// @notice Error when trying to transfer not whitelisted token to custody.
-    /// @param token The address of the token that is not whitelisted in custody.
-    error NotWhitelistedInCustody(address token);
+    error NotWhitelistedInCustody();
 
     /// @notice Error when trying to call onCall method using arbitrary call.
     error NotAllowedToCallOnCall();
@@ -114,31 +109,7 @@ interface IGatewayEVMErrors {
     error NotAllowedToCallOnRevert();
 
     /// @notice Error indicating payload size exceeded in external functions.
-    /// @param provided The size of the payload that was provided.
-    /// @param maximum The maximum allowed payload size.
-    error PayloadSizeExceeded(uint256 provided, uint256 maximum);
-
-    /// @notice Error thrown when fee transfer to TSS address fails.
-    /// @dev This error occurs when the low-level call to transfer fees fails.
-    error FeeTransferFailed();
-
-    /// @notice Error thrown when insufficient fee is provided for additional actions.
-    /// @param required The fee amount required for the action.
-    /// @param provided The fee amount actually provided by the caller.
-    error InsufficientFee(uint256 required, uint256 provided);
-
-    /// @notice Error thrown when excess ETH is sent for non-ETH operations.
-    /// @param required The fee amount required for the action.
-    /// @param provided The ETH amount actually provided by the caller.
-    error ExcessETHProvided(uint256 required, uint256 provided);
-
-    /// @notice Error thrown when additional action functionality is disabled (fee set to 0).
-    error AdditionalActionDisabled();
-
-    /// @notice Error thrown when msg.value doesn't match expected amount + fee.
-    /// @param expected The expected value (amount + fee).
-    /// @param provided The actual msg.value provided.
-    error IncorrectValueProvided(uint256 expected, uint256 provided);
+    error PayloadSizeExceeded();
 }
 
 /// @title IGatewayEVM
@@ -207,25 +178,12 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param revertOptions Revert options.
     function deposit(address receiver, RevertOptions calldata revertOptions) external payable;
 
-    /// @notice Deposits ETH to the TSS address with specified amount.
-    /// @param receiver Address of the receiver.
-    /// @param amount Amount of ETH to deposit.
-    /// @param revertOptions Revert options.
-    function deposit(address receiver, uint256 amount, RevertOptions calldata revertOptions) external payable;
-
     /// @notice Deposits ERC20 tokens to the custody or connector contract.
     /// @param receiver Address of the receiver.
     /// @param amount Amount of tokens to deposit.
     /// @param asset Address of the ERC20 token.
     /// @param revertOptions Revert options.
-    function deposit(
-        address receiver,
-        uint256 amount,
-        address asset,
-        RevertOptions calldata revertOptions
-    )
-        external
-        payable;
+    function deposit(address receiver, uint256 amount, address asset, RevertOptions calldata revertOptions) external;
 
     /// @notice Deposits ETH to the TSS address and calls an omnichain smart contract.
     /// @param receiver Address of the receiver.
@@ -233,20 +191,6 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param revertOptions Revert options.
     function depositAndCall(
         address receiver,
-        bytes calldata payload,
-        RevertOptions calldata revertOptions
-    )
-        external
-        payable;
-
-    /// @notice Deposits ETH to the TSS address and calls an omnichain smart contract with specified amount.
-    /// @param receiver Address of the receiver.
-    /// @param amount Amount of ETH to deposit.
-    /// @param payload Calldata to pass to the call.
-    /// @param revertOptions Revert options.
-    function depositAndCall(
-        address receiver,
-        uint256 amount,
         bytes calldata payload,
         RevertOptions calldata revertOptions
     )
@@ -266,14 +210,13 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
         bytes calldata payload,
         RevertOptions calldata revertOptions
     )
-        external
-        payable;
+        external;
 
     /// @notice Calls an omnichain smart contract without asset transfer.
     /// @param receiver Address of the receiver.
     /// @param payload Calldata to pass to the call.
     /// @param revertOptions Revert options.
-    function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions) external payable;
+    function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions) external;
 }
 
 /// @notice Message context passed to execute function.
