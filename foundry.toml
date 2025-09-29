@@ -23,7 +23,7 @@ ffi = true
 ast = true
 build_info = true
 extra_output = ["storageLayout"]
-evm_version = "cancun"
+evm_version = "london"
 
 [fmt]
 bracket_spacing = true
