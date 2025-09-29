@@ -75,7 +75,7 @@ contract GatewayZEVMUpgradeTest is
     /// @dev Using admin to authorize upgrades and pause.
     function initialize(address zetaToken_, address admin_) public initializer {
         if (zetaToken_ == address(0) || admin_ == address(0)) {
-            revert GatewayZEVMValidations.EmptyAddress();
+            revert EmptyAddress();
         }
         __UUPSUpgradeable_init();
         __AccessControl_init();
@@ -109,7 +109,7 @@ contract GatewayZEVMUpgradeTest is
     /// @notice Set registry address, callable only by DEFAULT_ADMIN_ROLE.
     /// @param _registry The address of the registry contract.
     function setRegistryAddress(address _registry) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        if (_registry == address(0)) revert GatewayZEVMValidations.EmptyAddress();
+        if (_registry == address(0)) revert EmptyAddress();
         registry = _registry;
     }
 
@@ -647,6 +647,12 @@ contract GatewayZEVMUpgradeTest is
     /// @return The minimum gas limit.
     function getMinGasLimit() external pure returns (uint256) {
         return GatewayZEVMValidations.MIN_GAS_LIMIT;
+    }
+
+    /// @notice Returns the maximum gas limit allowed.
+    /// @return The maximum gas limit.
+    function getMaxGasLimit() external pure returns (uint256) {
+        return GatewayZEVMValidations.MAX_GAS_LIMIT;
     }
 
     /// @notice Returns the maximum revert gas limit allowed.

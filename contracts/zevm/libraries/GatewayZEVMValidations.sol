@@ -8,25 +8,23 @@ import "../interfaces/IGatewayZEVM.sol";
 /// @notice Library containing validation functions for GatewayZEVM contract
 /// @dev This library provides common validation logic used across GatewayZEVM contract
 library GatewayZEVMValidations {
-    /// @notice Error indicating a empty address was provided.
-    error EmptyAddress();
-
     /// @notice Maximum message size constant
     uint256 internal constant MAX_MESSAGE_SIZE = 2880;
-
     /// @notice Minimum gas limit constant
     uint256 internal constant MIN_GAS_LIMIT = 100_000;
+    /// @notice Maximum gas limit constant
+    uint256 internal constant MAX_GAS_LIMIT = 2_500_000;
 
     /// @dev Validates that an address is not zero
     /// @param addr The address to validate
     function validateNonZeroAddress(address addr) internal pure {
-        if (addr == address(0)) revert EmptyAddress();
+        if (addr == address(0)) revert IGatewayZEVMErrors.EmptyAddress();
     }
 
     /// @dev Validates that receiver bytes are not empty
     /// @param receiver The receiver bytes to validate
     function validateReceiver(bytes memory receiver) internal pure {
-        if (receiver.length == 0) revert EmptyAddress();
+        if (receiver.length == 0) revert IGatewayZEVMErrors.EmptyAddress();
     }
 
     /// @dev Validates that amount is not zero
@@ -38,7 +36,7 @@ library GatewayZEVMValidations {
     /// @dev Validates that gas limit meets minimum requirement
     /// @param gasLimit The gas limit to validate
     function validateGasLimit(uint256 gasLimit) internal pure {
-        if (gasLimit < MIN_GAS_LIMIT) revert IGatewayZEVMErrors.InsufficientGasLimit();
+        if (gasLimit < MIN_GAS_LIMIT || gasLimit > MAX_GAS_LIMIT) revert IGatewayZEVMErrors.InvalidGasLimit();
     }
 
     /// @dev Validates that target address is not restricted
