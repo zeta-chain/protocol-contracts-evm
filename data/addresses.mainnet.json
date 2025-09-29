@@ -147,6 +147,20 @@
     "type": "uniswapV2Router02"
   },
   {
+    "address": "0x67AA6B2b715937Edc1Eb4D3b7B5d5dCD1fd93E8C",
+    "category": "messaging",
+    "chain_id": 7000,
+    "chain_name": "zeta_mainnet",
+    "type": "uniswapV3Factory"
+  },
+  {
+    "address": "0x9b30CfbACD3504252F82263F72D6acf62bf733C2",
+    "category": "omnichain",
+    "chain_id": 7000,
+    "chain_name": "zeta_mainnet",
+    "type": "uniswapV3Router"
+  },
+  {
     "category": "omnichain",
     "chain_id": 7000,
     "chain_name": "zeta_mainnet",
