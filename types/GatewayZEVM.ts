@@ -123,6 +123,7 @@ export interface GatewayZEVMInterface extends Interface {
       | "execute"
       | "executeAbort"
       | "executeRevert"
+      | "getMaxGasLimit"
       | "getMaxMessageSize"
       | "getMaxRevertGasLimit"
       | "getMinGasLimit"
@@ -235,6 +236,10 @@ export interface GatewayZEVMInterface extends Interface {
   encodeFunctionData(
     functionFragment: "executeRevert",
     values: [AddressLike, RevertContextStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMaxGasLimit",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getMaxMessageSize",
@@ -381,6 +386,10 @@ export interface GatewayZEVMInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "executeRevert",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMaxGasLimit",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -807,6 +816,8 @@ export interface GatewayZEVM extends BaseContract {
     "nonpayable"
   >;
 
+  getMaxGasLimit: TypedContractMethod<[], [bigint], "view">;
+
   getMaxMessageSize: TypedContractMethod<[], [bigint], "view">;
 
   getMaxRevertGasLimit: TypedContractMethod<[], [bigint], "view">;
@@ -1038,6 +1049,9 @@ export interface GatewayZEVM extends BaseContract {
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "getMaxGasLimit"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "getMaxMessageSize"
   ): TypedContractMethod<[], [bigint], "view">;

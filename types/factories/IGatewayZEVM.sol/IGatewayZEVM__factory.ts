@@ -349,6 +349,58 @@ const _abi = [
   },
   {
     type: "function",
+    name: "getMaxGasLimit",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+  },
+  {
+    type: "function",
+    name: "getMaxMessageSize",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+  },
+  {
+    type: "function",
+    name: "getMaxRevertGasLimit",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+  },
+  {
+    type: "function",
+    name: "getMinGasLimit",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+  },
+  {
+    type: "function",
     name: "withdraw",
     inputs: [
       {
@@ -902,6 +954,11 @@ const _abi = [
   },
   {
     type: "error",
+    name: "EmptyAddress",
+    inputs: [],
+  },
+  {
+    type: "error",
     name: "FailedZetaSent",
     inputs: [
       {
@@ -944,7 +1001,7 @@ const _abi = [
   },
   {
     type: "error",
-    name: "InsufficientGasLimit",
+    name: "InvalidGasLimit",
     inputs: [],
   },
   {

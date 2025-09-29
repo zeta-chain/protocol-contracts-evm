@@ -92,6 +92,10 @@ export interface IGatewayZEVMInterface extends Interface {
       | "depositAndRevert"
       | "execute"
       | "executeRevert"
+      | "getMaxGasLimit"
+      | "getMaxMessageSize"
+      | "getMaxRevertGasLimit"
+      | "getMinGasLimit"
       | "withdraw(bytes,uint256,(address,bool,address,bytes,uint256))"
       | "withdraw(bytes,uint256,address,(address,bool,address,bytes,uint256))"
       | "withdrawAndCall(bytes,uint256,address,bytes,(uint256,bool),(address,bool,address,bytes,uint256))"
@@ -153,6 +157,22 @@ export interface IGatewayZEVMInterface extends Interface {
     values: [AddressLike, RevertContextStruct]
   ): string;
   encodeFunctionData(
+    functionFragment: "getMaxGasLimit",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMaxMessageSize",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMaxRevertGasLimit",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMinGasLimit",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "withdraw(bytes,uint256,(address,bool,address,bytes,uint256))",
     values: [BytesLike, BigNumberish, RevertOptionsStruct]
   ): string;
@@ -206,6 +226,22 @@ export interface IGatewayZEVMInterface extends Interface {
   decodeFunctionResult(functionFragment: "execute", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "executeRevert",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMaxGasLimit",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMaxMessageSize",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMaxRevertGasLimit",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMinGasLimit",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -457,6 +493,14 @@ export interface IGatewayZEVM extends BaseContract {
     "nonpayable"
   >;
 
+  getMaxGasLimit: TypedContractMethod<[], [bigint], "view">;
+
+  getMaxMessageSize: TypedContractMethod<[], [bigint], "view">;
+
+  getMaxRevertGasLimit: TypedContractMethod<[], [bigint], "view">;
+
+  getMinGasLimit: TypedContractMethod<[], [bigint], "view">;
+
   "withdraw(bytes,uint256,(address,bool,address,bytes,uint256))": TypedContractMethod<
     [
       receiver: BytesLike,
@@ -582,6 +626,18 @@ export interface IGatewayZEVM extends BaseContract {
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "getMaxGasLimit"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getMaxMessageSize"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getMaxRevertGasLimit"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getMinGasLimit"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "withdraw(bytes,uint256,(address,bool,address,bytes,uint256))"
   ): TypedContractMethod<
