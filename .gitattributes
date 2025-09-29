@@ -1,3 +1,3 @@
 # Mark all files in the directories as generated
 pkg/* linguist-generated
-typechain-types/* linguist-generated
+types/* linguist-generated

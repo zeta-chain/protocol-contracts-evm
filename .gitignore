@@ -19,6 +19,7 @@ tsconfig.tsbuildinfo
 # Misc
 .env
 .DS_Store
+.idea
 .secrets
 .wallet.json
 
@@ -40,7 +41,6 @@ cache_forge
 broadcast/*/31337
 
 dependencies/
-.idea
 
 # Ignoring remappings because we are adding them in foundry.toml
 # currently forge soldeer always re-generates them, should be fixed in next version
