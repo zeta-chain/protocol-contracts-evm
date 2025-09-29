@@ -5,9 +5,13 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
 import "./ZetaErrors.sol";
 
-import "./ZetaNonEthInterface.sol";
+import "./IZetaNonEthInterface.sol";
 
-contract ZetaNonEth is ZetaNonEthInterface, ERC20Burnable, ZetaErrors {
+/**
+ * @notice On non-native (non-Ethereum) chains, ZETA tokens are minted and burned after the initial deployment on
+ * Ethereum.
+ */
+contract ZetaNonEth is IZetaNonEthInterface, ERC20Burnable, ZetaErrors {
     address public connectorAddress;
 
     /**
@@ -70,7 +74,7 @@ contract ZetaNonEth is ZetaNonEthInterface, ERC20Burnable, ZetaErrors {
         emit Minted(mintee, value, internalSendHash);
     }
 
-    function burnFrom(address account, uint256 amount) public override(ZetaNonEthInterface, ERC20Burnable) {
+    function burnFrom(address account, uint256 amount) public override(IZetaNonEthInterface, ERC20Burnable) {
         /**
          * @dev Only Connector can burn.
          */
