@@ -12,7 +12,7 @@ jobs:
       - name: Github Releases To Discord
         uses: SethCohen/github-releases-to-discord@v1.16.2
         with:
-          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          webhook_url: ${{ secrets.DISCORD_DEVZONE_RELEASE_ANNOUNCEMENTS_WEBHOOK_URL }}
           color: "2105893"
           username: "New Release: Protocol Contracts"
           max_description: "4096"
