@@ -45,12 +45,24 @@ contract TestUniversalContract is UniversalContract, Revertable, Abortable {
         if (message.length > 0) {
             decodedMessage = abi.decode(message, (string));
         }
-        emit ContextData(context.origin, context.sender, context.chainID, msg.sender, decodedMessage);
+        emit ContextData(context.sender, context.senderEVM, context.chainID, msg.sender, decodedMessage);
+    }
+
+    /// @notice Handles a cross-chain call.
+    /// @param context The context of the cross-chain call.
+    /// @param message The calldata passed to the contract call.
+    /// @dev Decodes the message and emits a ContextData event.
+    function onCall(MessageContext calldata context, bytes calldata message) external payable override {
+        string memory decodedMessage;
+        if (message.length > 0) {
+            decodedMessage = abi.decode(message, (string));
+        }
+        emit ContextData(context.sender, context.senderEVM, context.chainID, msg.sender, decodedMessage);
     }
 
     /// @notice Handles a cross-chain call revert.
     /// @param revertContext Revert context.
-    function onRevert(RevertContext calldata revertContext) external override {
+    function onRevert(RevertContext calldata revertContext) external payable override {
         emit ContextDataRevert(revertContext);
     }
 
