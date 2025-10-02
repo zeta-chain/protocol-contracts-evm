@@ -229,7 +229,7 @@ function extractDeclarationOrder(sourceCode: string): string[] {
 }
 
 function findFileByContractName(sources: any, contractName: string): string | null {
-    for (const [fileName, fileData] of Object.entries(sources)) {
+    for (const [, fileData] of Object.entries(sources)) {
         const content = typeof fileData === "object" && fileData !== null
             ? (fileData as { content?: string }).content || ""
             : String(fileData);
@@ -276,7 +276,7 @@ function cleanDuplicateHeaders(code: string): string {
     return result.join('\n');
 }
 
-function flattenSourceCode(sourceCode: string, contractName: string): string {
+function flattenSourceCode(sourceCode: string): string {
     if (sourceCode.startsWith("{{") || sourceCode.startsWith("{")) {
         try {
             let jsonStr = sourceCode;
@@ -408,8 +408,8 @@ export async function fetchAndFlattenContract(
             oldFlattened = oldContract.SourceCode;
             newFlattened = reorderMultiFileToMatchSingleFile(oldContract.SourceCode, newContract.SourceCode);
         } else {
-            oldFlattened = flattenSourceCode(oldContract.SourceCode, oldContract.ContractName);
-            newFlattened = flattenSourceCode(newContract.SourceCode, newContract.ContractName);
+            oldFlattened = flattenSourceCode(oldContract.SourceCode);
+            newFlattened = flattenSourceCode(newContract.SourceCode);
         }
 
         console.log("\n💾 Saving flattened contracts...");
