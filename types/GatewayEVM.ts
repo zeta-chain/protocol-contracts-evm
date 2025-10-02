@@ -72,13 +72,10 @@ export interface GatewayEVMInterface extends Interface {
       | "PAUSER_ROLE"
       | "TSS_ROLE"
       | "UPGRADE_INTERFACE_VERSION"
-      | "additionalActionFeeWei"
       | "call"
       | "custody"
       | "deposit(address,uint256,address,(address,bool,address,bytes,uint256))"
-      | "deposit(address,uint256,(address,bool,address,bytes,uint256))"
       | "deposit(address,(address,bool,address,bytes,uint256))"
-      | "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))"
       | "depositAndCall(address,bytes,(address,bool,address,bytes,uint256))"
       | "depositAndCall(address,uint256,address,bytes,(address,bool,address,bytes,uint256))"
       | "execute"
@@ -99,7 +96,6 @@ export interface GatewayEVMInterface extends Interface {
       | "supportsInterface"
       | "tssAddress"
       | "unpause"
-      | "updateAdditionalActionFee"
       | "updateTSSAddress"
       | "upgradeToAndCall"
       | "zetaConnector"
@@ -120,7 +116,6 @@ export interface GatewayEVMInterface extends Interface {
       | "RoleGranted"
       | "RoleRevoked"
       | "Unpaused"
-      | "UpdatedAdditionalActionFee"
       | "UpdatedGatewayTSSAddress"
       | "Upgraded"
   ): EventFragment;
@@ -147,10 +142,6 @@ export interface GatewayEVMInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "additionalActionFeeWei",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "call",
     values: [AddressLike, BytesLike, RevertOptionsStruct]
   ): string;
@@ -160,16 +151,8 @@ export interface GatewayEVMInterface extends Interface {
     values: [AddressLike, BigNumberish, AddressLike, RevertOptionsStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "deposit(address,uint256,(address,bool,address,bytes,uint256))",
-    values: [AddressLike, BigNumberish, RevertOptionsStruct]
-  ): string;
-  encodeFunctionData(
     functionFragment: "deposit(address,(address,bool,address,bytes,uint256))",
     values: [AddressLike, RevertOptionsStruct]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))",
-    values: [AddressLike, BigNumberish, BytesLike, RevertOptionsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "depositAndCall(address,bytes,(address,bool,address,bytes,uint256))",
@@ -261,10 +244,6 @@ export interface GatewayEVMInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "updateAdditionalActionFee",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "updateTSSAddress",
     values: [AddressLike]
   ): string;
@@ -299,10 +278,6 @@ export interface GatewayEVMInterface extends Interface {
     functionFragment: "UPGRADE_INTERFACE_VERSION",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "additionalActionFeeWei",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "call", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "custody", data: BytesLike): Result;
   decodeFunctionResult(
@@ -310,15 +285,7 @@ export interface GatewayEVMInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "deposit(address,uint256,(address,bool,address,bytes,uint256))",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "deposit(address,(address,bool,address,bytes,uint256))",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -371,10 +338,6 @@ export interface GatewayEVMInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "tssAddress", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "updateAdditionalActionFee",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "updateTSSAddress",
     data: BytesLike
@@ -642,19 +605,6 @@ export namespace UnpausedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace UpdatedAdditionalActionFeeEvent {
-  export type InputTuple = [oldFeeWei: BigNumberish, newFeeWei: BigNumberish];
-  export type OutputTuple = [oldFeeWei: bigint, newFeeWei: bigint];
-  export interface OutputObject {
-    oldFeeWei: bigint;
-    newFeeWei: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
 export namespace UpdatedGatewayTSSAddressEvent {
   export type InputTuple = [
     oldTSSAddress: AddressLike,
@@ -738,8 +688,6 @@ export interface GatewayEVM extends BaseContract {
 
   UPGRADE_INTERFACE_VERSION: TypedContractMethod<[], [string], "view">;
 
-  additionalActionFeeWei: TypedContractMethod<[], [bigint], "view">;
-
   call: TypedContractMethod<
     [
       receiver: AddressLike,
@@ -747,7 +695,7 @@ export interface GatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "payable"
+    "nonpayable"
   >;
 
   custody: TypedContractMethod<[], [string], "view">;
@@ -760,32 +708,11 @@ export interface GatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "payable"
-  >;
-
-  "deposit(address,uint256,(address,bool,address,bytes,uint256))": TypedContractMethod<
-    [
-      receiver: AddressLike,
-      amount: BigNumberish,
-      revertOptions: RevertOptionsStruct
-    ],
-    [void],
-    "payable"
+    "nonpayable"
   >;
 
   "deposit(address,(address,bool,address,bytes,uint256))": TypedContractMethod<
     [receiver: AddressLike, revertOptions: RevertOptionsStruct],
-    [void],
-    "payable"
-  >;
-
-  "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))": TypedContractMethod<
-    [
-      receiver: AddressLike,
-      amount: BigNumberish,
-      payload: BytesLike,
-      revertOptions: RevertOptionsStruct
-    ],
     [void],
     "payable"
   >;
@@ -809,7 +736,7 @@ export interface GatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "payable"
+    "nonpayable"
   >;
 
   execute: TypedContractMethod<
@@ -916,12 +843,6 @@ export interface GatewayEVM extends BaseContract {
 
   unpause: TypedContractMethod<[], [void], "nonpayable">;
 
-  updateAdditionalActionFee: TypedContractMethod<
-    [newFeeWei: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-
   updateTSSAddress: TypedContractMethod<
     [newTSSAddress: AddressLike],
     [void],
@@ -961,9 +882,6 @@ export interface GatewayEVM extends BaseContract {
     nameOrSignature: "UPGRADE_INTERFACE_VERSION"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "additionalActionFeeWei"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
     nameOrSignature: "call"
   ): TypedContractMethod<
     [
@@ -972,7 +890,7 @@ export interface GatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "payable"
+    "nonpayable"
   >;
   getFunction(
     nameOrSignature: "custody"
@@ -987,35 +905,12 @@ export interface GatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "deposit(address,uint256,(address,bool,address,bytes,uint256))"
-  ): TypedContractMethod<
-    [
-      receiver: AddressLike,
-      amount: BigNumberish,
-      revertOptions: RevertOptionsStruct
-    ],
-    [void],
-    "payable"
+    "nonpayable"
   >;
   getFunction(
     nameOrSignature: "deposit(address,(address,bool,address,bytes,uint256))"
   ): TypedContractMethod<
     [receiver: AddressLike, revertOptions: RevertOptionsStruct],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))"
-  ): TypedContractMethod<
-    [
-      receiver: AddressLike,
-      amount: BigNumberish,
-      payload: BytesLike,
-      revertOptions: RevertOptionsStruct
-    ],
     [void],
     "payable"
   >;
@@ -1041,7 +936,7 @@ export interface GatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "payable"
+    "nonpayable"
   >;
   getFunction(
     nameOrSignature: "execute"
@@ -1154,9 +1049,6 @@ export interface GatewayEVM extends BaseContract {
     nameOrSignature: "unpause"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "updateAdditionalActionFee"
-  ): TypedContractMethod<[newFeeWei: BigNumberish], [void], "nonpayable">;
-  getFunction(
     nameOrSignature: "updateTSSAddress"
   ): TypedContractMethod<[newTSSAddress: AddressLike], [void], "nonpayable">;
   getFunction(
@@ -1256,13 +1148,6 @@ export interface GatewayEVM extends BaseContract {
     UnpausedEvent.InputTuple,
     UnpausedEvent.OutputTuple,
     UnpausedEvent.OutputObject
-  >;
-  getEvent(
-    key: "UpdatedAdditionalActionFee"
-  ): TypedContractEvent<
-    UpdatedAdditionalActionFeeEvent.InputTuple,
-    UpdatedAdditionalActionFeeEvent.OutputTuple,
-    UpdatedAdditionalActionFeeEvent.OutputObject
   >;
   getEvent(
     key: "UpdatedGatewayTSSAddress"
@@ -1410,17 +1295,6 @@ export interface GatewayEVM extends BaseContract {
       UnpausedEvent.InputTuple,
       UnpausedEvent.OutputTuple,
       UnpausedEvent.OutputObject
-    >;
-
-    "UpdatedAdditionalActionFee(uint256,uint256)": TypedContractEvent<
-      UpdatedAdditionalActionFeeEvent.InputTuple,
-      UpdatedAdditionalActionFeeEvent.OutputTuple,
-      UpdatedAdditionalActionFeeEvent.OutputObject
-    >;
-    UpdatedAdditionalActionFee: TypedContractEvent<
-      UpdatedAdditionalActionFeeEvent.InputTuple,
-      UpdatedAdditionalActionFeeEvent.OutputTuple,
-      UpdatedAdditionalActionFeeEvent.OutputObject
     >;
 
     "UpdatedGatewayTSSAddress(address,address)": TypedContractEvent<

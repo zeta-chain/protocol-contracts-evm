@@ -11,6 +11,19 @@ import type {
 const _abi = [
   {
     type: "function",
+    name: "CHAIN_ID",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "GAS_LIMIT",
     inputs: [],
     outputs: [
@@ -31,19 +44,6 @@ const _abi = [
         name: "",
         type: "uint256",
         internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "SYSTEM_CONTRACT_ADDRESS",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
       },
     ],
     stateMutability: "view",

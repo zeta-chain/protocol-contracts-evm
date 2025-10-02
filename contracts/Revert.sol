@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-// Maximum allowed gas limit for revert operations.
-uint256 constant MAX_REVERT_GAS_LIMIT = 2_000_000;
-
-/// @notice Error indicating revert gas limit exceeds maximum allowed
-/// @param provided The gas limit provided for revert operation.
-/// @param maximum The maximum allowed gas limit for revert operation.
-error RevertGasLimitExceeded(uint256 provided, uint256 maximum);
-
 /// @notice Struct containing revert options
 /// @param revertAddress Address to receive revert.
 /// @param callOnRevert Flag if onRevert hook should be called.

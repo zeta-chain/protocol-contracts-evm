@@ -11,7 +11,6 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 contract ZetaConnectorNative is ZetaConnectorBase {
     using SafeERC20 for IERC20;
 
-    /// @notice Initializer for ZetaConnectorNative.
     function initialize(
         address gateway_,
         address zetaToken_,
@@ -28,8 +27,20 @@ contract ZetaConnectorNative is ZetaConnectorBase {
     /// @notice Withdraw tokens to a specified address.
     /// @param to The address to withdraw tokens to.
     /// @param amount The amount of tokens to withdraw.
+    //// @param internalSendHash A hash used for internal tracking of the transaction (not used currently
+    // https://github.com/zeta-chain/protocol-contracts/issues/398)
     /// @dev This function can only be called by the TSS address.
-    function withdraw(address to, uint256 amount) external nonReentrant onlyRole(WITHDRAWER_ROLE) whenNotPaused {
+    function withdraw(
+        address to,
+        uint256 amount,
+        bytes32 /*internalSendHash*/
+    )
+        external
+        override
+        nonReentrant
+        onlyRole(WITHDRAWER_ROLE)
+        whenNotPaused
+    {
         IERC20(zetaToken).safeTransfer(to, amount);
         emit Withdrawn(to, amount);
     }
@@ -39,14 +50,18 @@ contract ZetaConnectorNative is ZetaConnectorBase {
     /// @param to The address to withdraw tokens to.
     /// @param amount The amount of tokens to withdraw.
     /// @param data The calldata to pass to the contract call.
+    //// @param internalSendHash A hash used for internal tracking of the transaction (not used currently
+    // https://github.com/zeta-chain/protocol-contracts/issues/398)
     /// @dev This function can only be called by the TSS address.
     function withdrawAndCall(
         MessageContext calldata messageContext,
         address to,
         uint256 amount,
-        bytes calldata data
+        bytes calldata data,
+        bytes32 /*internalSendHash*/
     )
         external
+        override
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
         whenNotPaused
@@ -64,15 +79,19 @@ contract ZetaConnectorNative is ZetaConnectorBase {
     /// @param to The address to withdraw tokens to.
     /// @param amount The amount of tokens to withdraw.
     /// @param data The calldata to pass to the contract call.
+    //// @param internalSendHash A hash used for internal tracking of the transaction (not used currently
+    // https://github.com/zeta-chain/protocol-contracts/issues/398)
     /// @dev This function can only be called by the TSS address.
     /// @param revertContext Revert context to pass to onRevert.
     function withdrawAndRevert(
         address to,
         uint256 amount,
         bytes calldata data,
+        bytes32, /*internalSendHash*/
         RevertContext calldata revertContext
     )
         external
+        override
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
         whenNotPaused
@@ -88,7 +107,7 @@ contract ZetaConnectorNative is ZetaConnectorBase {
 
     /// @notice Handle received tokens.
     /// @param amount The amount of tokens received.
-    function deposit(uint256 amount) external override whenNotPaused {
+    function receiveTokens(uint256 amount) external override whenNotPaused {
         IERC20(zetaToken).safeTransferFrom(msg.sender, address(this), amount);
     }
 }

@@ -11,24 +11,8 @@ import type {
 const _abi = [
   {
     type: "error",
-    name: "AdditionalActionDisabled",
-    inputs: [],
-  },
-  {
-    type: "error",
     name: "ApprovalFailed",
-    inputs: [
-      {
-        name: "token",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "spender",
-        type: "address",
-        internalType: "address",
-      },
-    ],
+    inputs: [],
   },
   {
     type: "error",
@@ -47,66 +31,18 @@ const _abi = [
   },
   {
     type: "error",
-    name: "ExcessETHProvided",
-    inputs: [
-      {
-        name: "required",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "provided",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-  },
-  {
-    type: "error",
     name: "ExecutionFailed",
     inputs: [],
   },
   {
     type: "error",
-    name: "FeeTransferFailed",
+    name: "InsufficientERC20Amount",
     inputs: [],
   },
   {
     type: "error",
-    name: "IncorrectValueProvided",
-    inputs: [
-      {
-        name: "expected",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "provided",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-  },
-  {
-    type: "error",
-    name: "InsufficientEVMAmount",
+    name: "InsufficientETHAmount",
     inputs: [],
-  },
-  {
-    type: "error",
-    name: "InsufficientFee",
-    inputs: [
-      {
-        name: "required",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "provided",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
   },
   {
     type: "error",
@@ -121,29 +57,12 @@ const _abi = [
   {
     type: "error",
     name: "NotWhitelistedInCustody",
-    inputs: [
-      {
-        name: "token",
-        type: "address",
-        internalType: "address",
-      },
-    ],
+    inputs: [],
   },
   {
     type: "error",
     name: "PayloadSizeExceeded",
-    inputs: [
-      {
-        name: "provided",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "maximum",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
+    inputs: [],
   },
   {
     type: "error",
