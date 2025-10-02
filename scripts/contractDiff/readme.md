@@ -11,6 +11,9 @@ It should be run after deployment/upgrade to verify that the new implementation 
 
 ## Usage
 ```bash
+# set your etherscan api key in .env file
+ETHERSCAN_API_KEY environment variable
+
 # Compile contracts first to generate artifacts
 npx hardhat compile
 
@@ -26,11 +29,7 @@ npx hardhat contractDiff --network base_mainnet \
     - 2025-10-02_NEW_ContractName_0x9ef630aB.sol
 
 ## Comparing code
-- Flattened contract files can be compared using any diff tool. Recommended online diff checkers:
+- Flattened contract files can be compared using any diff tool:
+    - vimdiff contract-diffs/OLD_FLATTENED_CONTRACT.sol contract-diffs/NEW_FLATTENED_CONTRACT.sol
     - [Diffchecker](https://www.diffchecker.com/text-compare/)
     - [Text Compare](https://text-compare.com/)
-
-## Requirements
-- Node.js and npm
-- Hardhat
-- ETHERSCAN_API_KEY environment variable

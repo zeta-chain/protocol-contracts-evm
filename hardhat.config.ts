@@ -55,7 +55,7 @@ task("protocolChecksum", "Run EVM protocol checkers verification")
 
       process.env.NETWORK_TYPE = networkType;
 
-      const checksumScript = await import("./scripts/checkers/protocolChecksum/protocolChecksum");
+      const checksumScript = await import("./scripts/checkers/protocolChecksum");
       await checksumScript.main();
     } catch (error) {
       console.error("❌ Error running protocol checkers script:", error);
@@ -75,7 +75,7 @@ task("contractDiff", "Fetch and flatten smart contracts for diff analysis")
         console.log(`New Implementation: ${taskArgs.newAddress}`);
         console.log("=".repeat(60));
 
-        const contractDiffTool = await import("./scripts/checkers/contractDiff/contractDiffTool");
+        const contractDiffTool = await import("./scripts/contractDiff/contractDiffTool");
         await contractDiffTool.fetchAndFlattenContract(
             taskArgs.oldAddress,
             taskArgs.newAddress,
