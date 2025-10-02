@@ -76,19 +76,6 @@ const _abi = [
   },
   {
     type: "function",
-    name: "deposit",
-    inputs: [
-      {
-        name: "amount",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     name: "gateway",
     inputs: [],
     outputs: [
@@ -224,6 +211,19 @@ const _abi = [
   },
   {
     type: "function",
+    name: "receiveTokens",
+    inputs: [
+      {
+        name: "amount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "renounceRole",
     inputs: [
       {
@@ -327,6 +327,124 @@ const _abi = [
     ],
     outputs: [],
     stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "withdraw",
+    inputs: [
+      {
+        name: "to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "internalSendHash",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "withdrawAndCall",
+    inputs: [
+      {
+        name: "messageContext",
+        type: "tuple",
+        internalType: "struct MessageContext",
+        components: [
+          {
+            name: "sender",
+            type: "address",
+            internalType: "address",
+          },
+        ],
+      },
+      {
+        name: "to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "data",
+        type: "bytes",
+        internalType: "bytes",
+      },
+      {
+        name: "internalSendHash",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "withdrawAndRevert",
+    inputs: [
+      {
+        name: "to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "data",
+        type: "bytes",
+        internalType: "bytes",
+      },
+      {
+        name: "internalSendHash",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+      {
+        name: "revertContext",
+        type: "tuple",
+        internalType: "struct RevertContext",
+        components: [
+          {
+            name: "sender",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "asset",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "amount",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "revertMessage",
+            type: "bytes",
+            internalType: "bytes",
+          },
+        ],
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
