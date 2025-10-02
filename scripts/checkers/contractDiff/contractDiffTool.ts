@@ -76,8 +76,8 @@ interface EtherscanResponse {
 }
 
 interface BlockscoutFile {
-    name: string;
-    content: string;
+    file_path: string;
+    source_code: string;
 }
 
 interface BlockscoutResponse {
@@ -94,11 +94,6 @@ interface BlockscoutResponse {
     abi?: string;
 }
 
-interface BlockscoutFile {
-    file_path: string;
-    source_code: string;
-}
-
 async function fetchFromBlockscout(
     address: string,
     apiUrl: string
@@ -113,8 +108,6 @@ async function fetchFromBlockscout(
 
         console.log(`   ✅ Contract: ${data.name}`);
         console.log(`   📝 Compiler: ${data.compiler_version}`);
-        console.log(`   📁 Main file: ${data.file_path || data.name}`);
-        console.log(`   📁 Additional files count: ${data.additional_sources?.length || 0}`);
 
         // Convert Blockscout response to Etherscan-compatible format
         let sourceCode = data.source_code;
@@ -127,11 +120,8 @@ async function fetchFromBlockscout(
             const mainFileName = data.file_path || `${data.name}.sol`;
             sources[mainFileName] = { content: data.source_code };
 
-            // Add additional files - USE file_path and source_code
-            console.log(`   📁 File names:`);
             for (const file of data.additional_sources) {
                 sources[file.file_path] = { content: file.source_code };
-                console.log(`      - ${file.file_path}`);
             }
 
             sourceCode = JSON.stringify({ sources });
