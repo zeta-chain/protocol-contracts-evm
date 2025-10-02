@@ -44,9 +44,9 @@ task("upgradeProposal", "Create Safe upgrade proposals for GatewayEVM")
     }
   });
 
-task("protocolChecksum", "Run EVM protocol checksum verification")
-  .addFlag("testnet", "Run checksum for testnet networks")
-  .addFlag("mainnet", "Run checksum for mainnet networks")
+task("protocolChecksum", "Run EVM protocol checkers verification")
+  .addFlag("testnet", "Run checkers for testnet networks")
+  .addFlag("mainnet", "Run checkers for mainnet networks")
   .setAction(async (taskArgs, hre) => {
     try {
       const isMainnet = taskArgs.mainnet;
@@ -55,10 +55,10 @@ task("protocolChecksum", "Run EVM protocol checksum verification")
 
       process.env.NETWORK_TYPE = networkType;
 
-      const checksumScript = await import("./scripts/checksum/protocolChecksum");
+      const checksumScript = await import("./scripts/checkers/protocolChecksum/protocolChecksum");
       await checksumScript.main();
     } catch (error) {
-      console.error("❌ Error running protocol checksum script:", error);
+      console.error("❌ Error running protocol checkers script:", error);
       process.exit(1);
     }
   });
