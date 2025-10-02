@@ -63,4 +63,28 @@ task("protocolChecksum", "Run EVM protocol checkers verification")
     }
   });
 
+task("contractDiff", "Fetch and flatten smart contracts for diff analysis")
+    .addParam("oldAddress", "Address of the old implementation contract")
+    .addParam("newAddress", "Address of the new implementation contract")
+    .setAction(async (taskArgs, hre) => {
+      try {
+        console.log("🔍 Contract Diff Tool");
+        console.log("=".repeat(60));
+        console.log(`Network: ${hre.network.name}`);
+        console.log(`Old Implementation: ${taskArgs.oldAddress}`);
+        console.log(`New Implementation: ${taskArgs.newAddress}`);
+        console.log("=".repeat(60));
+
+        const contractDiffTool = await import("./scripts/checkers/contractDiff/contractDiffTool");
+        await contractDiffTool.fetchAndFlattenContract(
+            taskArgs.oldAddress,
+            taskArgs.newAddress,
+            hre.network.name
+        )
+      } catch (error) {
+        console.error("❌ Error running contract diff tool:", error);
+        process.exit(1);
+      }
+    });
+
 export default config;
