@@ -133,7 +133,7 @@ contract GatewayEVMUpgradeTest is
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
     function execute(
-        MessageContext calldata messageContext,
+        MessageContextV2 calldata messageContext,
         address destination,
         bytes calldata data
     )
@@ -166,7 +166,7 @@ contract GatewayEVMUpgradeTest is
     /// @param amount Amount of tokens to transfer.
     /// @param data Calldata to pass to the call.
     function executeWithERC20(
-        MessageContext calldata messageContext,
+        MessageContextV2 calldata messageContext,
         address token,
         address to,
         uint256 amount,
@@ -439,14 +439,20 @@ contract GatewayEVMUpgradeTest is
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
     function _executeAuthenticatedCall(
-        MessageContext calldata messageContext,
+        MessageContextV2 calldata messageContext,
         address destination,
         bytes calldata data
     )
         private
         returns (bytes memory)
     {
-        return Callable(destination).onCall{ value: msg.value }(messageContext, data);
+        if (messageContext.amount == 0) {
+            return Callable(destination).onCall{ value: msg.value }(
+                MessageContext({ sender: messageContext.sender }), data
+            );
+        } else {
+            return CallableV2(destination).onCall{ value: msg.value }(messageContext, data);
+        }
     }
 
     // @dev prevent spoofing onCall and onRevert functions
@@ -457,7 +463,7 @@ contract GatewayEVMUpgradeTest is
                 functionSelector := calldataload(data.offset)
             }
 
-            if (functionSelector == Callable.onCall.selector) {
+            if (functionSelector == Callable.onCall.selector || functionSelector == CallableV2.onCall.selector) {
                 revert NotAllowedToCallOnCall();
             }
 

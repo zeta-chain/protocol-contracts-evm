@@ -5,7 +5,7 @@ import { INotSupportedMethods } from "../../contracts/Errors.sol";
 import { RevertContext, RevertOptions, Revertable } from "../../contracts/Revert.sol";
 import { ZetaConnectorBase } from "./ZetaConnectorBase.sol";
 import { IERC20Custody } from "./interfaces/IERC20Custody.sol";
-import { Callable, IGatewayEVM, MessageContext } from "./interfaces/IGatewayEVM.sol";
+import "./interfaces/IGatewayEVM.sol";
 
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -129,7 +129,7 @@ contract GatewayEVM is
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
     function execute(
-        MessageContext calldata messageContext,
+        MessageContextV2 calldata messageContext,
         address destination,
         bytes calldata data
     )
@@ -165,7 +165,7 @@ contract GatewayEVM is
     /// @param amount Amount of tokens to transfer.
     /// @param data Calldata to pass to the call.
     function executeWithERC20(
-        MessageContext calldata messageContext,
+        MessageContextV2 calldata messageContext,
         address token,
         address to,
         uint256 amount,
@@ -445,14 +445,20 @@ contract GatewayEVM is
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
     function _executeAuthenticatedCall(
-        MessageContext calldata messageContext,
+        MessageContextV2 calldata messageContext,
         address destination,
         bytes calldata data
     )
         private
         returns (bytes memory)
     {
-        return Callable(destination).onCall{ value: msg.value }(messageContext, data);
+        if (messageContext.amount == 0) {
+            return Callable(destination).onCall{ value: msg.value }(
+                MessageContext({ sender: messageContext.sender }), data
+            );
+        } else {
+            return CallableV2(destination).onCall{ value: msg.value }(messageContext, data);
+        }
     }
 
     // @dev prevent spoofing onCall and onRevert functions
@@ -463,7 +469,7 @@ contract GatewayEVM is
                 functionSelector := calldataload(data.offset)
             }
 
-            if (functionSelector == Callable.onCall.selector) {
+            if (functionSelector == Callable.onCall.selector || functionSelector == CallableV2.onCall.selector) {
                 revert NotAllowedToCallOnCall();
             }
 

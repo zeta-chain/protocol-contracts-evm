@@ -35,7 +35,8 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
     address tssAddress;
     address foo;
     RevertContext revertContext;
-    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0) });
+    MessageContextV2 arbitraryCallMessageContext =
+        MessageContextV2({ sender: address(0), asset: address(0), amount: 0 });
 
     error EnforcedPause();
     error NotWhitelisted();
@@ -353,7 +354,13 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         vm.expectEmit(true, true, true, true, address(custody));
         emit WithdrawnAndCalled(address(receiver), address(token), amount, message);
         vm.prank(tssAddress);
-        custody.withdrawAndCall(MessageContext({ sender: sender }), address(receiver), address(token), amount, message);
+        custody.withdrawAndCall(
+            MessageContextV2({ sender: sender, asset: address(token), amount: amount }),
+            address(receiver),
+            address(token),
+            amount,
+            message
+        );
 
         // Verify that the tokens were not transferred to the destination address
         uint256 balanceAfter = token.balanceOf(destination);

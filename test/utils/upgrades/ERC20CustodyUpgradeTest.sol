@@ -2,7 +2,7 @@
 pragma solidity 0.8.26;
 
 import { IERC20Custody } from "../../../contracts/evm/interfaces/IERC20Custody.sol";
-import { IGatewayEVM, MessageContext } from "../../../contracts/evm/interfaces/IGatewayEVM.sol";
+import { IGatewayEVM, MessageContextV2 } from "../../../contracts/evm/interfaces/IGatewayEVM.sol";
 
 import { RevertContext } from "../../../contracts/Revert.sol";
 
@@ -150,7 +150,7 @@ contract ERC20CustodyUpgradeTest is
     /// @param amount Amount of tokens to withdraw.
     /// @param data Calldata to pass to the contract call.
     function withdrawAndCall(
-        MessageContext calldata messageContext,
+        MessageContextV2 calldata messageContext,
         address to,
         address token,
         uint256 amount,

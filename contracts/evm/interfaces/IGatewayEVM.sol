@@ -122,7 +122,7 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param amount The amount of tokens to transfer.
     /// @param data The calldata to pass to the contract call.
     function executeWithERC20(
-        MessageContext calldata messageContext,
+        MessageContextV2 calldata messageContext,
         address token,
         address to,
         uint256 amount,
@@ -150,7 +150,7 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
     function execute(
-        MessageContext calldata messageContext,
+        MessageContextV2 calldata messageContext,
         address destination,
         bytes calldata data
     )
@@ -228,4 +228,25 @@ struct MessageContext {
 /// @notice Interface implemented by contracts receiving authenticated calls.
 interface Callable {
     function onCall(MessageContext calldata context, bytes calldata message) external payable returns (bytes memory);
+}
+
+/// @notice Message context passed to execute function.
+/// @param sender Sender from omnichain contract.
+/// @param asset The address of the asset.
+/// @param amount The amount of the asset.
+struct MessageContextV2 {
+    address sender;
+    address asset;
+    uint256 amount;
+}
+
+/// @notice Interface implemented by contracts receiving authenticated calls with MessageContextV2.
+interface CallableV2 {
+    function onCall(
+        MessageContextV2 calldata context,
+        bytes calldata message
+    )
+        external
+        payable
+        returns (bytes memory);
 }
