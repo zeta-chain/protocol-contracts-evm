@@ -201,7 +201,7 @@ contract ZetaConnectorNonNativeTest is
         uint256 balanceBeforeZetaConnector = zetaToken.balanceOf(address(zetaConnector));
 
         vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedOnCallV2(sender, address (zetaToken), amount,message);
+        emit ReceivedOnCallV2(sender, address(zetaToken), amount, message);
         vm.expectEmit(true, true, true, true, address(zetaConnector));
         emit WithdrawnAndCalled(address(receiver), amount, message);
         vm.prank(tssAddress);

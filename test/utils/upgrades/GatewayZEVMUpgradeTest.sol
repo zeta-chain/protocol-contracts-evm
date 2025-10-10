@@ -268,8 +268,8 @@ contract GatewayZEVMUpgradeTest is
         CallOptionsV2 calldata callOptions,
         RevertOptions calldata revertOptions
     )
-    external
-    whenNotPaused
+        external
+        whenNotPaused
     {
         if (receiver.length == 0) revert ZeroAddress();
         if (amount == 0) revert InsufficientZRC20Amount();
