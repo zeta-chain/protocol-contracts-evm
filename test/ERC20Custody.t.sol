@@ -350,7 +350,7 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         uint256 balanceBeforeCustody = token.balanceOf(address(custody));
 
         vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedOnCall(sender, message);
+        emit ReceivedOnCallV2(sender, address (token), amount,message);
         vm.expectEmit(true, true, true, true, address(custody));
         emit WithdrawnAndCalled(address(receiver), address(token), amount, message);
         vm.prank(tssAddress);
