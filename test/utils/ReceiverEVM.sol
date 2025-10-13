@@ -2,7 +2,7 @@
 pragma solidity 0.8.26;
 
 import { RevertContext } from "../../contracts/Revert.sol";
-import { MessageContext, MessageContextV2 } from "../../contracts/evm/interfaces/IGatewayEVM.sol";
+import {LegacyMessageContext, MessageContext} from "../../contracts/evm/interfaces/IGatewayEVM.sol";
 import "./IReceiverEVM.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -74,7 +74,7 @@ contract ReceiverEVM is IReceiverEVMEvents, ReentrancyGuard {
     }
 
     function onCall(
-        MessageContext calldata messageContext,
+        LegacyMessageContext calldata messageContext,
         bytes calldata message
     )
         external
@@ -86,7 +86,7 @@ contract ReceiverEVM is IReceiverEVMEvents, ReentrancyGuard {
     }
 
     function onCall(
-        MessageContextV2 calldata messageContext,
+        MessageContext calldata messageContext,
         bytes calldata message
     )
         external

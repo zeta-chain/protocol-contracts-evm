@@ -11,9 +11,9 @@ import "../contracts/helpers/interfaces/IBaseRegistry.sol";
 
 // Mock GatewayEVM
 contract MockGatewayEVM {
-    event CallEmitted(address receiver, bytes message, MessageContext messageContext);
+    event CallEmitted(address receiver, bytes message, LegacyMessageContext messageContext);
 
-    function onCall(MessageContext calldata messageContext, bytes calldata data) external returns (bytes memory) {
+    function onCall(LegacyMessageContext calldata messageContext, bytes calldata data) external returns (bytes memory) {
         emit CallEmitted(msg.sender, data, messageContext);
         return bytes("");
     }
@@ -106,7 +106,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
     }
 
     function testOnCallInvalidSender() public {
-        MessageContext memory context = MessageContext({ sender: address(0x7777) });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: address(0x7777) });
 
         vm.prank(address(mockGateway));
         vm.expectRevert(InvalidSender.selector);
@@ -117,7 +117,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         vm.prank(admin);
         registry.pause();
 
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
 
         vm.prank(address(mockGateway));
         vm.expectRevert();
@@ -125,7 +125,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
     }
 
     function testOnCallUnauthorized() public {
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
 
         vm.prank(user);
         vm.expectRevert();
@@ -136,7 +136,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         bytes memory activateData = abi.encodeWithSignature(
             "changeChainStatus(uint256,address,bytes,bool)", chainId, gasZRC20, registryAddress, true
         );
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
 
         vm.prank(address(mockGateway));
         vm.expectEmit(true, true, true, true);
@@ -174,7 +174,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         bytes memory activateData = abi.encodeWithSignature(
             "changeChainStatus(uint256,address,bytes,bool)", chainId, gasZRC20, registryAddress, true
         );
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, activateData);
 
@@ -196,7 +196,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         bytes memory activateData = abi.encodeWithSignature(
             "changeChainStatus(uint256,address,bytes,bool)", chainId, gasZRC20, registryAddress, true
         );
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, activateData);
 
@@ -217,7 +217,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         bytes memory activateData = abi.encodeWithSignature(
             "changeChainStatus(uint256,address,bytes,bool)", chainId, gasZRC20, registryAddress, true
         );
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, activateData);
 
@@ -234,7 +234,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         bytes memory activateData = abi.encodeWithSignature(
             "changeChainStatus(uint256,address,bytes,bool)", chainId, gasZRC20, registryAddress, true
         );
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, activateData);
 
@@ -251,7 +251,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         bytes memory activateData = abi.encodeWithSignature(
             "changeChainStatus(uint256,address,bytes,bool)", chainId, gasZRC20, registryAddress, true
         );
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, activateData);
 
@@ -279,7 +279,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         bytes memory activateData = abi.encodeWithSignature(
             "changeChainStatus(uint256,address,bytes,bool)", chainId, gasZRC20, registryAddress, true
         );
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, activateData);
 
@@ -299,7 +299,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         bytes memory activateData = abi.encodeWithSignature(
             "changeChainStatus(uint256,address,bytes,bool)", chainId, gasZRC20, registryAddress, true
         );
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, activateData);
 
@@ -338,7 +338,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
         bytes memory activateData = abi.encodeWithSignature(
             "changeChainStatus(uint256,address,bytes,bool)", chainId, gasZRC20, registryAddress, true
         );
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, activateData);
 
@@ -369,7 +369,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
             decimals
         );
 
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         vm.expectEmit(true, true, true, true);
         emit ZRC20TokenRegistered(originAddress, zrc20Address, decimals, originChainId, symbol);
@@ -410,7 +410,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
             decimals
         );
 
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         vm.expectRevert(ZeroAddress.selector);
         registry.onCall(context, registerData);
@@ -434,7 +434,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
             decimals
         );
 
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         vm.expectRevert(abi.encodeWithSelector(InvalidContractType.selector, "Symbol cannot be empty"));
         registry.onCall(context, registerData);
@@ -458,7 +458,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
             decimals
         );
 
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         vm.expectEmit(true, true, true, true);
         emit ZRC20TokenRegistered(originAddress, zrc20Address, decimals, originChainId, symbol);
@@ -483,7 +483,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
             decimals
         );
 
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, registerData);
 
@@ -516,7 +516,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
 
         bytes memory updateData = abi.encodeWithSignature("setZRC20TokenActive(address,bool)", zrc20Address, false);
 
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         vm.expectRevert(ZeroAddress.selector);
         registry.onCall(context, updateData);
@@ -528,7 +528,7 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
             "changeChainStatus(uint256,address,bytes,bool)", chainId1, gasZRC20, registryAddress, true
         );
 
-        MessageContext memory context = MessageContext({ sender: coreRegistry });
+        LegacyMessageContext memory context = LegacyMessageContext({ sender: coreRegistry });
         vm.prank(address(mockGateway));
         registry.onCall(context, activateData1);
 

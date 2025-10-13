@@ -54,7 +54,7 @@ contract ZetaConnectorNative is ZetaConnectorBase {
     // https://github.com/zeta-chain/protocol-contracts/issues/398)
     /// @dev This function can only be called by the TSS address.
     function withdrawAndCall(
-        MessageContextV2 calldata messageContext,
+        MessageContext calldata messageContext,
         address to,
         uint256 amount,
         bytes calldata data,

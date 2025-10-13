@@ -39,8 +39,8 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
     address foo;
     RevertOptions revertOptions;
     RevertContext revertContext;
-    MessageContextV2 arbitraryCallMessageContext =
-        MessageContextV2({ sender: address(0), asset: address(0), amount: 0 });
+    MessageContext arbitraryCallMessageContext =
+        MessageContext({ sender: address(0), asset: address(0), amount: 0 });
 
     error EnforcedPause();
     error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);
@@ -196,11 +196,11 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         emit Executed(address(receiver), 0, bytes("1"));
         vm.prank(tssAddress);
         gateway.execute(
-            MessageContextV2({ sender: sender, asset: address(0), amount: 0 }), address(receiver), bytes("1")
+            MessageContext({ sender: sender, asset: address(0), amount: 0 }), address(receiver), bytes("1")
         );
     }
 
-    // Test with new MessageContextV2
+    // Test with new MessageContext
     function testForwardCallToReceiveOnCallUsingAuthCallV2() public {
         vm.expectEmit(true, true, true, true, address(receiver));
         address sender = address(0x123);
@@ -212,7 +212,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         emit Executed(address(receiver), 0, data);
         vm.prank(tssAddress);
         gateway.execute(
-            MessageContextV2({ sender: sender, asset: asset, amount: amount }), address(receiver), bytes("1")
+            MessageContext({ sender: sender, asset: asset, amount: amount }), address(receiver), bytes("1")
         );
     }
 
@@ -240,7 +240,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         vm.prank(owner);
         vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, owner, TSS_ROLE));
         gateway.execute(
-            MessageContextV2({ sender: address(0x123), asset: address(0), amount: 0 }), address(receiver), data
+            MessageContext({ sender: address(0x123), asset: address(0), amount: 0 }), address(receiver), data
         );
     }
 
@@ -315,7 +315,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
 
         vm.prank(tssAddress);
         vm.expectRevert(ZeroAddress.selector);
-        gateway.execute(MessageContextV2({ sender: address(0x123), asset: address(0), amount: 0 }), address(0), data);
+        gateway.execute(MessageContext({ sender: address(0x123), asset: address(0), amount: 0 }), address(0), data);
     }
 
     function testForwardCallToReceiveNoParamsTogglePause() public {

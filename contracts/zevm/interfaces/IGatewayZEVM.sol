@@ -80,6 +80,7 @@ interface IGatewayZEVMEvents {
     /// @param gasfee The gas fee for the withdrawal.
     /// @param protocolFlatFee The protocol flat fee for the withdrawal.
     /// @param message The calldata passed to the contract call.
+    /// @param version The number representing message context version.
     /// @param callOptions Call options including gas limit, arbirtrary call flag and message context version.
     /// @param revertOptions Revert options.
     event WithdrawnAndCalledV2(
@@ -91,7 +92,8 @@ interface IGatewayZEVMEvents {
         uint256 gasfee,
         uint256 protocolFlatFee,
         bytes message,
-        CallOptionsV2 callOptions,
+        uint256 version,
+        CallOptions callOptions,
         RevertOptions revertOptions
     );
 }
@@ -190,6 +192,7 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
     /// @param amount The amount of tokens to withdraw.
     /// @param zrc20 The address of the ZRC20 token.
     /// @param message The calldata to pass to the contract call.
+    /// @param version The number representing message context version.
     /// @param callOptions Call options including gas limit, arbirtrary call flag and message context version.
     /// @param revertOptions Revert options.
     function withdrawAndCall(
@@ -197,7 +200,8 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
         uint256 amount,
         address zrc20,
         bytes calldata message,
-        CallOptionsV2 calldata callOptions,
+        uint256 version,
+        CallOptions calldata callOptions,
         RevertOptions calldata revertOptions
     )
         external;
@@ -308,14 +312,4 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
 struct CallOptions {
     uint256 gasLimit;
     bool isArbitraryCall;
-}
-
-/// @notice CallOptions struct passed to withdrawAndCall function.
-/// @param gasLimit Gas limit.
-/// @param isArbitraryCall Indicates if call should be arbitrary or authenticated.
-/// @param isMsgContextV2 Indicates if call is using new message context.
-struct CallOptionsV2 {
-    uint256 gasLimit;
-    bool isArbitraryCall;
-    bool isMsgContextV2;
 }

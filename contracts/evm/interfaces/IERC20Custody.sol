@@ -3,7 +3,7 @@ pragma solidity 0.8.26;
 
 import { RevertContext } from "../../../contracts/Revert.sol";
 
-import { MessageContextV2 } from "./IGatewayEVM.sol";
+import {MessageContext} from "./IGatewayEVM.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @title IERC20CustodyEvents
@@ -79,7 +79,7 @@ interface IERC20Custody is IERC20CustodyEvents, IERC20CustodyErrors {
     /// @param amount Amount of tokens to withdraw.
     /// @param data Calldata to pass to the contract call.
     function withdrawAndCall(
-        MessageContextV2 calldata messageContext,
+        MessageContext calldata messageContext,
         address token,
         address to,
         uint256 amount,

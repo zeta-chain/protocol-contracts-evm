@@ -56,7 +56,7 @@ contract ZetaConnectorNativeUpgradeTest is ZetaConnectorBase {
     //// @param internalSendHash A hash used for internal tracking of the transaction.
     /// @dev This function can only be called by the TSS address.
     function withdrawAndCall(
-        MessageContextV2 calldata messageContext,
+        MessageContext calldata messageContext,
         address to,
         uint256 amount,
         bytes calldata data,

@@ -340,59 +340,45 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testWithdrawAndCallZRC20WithCallOptsV2FailsIfReceiverIsZeroAddress() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
-        CallOptionsV2 memory callOptionsV2 =
-            CallOptionsV2({ gasLimit: MIN_GAS_LIMIT, isArbitraryCall: true, isMsgContextV2: true });
+        uint256 version = 2;
 
         vm.expectRevert(ZeroAddress.selector);
-        gateway.withdrawAndCall(abi.encodePacked(""), 1, address(zrc20), message, callOptionsV2, revertOptions);
+        gateway.withdrawAndCall(abi.encodePacked(""), 1, address(zrc20), message, version, callOptions, revertOptions);
     }
 
     function testWithdrawAndCallZRC20WithCallOptsV2FailsIfMessageSizeExceeded() public {
         uint256 maxSize = gateway.MAX_MESSAGE_SIZE();
+        uint256 version = 2;
         bytes memory message = new bytes(maxSize / 2);
         revertOptions.revertMessage = new bytes(maxSize / 2 + 1);
-        CallOptionsV2 memory callOptionsV2 =
-            CallOptionsV2({ gasLimit: MIN_GAS_LIMIT, isArbitraryCall: true, isMsgContextV2: true });
 
         uint256 messageSize = message.length + revertOptions.revertMessage.length;
 
         vm.expectRevert(abi.encodeWithSelector(MessageSizeExceeded.selector, messageSize, maxSize));
-        gateway.withdrawAndCall(abi.encodePacked(addr1), 1, address(zrc20), message, callOptionsV2, revertOptions);
-    }
-
-    function testWithdrawAndCallZRC20WithCallOptsV2FailsIfGasLimitIsZero() public {
-        bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
-        CallOptionsV2 memory callOptionsV2 = CallOptionsV2({ gasLimit: 0, isArbitraryCall: true, isMsgContextV2: true });
-
-        vm.expectRevert(InsufficientGasLimit.selector);
-        gateway.withdrawAndCall(abi.encodePacked(addr1), 1, address(zrc20), message, callOptionsV2, revertOptions);
+        gateway.withdrawAndCall(abi.encodePacked(addr1), 1, address(zrc20), message, version, callOptions, revertOptions);
     }
 
     function testWithdrawAndCallZRC20WithCallOptsV2FailsIfGasLimitIsBelowMin() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
-        CallOptionsV2 memory callOptionsV2 =
-            CallOptionsV2({ gasLimit: MIN_GAS_LIMIT - 1, isArbitraryCall: true, isMsgContextV2: true });
-
+        uint256 version = 2;
+        callOptions = CallOptions({gasLimit: MIN_GAS_LIMIT - 1, isArbitraryCall: true });
         vm.expectRevert(InsufficientGasLimit.selector);
-        gateway.withdrawAndCall(abi.encodePacked(addr1), 1, address(zrc20), message, callOptionsV2, revertOptions);
+        gateway.withdrawAndCall(abi.encodePacked(addr1), 1, address(zrc20), message, version, callOptions, revertOptions);
     }
 
     function testWithdrawAndCallZRC20WithCallOptsV2FailsIfAmountIsZero() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
-        CallOptionsV2 memory callOptionsV2 =
-            CallOptionsV2({ gasLimit: MIN_GAS_LIMIT, isArbitraryCall: true, isMsgContextV2: true });
-
+        uint256 version = 2;
         vm.expectRevert(InsufficientZRC20Amount.selector);
-        gateway.withdrawAndCall(abi.encodePacked(addr1), 0, address(zrc20), message, callOptionsV2, revertOptions);
+        gateway.withdrawAndCall(abi.encodePacked(addr1), 0, address(zrc20), message, version, callOptions, revertOptions);
     }
 
-    function testWithdrawAndCallZRC20WithCallOptsV2WithMessageContextV2() public {
+    function testWithdrawAndCallZRC20WithCallOptsV2WithMessageContext() public {
         uint256 amount = 1;
+        uint256 version = 2;
         uint256 ownerBalanceBefore = zrc20.balanceOf(owner);
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
         uint256 expectedGasFee = MIN_GAS_LIMIT;
-        CallOptionsV2 memory callOptionsV2 =
-            CallOptionsV2({ gasLimit: MIN_GAS_LIMIT, isArbitraryCall: true, isMsgContextV2: true });
 
         vm.expectEmit(true, true, true, true, address(gateway));
         emit WithdrawnAndCalledV2(
@@ -404,11 +390,12 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
             expectedGasFee,
             zrc20.PROTOCOL_FLAT_FEE(),
             message,
-            callOptionsV2,
+            version,
+            callOptions,
             revertOptions
         );
 
-        gateway.withdrawAndCall(abi.encodePacked(addr1), amount, address(zrc20), message, callOptionsV2, revertOptions);
+        gateway.withdrawAndCall(abi.encodePacked(addr1), amount, address(zrc20), message, version, callOptions, revertOptions);
 
         uint256 ownerBalanceAfter = zrc20.balanceOf(owner);
         assertEq(ownerBalanceBefore - amount - expectedGasFee, ownerBalanceAfter);

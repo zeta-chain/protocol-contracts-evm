@@ -41,8 +41,8 @@ contract ZetaConnectorNonNativeTest is
     address tssAddress;
     address foo;
     RevertContext revertContext;
-    MessageContextV2 arbitraryCallMessageContext =
-        MessageContextV2({ sender: address(0), asset: address(0), amount: 0 });
+    MessageContext arbitraryCallMessageContext =
+        MessageContext({ sender: address(0), asset: address(0), amount: 0 });
 
     error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);
     error ExceedsMaxSupply();
@@ -206,7 +206,7 @@ contract ZetaConnectorNonNativeTest is
         emit WithdrawnAndCalled(address(receiver), amount, message);
         vm.prank(tssAddress);
         zetaConnector.withdrawAndCall(
-            MessageContextV2({ sender: sender, asset: address(zetaToken), amount: amount }),
+            MessageContext({ sender: sender, asset: address(zetaToken), amount: amount }),
             address(receiver),
             amount,
             message,

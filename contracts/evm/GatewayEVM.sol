@@ -129,7 +129,7 @@ contract GatewayEVM is
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
     function execute(
-        MessageContextV2 calldata messageContext,
+        MessageContext calldata messageContext,
         address destination,
         bytes calldata data
     )
@@ -165,7 +165,7 @@ contract GatewayEVM is
     /// @param amount Amount of tokens to transfer.
     /// @param data Calldata to pass to the call.
     function executeWithERC20(
-        MessageContextV2 calldata messageContext,
+        MessageContext calldata messageContext,
         address token,
         address to,
         uint256 amount,
@@ -445,7 +445,7 @@ contract GatewayEVM is
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
     function _executeAuthenticatedCall(
-        MessageContextV2 calldata messageContext,
+        MessageContext calldata messageContext,
         address destination,
         bytes calldata data
     )
@@ -454,7 +454,7 @@ contract GatewayEVM is
     {
         if (messageContext.amount == 0) {
             return Callable(destination).onCall{ value: msg.value }(
-                MessageContext({ sender: messageContext.sender }), data
+                LegacyMessageContext({ sender: messageContext.sender }), data
             );
         } else {
             return CallableV2(destination).onCall{ value: msg.value }(messageContext, data);

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-import { CallOptions, CallOptionsV2, IGatewayZEVM } from "../../../contracts/zevm/interfaces/IGatewayZEVM.sol";
+import { CallOptions, IGatewayZEVM } from "../../../contracts/zevm/interfaces/IGatewayZEVM.sol";
 
 import { RevertContext, RevertOptions, Revertable } from "../../../contracts/Revert.sol";
 import "../../../contracts/zevm/interfaces/IWZETA.sol";
@@ -258,6 +258,7 @@ contract GatewayZEVMUpgradeTest is
     /// @param amount The amount of tokens to withdraw.
     /// @param zrc20 The address of the ZRC20 token.
     /// @param message The calldata to pass to the contract call.
+    /// @param version The number representing message context version.
     /// @param callOptions Call options including gas limit and arbirtrary call flag.
     /// @param revertOptions Revert options.
     function withdrawAndCall(
@@ -265,7 +266,8 @@ contract GatewayZEVMUpgradeTest is
         uint256 amount,
         address zrc20,
         bytes calldata message,
-        CallOptionsV2 calldata callOptions,
+        uint256 version,
+        CallOptions calldata callOptions,
         RevertOptions calldata revertOptions
     )
         external
@@ -286,6 +288,7 @@ contract GatewayZEVMUpgradeTest is
             gasFee,
             IZRC20(zrc20).PROTOCOL_FLAT_FEE(),
             message,
+            version,
             callOptions,
             revertOptions
         );
