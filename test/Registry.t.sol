@@ -13,7 +13,13 @@ import "../contracts/helpers/interfaces/IBaseRegistry.sol";
 contract MockGatewayEVM {
     event CallEmitted(address receiver, bytes message, LegacyMessageContext messageContext);
 
-    function onCall(LegacyMessageContext calldata messageContext, bytes calldata data) external returns (bytes memory) {
+    function onCall(
+        LegacyMessageContext calldata messageContext,
+        bytes calldata data
+    )
+        external
+        returns (bytes memory)
+    {
         emit CallEmitted(msg.sender, data, messageContext);
         return bytes("");
     }

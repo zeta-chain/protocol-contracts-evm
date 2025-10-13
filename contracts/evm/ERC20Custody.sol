@@ -2,7 +2,7 @@
 pragma solidity 0.8.26;
 
 import { IERC20Custody } from "./interfaces/IERC20Custody.sol";
-import { IGatewayEVM, MessageContext} from "./interfaces/IGatewayEVM.sol";
+import { IGatewayEVM, MessageContext } from "./interfaces/IGatewayEVM.sol";
 
 import { RevertContext } from "../../contracts/Revert.sol";
 

@@ -41,8 +41,7 @@ contract ZetaConnectorNativeTest is
     address tssAddress;
     address foo;
     RevertContext revertContext;
-    MessageContext arbitraryCallMessageContext =
-        MessageContext({ sender: address(0), asset: address(0), amount: 0 });
+    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0), asset: address(0), amount: 0 });
 
     error EnforcedPause();
     error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);

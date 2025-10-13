@@ -39,8 +39,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
     address foo;
     RevertOptions revertOptions;
     RevertContext revertContext;
-    MessageContext arbitraryCallMessageContext =
-        MessageContext({ sender: address(0), asset: address(0), amount: 0 });
+    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0), asset: address(0), amount: 0 });
 
     error EnforcedPause();
     error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);
@@ -195,9 +194,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         vm.expectEmit(true, true, true, true, address(gateway));
         emit Executed(address(receiver), 0, bytes("1"));
         vm.prank(tssAddress);
-        gateway.execute(
-            MessageContext({ sender: sender, asset: address(0), amount: 0 }), address(receiver), bytes("1")
-        );
+        gateway.execute(MessageContext({ sender: sender, asset: address(0), amount: 0 }), address(receiver), bytes("1"));
     }
 
     // Test with new MessageContext
@@ -211,9 +208,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         vm.expectEmit(true, true, true, true, address(gateway));
         emit Executed(address(receiver), 0, data);
         vm.prank(tssAddress);
-        gateway.execute(
-            MessageContext({ sender: sender, asset: asset, amount: amount }), address(receiver), bytes("1")
-        );
+        gateway.execute(MessageContext({ sender: sender, asset: asset, amount: amount }), address(receiver), bytes("1"));
     }
 
     function testForwardCallToReceiveNonPayableFailsIfSenderIsNotTSS() public {

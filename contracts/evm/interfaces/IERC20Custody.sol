@@ -3,7 +3,7 @@ pragma solidity 0.8.26;
 
 import { RevertContext } from "../../../contracts/Revert.sol";
 
-import {MessageContext} from "./IGatewayEVM.sol";
+import { MessageContext } from "./IGatewayEVM.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @title IERC20CustodyEvents
