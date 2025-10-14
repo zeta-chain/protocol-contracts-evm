@@ -66,8 +66,8 @@ library GatewayEVMValidations {
         uint256 amount,
         RevertOptions calldata revertOptions
     )
-    internal
-    pure
+        internal
+        pure
     {
         validateNonZeroAddress(receiver);
         validateAmount(amount);
@@ -86,8 +86,8 @@ library GatewayEVMValidations {
         bytes calldata payload,
         RevertOptions calldata revertOptions
     )
-    internal
-    pure
+        internal
+        pure
     {
         validateNonZeroAddress(receiver);
         validateAmount(amount);
@@ -104,8 +104,8 @@ library GatewayEVMValidations {
         bytes calldata payload,
         RevertOptions calldata revertOptions
     )
-    internal
-    pure
+        internal
+        pure
     {
         validateNonZeroAddress(receiver);
         validateCallRevertOptions(revertOptions);

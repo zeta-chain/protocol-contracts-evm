@@ -7,6 +7,7 @@ import "../../../contracts/evm/ZetaConnectorBase.sol";
 import "../../../contracts/evm/interfaces/IERC20Custody.sol";
 import "../../../contracts/evm/interfaces/IGatewayEVM.sol";
 
+import { GatewayEVMValidations } from "../../../contracts/evm/libraries/GatewayEVMValidations.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
@@ -14,7 +15,6 @@ import "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import { GatewayEVMValidations } from "../../../contracts/evm/libraries/GatewayEVMValidations.sol";
 
 /// @title GatewayEVMUpgradeTest
 /// @notice Modified GatewayEVM contract for testing upgrades
