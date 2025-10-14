@@ -94,6 +94,15 @@ interface BlockscoutResponse {
     abi?: string;
 }
 
+/**
+ * Fetches contract source code from Blockscout explorer API.
+ * Converts the Blockscout response format to match Etherscan's format for consistency.
+ *
+ * @param address - The contract address to fetch
+ * @param apiUrl - The Blockscout API base URL
+ * @returns ContractSource object with source code and metadata
+ * @throws Error if contract is not verified or fetch fails
+ */
 async function fetchFromBlockscout(
     address: string,
     apiUrl: string
@@ -145,7 +154,7 @@ async function fetchFromBlockscout(
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response?.status === 404) {
-                throw new Error("Contract not found or not verified on Blockscout");
+                throw new Error(`Contract not found or not verified on Blockscout: ${error.message}`);
             }
             throw new Error(`Failed to fetch contract from Blockscout: ${error.message}`);
         }
@@ -153,10 +162,19 @@ async function fetchFromBlockscout(
     }
 }
 
+/**
+ * Fetches contract source code from Etherscan-compatible API.
+ *
+ * @param address - The contract address to fetch
+ * @param apiUrl - The Etherscan API URL with chainid
+ * @param apiKey - The Etherscan API key for authentication
+ * @returns ContractSource object with source code and metadata
+ * @throws Error if contract is not verified or fetch fails
+ */
 async function fetchFromEtherscan(
-    address: string,
-    apiUrl: string,
-    apiKey: string
+  address: string,
+  apiUrl: string,
+  apiKey: string
 ): Promise<ContractSource> {
     try {
         const response = await axios.get<EtherscanResponse>(apiUrl, {
@@ -194,6 +212,15 @@ async function fetchFromEtherscan(
     }
 }
 
+/**
+ * Fetches contract source code from the appropriate explorer based on network configuration.
+ * Routes to either Blockscout or Etherscan API based on the explorer type.
+ *
+ * @param address - The contract address to fetch
+ * @param network - The network identifier
+ * @returns ContractSource object with source code and metadata
+ * @throws Error if network is unknown or fetch fails
+ */
 async function fetchContractSource(
     address: string,
     network: string
@@ -214,6 +241,13 @@ async function fetchContractSource(
     }
 }
 
+/**
+ * Extracts the declaration order of contracts, interfaces, and libraries from Solidity source code.
+ * Used to maintain consistent ordering when flattening multi-file contracts.
+ *
+ * @param sourceCode - The Solidity source code to analyze
+ * @returns Array of contract/interface/library names in order of declaration
+ */
 function extractDeclarationOrder(sourceCode: string): string[] {
     const order: string[] = [];
 
@@ -228,6 +262,13 @@ function extractDeclarationOrder(sourceCode: string): string[] {
     return order;
 }
 
+/**
+ * Finds the file content that contains a specific contract, interface, or library declaration.
+ *
+ * @param sources - Object containing file paths/names as keys and file content as values
+ * @param contractName - The name of the contract/interface/library to find
+ * @returns The file content containing the contract, or null if not found
+ */
 function findFileByContractName(sources: any, contractName: string): string | null {
     for (const [, fileData] of Object.entries(sources)) {
         const content = typeof fileData === "object" && fileData !== null
@@ -243,6 +284,13 @@ function findFileByContractName(sources: any, contractName: string): string | nu
     return null;
 }
 
+/**
+ * Removes duplicate SPDX license identifiers and pragma statements from flattened code.
+ * Keeps only the first occurrence of each to avoid compilation errors.
+ *
+ * @param code - The Solidity source code to clean
+ * @returns Cleaned source code with duplicate headers removed
+ */
 function cleanDuplicateHeaders(code: string): string {
     const lines = code.split('\n');
     const result: string[] = [];
@@ -276,6 +324,14 @@ function cleanDuplicateHeaders(code: string): string {
     return result.join('\n');
 }
 
+/**
+ * Flattens multi-file contract source code into a single file.
+ * Handles both standard JSON format and double-braced format from explorers.
+ * Files are concatenated in alphabetical order and duplicate headers are removed.
+ *
+ * @param sourceCode - The source code
+ * @returns Flattened source code as a single string
+ */
 function flattenSourceCode(sourceCode: string): string {
     if (sourceCode.startsWith("{{") || sourceCode.startsWith("{")) {
         try {
@@ -308,6 +364,14 @@ function flattenSourceCode(sourceCode: string): string {
     return sourceCode;
 }
 
+/**
+ * Reorders multi-file contract source to match the declaration order of a single-file version.
+ * This ensures consistent ordering when comparing contracts that have different file structures.
+ *
+ * @param singleFileCode - The single-file version used as reference for ordering
+ * @param multiFileCode - The multi-file version source code to reorder
+ * @returns Reordered and flattened source code matching the single-file order
+ */
 function reorderMultiFileToMatchSingleFile(
     singleFileCode: string,
     multiFileCode: string
@@ -366,6 +430,15 @@ function reorderMultiFileToMatchSingleFile(
     }
 }
 
+/**
+ * Saves contract source code to a file in the specified output directory.
+ * Creates the directory if it doesn't exist.
+ *
+ * @param content - The contract source code to save
+ * @param fileName - The name of the file to create
+ * @param outputDir - The directory where the file should be saved
+ * @returns The full path to the saved file
+ */
 function saveContractToFile(
     content: string,
     fileName: string,
@@ -381,6 +454,16 @@ function saveContractToFile(
     return filePath;
 }
 
+/**
+ * Main function to fetch, flatten, and compare two contract implementations.
+ * Fetches both contracts, handles single vs multi-file structures,
+ * flattens them for comparison, and saves the results to disk.
+ *
+ * @param oldAddress - The address of the old/previous contract implementation
+ * @param newAddress - The address of the new/updated contract implementation
+ * @param network - The network identifier where the contracts are deployed
+ * @throws Error if fetching or processing fails
+ */
 export async function fetchAndFlattenContract(
     oldAddress: string,
     newAddress: string,
