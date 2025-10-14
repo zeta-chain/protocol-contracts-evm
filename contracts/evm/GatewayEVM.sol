@@ -6,6 +6,7 @@ import { RevertContext, RevertOptions, Revertable } from "../../contracts/Revert
 import { ZetaConnectorBase } from "./ZetaConnectorBase.sol";
 import { IERC20Custody } from "./interfaces/IERC20Custody.sol";
 import { Callable, IGatewayEVM, MessageContext } from "./interfaces/IGatewayEVM.sol";
+import { GatewayEVMValidations } from "./libraries/GatewayEVMValidations.sol";
 
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -28,6 +29,7 @@ contract GatewayEVM is
     INotSupportedMethods
 {
     using SafeERC20 for IERC20;
+    using GatewayEVMValidations for *;
 
     /// @notice The address of the custody contract.
     address public custody;
@@ -114,7 +116,7 @@ contract GatewayEVM is
         onlyRole(TSS_ROLE)
         whenNotPaused
     {
-        if (destination == address(0)) revert ZeroAddress();
+        GatewayEVMValidations.validateNonZeroAddress(destination);
         (bool success,) = destination.call{ value: msg.value }("");
         if (!success) revert ExecutionFailed();
         Revertable(destination).onRevert(revertContext);
@@ -140,7 +142,7 @@ contract GatewayEVM is
         whenNotPaused
         returns (bytes memory)
     {
-        if (destination == address(0)) revert ZeroAddress();
+        GatewayEVMValidations.validateNonZeroAddress(destination);
         bytes memory result;
         // Execute the call on the target contract
         // if sender is provided in messageContext call is authenticated and target is Callable.onCall
@@ -176,10 +178,10 @@ contract GatewayEVM is
         onlyRole(ASSET_HANDLER_ROLE)
         whenNotPaused
     {
-        if (amount == 0) revert InsufficientERC20Amount();
-        if (to == address(0)) revert ZeroAddress();
+        GatewayEVMValidations.validateAmount(amount);
+        GatewayEVMValidations.validateNonZeroAddress(to);
         // Approve the target contract to spend the tokens
-        if (!_resetApproval(token, to)) revert ApprovalFailed();
+        if (!_resetApproval(token, to)) revert ApprovalFailed(token, to);
         // Approve token to spender
         IERC20(token).forceApprove(to, amount);
         // Execute the call on the target contract
@@ -192,7 +194,7 @@ contract GatewayEVM is
         }
 
         // Reset approval
-        if (!_resetApproval(token, to)) revert ApprovalFailed();
+        if (!_resetApproval(token, to)) revert ApprovalFailed(token, to);
 
         // Transfer any remaining tokens back to the custody/connector contract
         uint256 remainingBalance = IERC20(token).balanceOf(address(this));
@@ -222,8 +224,8 @@ contract GatewayEVM is
         onlyRole(ASSET_HANDLER_ROLE)
         whenNotPaused
     {
-        if (amount == 0) revert InsufficientERC20Amount();
-        if (to == address(0)) revert ZeroAddress();
+        GatewayEVMValidations.validateAmount(amount);
+        GatewayEVMValidations.validateNonZeroAddress(to);
 
         IERC20(token).safeTransfer(address(to), amount);
         Revertable(to).onRevert(revertContext);
@@ -235,9 +237,7 @@ contract GatewayEVM is
     /// @param receiver Address of the receiver.
     /// @param revertOptions Revert options.
     function deposit(address receiver, RevertOptions calldata revertOptions) external payable whenNotPaused {
-        if (msg.value == 0) revert InsufficientETHAmount();
-        if (receiver == address(0)) revert ZeroAddress();
-        if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateDepositParams(receiver, msg.value, revertOptions);
 
         (bool deposited,) = tssAddress.call{ value: msg.value }("");
 
@@ -260,9 +260,7 @@ contract GatewayEVM is
         external
         whenNotPaused
     {
-        if (amount == 0) revert InsufficientERC20Amount();
-        if (receiver == address(0)) revert ZeroAddress();
-        if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateDepositParams(receiver, amount, revertOptions);
 
         _transferFromToAssetHandler(msg.sender, asset, amount);
 
@@ -282,9 +280,7 @@ contract GatewayEVM is
         payable
         whenNotPaused
     {
-        if (msg.value == 0) revert InsufficientETHAmount();
-        if (receiver == address(0)) revert ZeroAddress();
-        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateDepositAndCallParams(receiver, msg.value, payload, revertOptions);
 
         (bool deposited,) = tssAddress.call{ value: msg.value }("");
 
@@ -309,9 +305,7 @@ contract GatewayEVM is
         external
         whenNotPaused
     {
-        if (amount == 0) revert InsufficientERC20Amount();
-        if (receiver == address(0)) revert ZeroAddress();
-        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateDepositAndCallParams(receiver, amount, payload, revertOptions);
 
         _transferFromToAssetHandler(msg.sender, asset, amount);
 
@@ -330,9 +324,7 @@ contract GatewayEVM is
         external
         whenNotPaused
     {
-        if (revertOptions.callOnRevert) revert CallOnRevertNotSupported();
-        if (receiver == address(0)) revert ZeroAddress();
-        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateCallParams(receiver, payload, revertOptions);
 
         emit Called(msg.sender, receiver, payload, revertOptions);
     }
@@ -403,7 +395,7 @@ contract GatewayEVM is
             // ZetaConnectorBase(zetaConnector).receiveTokens(amount);
         } else {
             // transfer to custody
-            if (!IERC20Custody(custody).whitelisted(token)) revert NotWhitelistedInCustody();
+            if (!IERC20Custody(custody).whitelisted(token)) revert NotWhitelistedInCustody(token);
             IERC20(token).safeTransferFrom(from, custody, amount);
         }
     }
@@ -417,12 +409,12 @@ contract GatewayEVM is
         if (token == zetaToken) {
             // transfer to connector
             // approve connector to handle tokens depending on connector version (eg. lock or burn)
-            if (!IERC20(token).approve(zetaConnector, amount)) revert ApprovalFailed();
+            if (!IERC20(token).approve(zetaConnector, amount)) revert ApprovalFailed(token, zetaConnector);
             // send tokens to connector
             ZetaConnectorBase(zetaConnector).receiveTokens(amount);
         } else {
             // transfer to custody
-            if (!IERC20Custody(custody).whitelisted(token)) revert NotWhitelistedInCustody();
+            if (!IERC20Custody(custody).whitelisted(token)) revert NotWhitelistedInCustody(token);
             IERC20(token).safeTransfer(custody, amount);
         }
     }

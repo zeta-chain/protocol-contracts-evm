@@ -14,6 +14,7 @@ import "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { GatewayEVMValidations } from "../../../contracts/evm/libraries/GatewayEVMValidations.sol";
 
 /// @title GatewayEVMUpgradeTest
 /// @notice Modified GatewayEVM contract for testing upgrades
@@ -29,6 +30,7 @@ contract GatewayEVMUpgradeTest is
     INotSupportedMethods
 {
     using SafeERC20 for IERC20;
+    using GatewayEVMValidations for *;
 
     /// @notice The address of the custody contract.
     address public custody;
@@ -114,11 +116,11 @@ contract GatewayEVMUpgradeTest is
     )
         public
         payable
+        nonReentrant
         onlyRole(TSS_ROLE)
         whenNotPaused
-        nonReentrant
     {
-        if (destination == address(0)) revert ZeroAddress();
+        GatewayEVMValidations.validateNonZeroAddress(destination);
         (bool success,) = destination.call{ value: msg.value }("");
         if (!success) revert ExecutionFailed();
         Revertable(destination).onRevert(revertContext);
@@ -126,7 +128,7 @@ contract GatewayEVMUpgradeTest is
         emit Reverted(destination, address(0), msg.value, data, revertContext);
     }
 
-    /// @notice Executes an authenticated call to a destination address without ERC20 tokens.
+    /// @notice Executes a call to a destination address without ERC20 tokens.
     /// @dev This function can only be called by the TSS address and it is payable.
     /// @param messageContext Message context containing sender.
     /// @param destination Address to call.
@@ -139,13 +141,16 @@ contract GatewayEVMUpgradeTest is
     )
         external
         payable
+        nonReentrant
         onlyRole(TSS_ROLE)
         whenNotPaused
-        nonReentrant
         returns (bytes memory)
     {
-        if (destination == address(0)) revert ZeroAddress();
+        GatewayEVMValidations.validateNonZeroAddress(destination);
         bytes memory result;
+        // Execute the call on the target contract
+        // if sender is provided in messageContext call is authenticated and target is Callable.onCall
+        // otherwise, call is arbitrary
         if (messageContext.sender == address(0)) {
             result = _executeArbitraryCall(destination, data);
         } else {
@@ -173,16 +178,19 @@ contract GatewayEVMUpgradeTest is
         bytes calldata data
     )
         public
+        nonReentrant
         onlyRole(ASSET_HANDLER_ROLE)
         whenNotPaused
-        nonReentrant
     {
-        if (amount == 0) revert InsufficientERC20Amount();
-        if (to == address(0)) revert ZeroAddress();
+        GatewayEVMValidations.validateAmount(amount);
+        GatewayEVMValidations.validateNonZeroAddress(to);
         // Approve the target contract to spend the tokens
-        if (!_resetApproval(token, to)) revert ApprovalFailed();
-        if (!IERC20(token).approve(to, amount)) revert ApprovalFailed();
+        if (!_resetApproval(token, to)) revert ApprovalFailed(token, to);
+        // Approve token to spender
+        IERC20(token).forceApprove(to, amount);
         // Execute the call on the target contract
+        // if sender is provided in messageContext call is authenticated and target is Callable.onCall
+        // otherwise, call is arbitrary
         if (messageContext.sender == address(0)) {
             _executeArbitraryCall(to, data);
         } else {
@@ -190,7 +198,7 @@ contract GatewayEVMUpgradeTest is
         }
 
         // Reset approval
-        if (!_resetApproval(token, to)) revert ApprovalFailed();
+        if (!_resetApproval(token, to)) revert ApprovalFailed(token, to);
 
         // Transfer any remaining tokens back to the custody/connector contract
         uint256 remainingBalance = IERC20(token).balanceOf(address(this));
@@ -216,12 +224,12 @@ contract GatewayEVMUpgradeTest is
         RevertContext calldata revertContext
     )
         external
+        nonReentrant
         onlyRole(ASSET_HANDLER_ROLE)
         whenNotPaused
-        nonReentrant
     {
-        if (amount == 0) revert InsufficientERC20Amount();
-        if (to == address(0)) revert ZeroAddress();
+        GatewayEVMValidations.validateAmount(amount);
+        GatewayEVMValidations.validateNonZeroAddress(to);
 
         IERC20(token).safeTransfer(address(to), amount);
         Revertable(to).onRevert(revertContext);
@@ -241,9 +249,7 @@ contract GatewayEVMUpgradeTest is
         whenNotPaused
         nonReentrant
     {
-        if (msg.value == 0) revert InsufficientETHAmount();
-        if (receiver == address(0)) revert ZeroAddress();
-        if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateDepositParams(receiver, msg.value, revertOptions);
 
         (bool deposited,) = tssAddress.call{ value: msg.value }("");
 
@@ -267,9 +273,7 @@ contract GatewayEVMUpgradeTest is
         whenNotPaused
         nonReentrant
     {
-        if (amount == 0) revert InsufficientERC20Amount();
-        if (receiver == address(0)) revert ZeroAddress();
-        if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateDepositParams(receiver, amount, revertOptions);
 
         _transferFromToAssetHandler(msg.sender, asset, amount);
 
@@ -290,9 +294,7 @@ contract GatewayEVMUpgradeTest is
         whenNotPaused
         nonReentrant
     {
-        if (msg.value == 0) revert InsufficientETHAmount();
-        if (receiver == address(0)) revert ZeroAddress();
-        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateDepositAndCallParams(receiver, msg.value, payload, revertOptions);
 
         (bool deposited,) = tssAddress.call{ value: msg.value }("");
 
@@ -318,9 +320,7 @@ contract GatewayEVMUpgradeTest is
         whenNotPaused
         nonReentrant
     {
-        if (amount == 0) revert InsufficientERC20Amount();
-        if (receiver == address(0)) revert ZeroAddress();
-        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateDepositAndCallParams(receiver, amount, payload, revertOptions);
 
         _transferFromToAssetHandler(msg.sender, asset, amount);
 
@@ -340,8 +340,7 @@ contract GatewayEVMUpgradeTest is
         whenNotPaused
         nonReentrant
     {
-        if (receiver == address(0)) revert ZeroAddress();
-        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+        GatewayEVMValidations.validateCallParams(receiver, payload, revertOptions);
 
         emit Called(msg.sender, receiver, payload, revertOptions);
     }
@@ -366,13 +365,28 @@ contract GatewayEVMUpgradeTest is
         zetaConnector = zetaConnector_;
     }
 
-    /// @dev Resets the approval of a token for a specified address.
+    /// @notice Resets the approval of a token for a specified address.
     /// This is used to ensure that the approval is set to zero before setting it to a new value.
     /// @param token Address of the ERC20 token.
     /// @param to Address to reset the approval for.
-    /// @return True if the approval reset was successful, false otherwise.
+    /// @return True if the approval reset was successful or if the token reverts on zero approval.
     function _resetApproval(address token, address to) private returns (bool) {
-        return IERC20(token).approve(to, 0);
+        // Use low-level call to handle tokens that don't return boolean values
+        (bool success, bytes memory returnData) = token.call(abi.encodeWithSelector(IERC20.approve.selector, to, 0));
+        if (!success) {
+            // If the call failed, it might be because the token reverts on zero approval
+            // In this case, we consider it successful since the goal is to reset approval
+            return true;
+        }
+
+        // If there's return data, check if it's true (for standard ERC20 tokens)
+        // If there's no return data, assume success (for non-standard tokens like USDT)
+        if (returnData.length > 0) {
+            bool approved = abi.decode(returnData, (bool));
+            return approved;
+        }
+
+        return true;
     }
 
     /// @dev Transfers tokens from the sender to the asset handler.
@@ -397,7 +411,7 @@ contract GatewayEVMUpgradeTest is
             // ZetaConnectorBase(zetaConnector).receiveTokens(amount);
         } else {
             // transfer to custody
-            if (!IERC20Custody(custody).whitelisted(token)) revert NotWhitelistedInCustody();
+            if (!IERC20Custody(custody).whitelisted(token)) revert NotWhitelistedInCustody(token);
             IERC20(token).safeTransferFrom(from, custody, amount);
         }
     }
@@ -409,14 +423,13 @@ contract GatewayEVMUpgradeTest is
     /// @param amount Amount of tokens to transfer.
     function _transferToAssetHandler(address token, uint256 amount) private {
         if (token == zetaToken) {
-            // transfer to connector
             // approve connector to handle tokens depending on connector version (eg. lock or burn)
-            if (!IERC20(token).approve(zetaConnector, amount)) revert ApprovalFailed();
+            if (!IERC20(token).approve(zetaConnector, amount)) revert ApprovalFailed(token, zetaConnector);
             // send tokens to connector
             ZetaConnectorBase(zetaConnector).receiveTokens(amount);
         } else {
             // transfer to custody
-            if (!IERC20Custody(custody).whitelisted(token)) revert NotWhitelistedInCustody();
+            if (!IERC20Custody(custody).whitelisted(token)) revert NotWhitelistedInCustody(token);
             IERC20(token).safeTransfer(custody, amount);
         }
     }

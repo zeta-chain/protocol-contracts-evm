@@ -534,7 +534,8 @@ contract GatewayEVMInboundTest is
         vm.prank(owner);
         custody.unwhitelist(address(token));
 
-        vm.expectRevert(NotWhitelistedInCustody.selector);
+        vm.expectRevert(abi.encodeWithSelector(NotWhitelistedInCustody.selector, address(token)));
+
         gateway.deposit(destination, amount, address(token), revertOptions);
     }
 
@@ -543,7 +544,11 @@ contract GatewayEVMInboundTest is
         token.approve(address(gateway), amount);
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() + 1);
 
-        vm.expectRevert(PayloadSizeExceeded.selector);
+        uint256 payloadSize = revertOptions.revertMessage.length;
+        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
+
+        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
+
         gateway.deposit(destination, amount, address(token), revertOptions);
     }
 
@@ -568,7 +573,7 @@ contract GatewayEVMInboundTest is
 
         token.approve(address(gateway), amount);
 
-        vm.expectRevert(InsufficientERC20Amount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         gateway.deposit(destination, amount, address(token), revertOptions);
     }
 
@@ -593,13 +598,18 @@ contract GatewayEVMInboundTest is
     function testRevertDepositEthToTssIfAmountIs0() public {
         uint256 amount = 0;
 
-        vm.expectRevert(InsufficientETHAmount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         gateway.deposit{ value: amount }(destination, revertOptions);
     }
 
     function testRevertDepositEthToTssIfPayloadSizeExceeded() public {
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() + 1);
-        vm.expectRevert(PayloadSizeExceeded.selector);
+
+        uint256 payloadSize = revertOptions.revertMessage.length;
+        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
+
+        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
+
         gateway.deposit{ value: 1 }(destination, revertOptions);
     }
 
@@ -619,7 +629,8 @@ contract GatewayEVMInboundTest is
         vm.prank(owner);
         custody.unwhitelist(address(token));
 
-        vm.expectRevert(NotWhitelistedInCustody.selector);
+        vm.expectRevert(abi.encodeWithSelector(NotWhitelistedInCustody.selector, address(token)));
+
         gateway.depositAndCall(destination, amount, address(token), payload, revertOptions);
     }
 
@@ -630,7 +641,11 @@ contract GatewayEVMInboundTest is
 
         token.approve(address(gateway), amount);
 
-        vm.expectRevert(PayloadSizeExceeded.selector);
+        uint256 payloadSize = payload.length + revertOptions.revertMessage.length;
+        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
+
+        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
+
         gateway.depositAndCall(destination, amount, address(token), payload, revertOptions);
     }
 
@@ -659,7 +674,7 @@ contract GatewayEVMInboundTest is
 
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
 
-        vm.expectRevert(InsufficientERC20Amount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         gateway.depositAndCall(destination, amount, address(token), payload, revertOptions);
     }
 
@@ -690,7 +705,11 @@ contract GatewayEVMInboundTest is
         bytes memory payload = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2);
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2 + 1);
 
-        vm.expectRevert(PayloadSizeExceeded.selector);
+        uint256 payloadSize = payload.length + revertOptions.revertMessage.length;
+        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
+
+        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
+
         gateway.depositAndCall{ value: amount }(destination, payload, revertOptions);
     }
 
@@ -698,7 +717,7 @@ contract GatewayEVMInboundTest is
         uint256 amount = 0;
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
 
-        vm.expectRevert(InsufficientETHAmount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         gateway.depositAndCall{ value: amount }(destination, payload, revertOptions);
     }
 
@@ -722,7 +741,11 @@ contract GatewayEVMInboundTest is
         bytes memory payload = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2);
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2 + 1);
 
-        vm.expectRevert(PayloadSizeExceeded.selector);
+        uint256 payloadSize = payload.length + revertOptions.revertMessage.length;
+        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
+
+        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
+
         gateway.call(destination, payload, revertOptions);
     }
 

@@ -292,7 +292,7 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
             abi.encodeWithSignature("receiveERC20(uint256,address,address)", amount, address(token), destination);
 
         vm.prank(tssAddress);
-        vm.expectRevert(InsufficientERC20Amount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         custody.withdrawAndCall(arbitraryCallMessageContext, address(receiver), address(token), amount, data);
     }
 
@@ -408,7 +408,7 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
             abi.encodeWithSignature("receiveERC20Partial(uint256,address,address)", amount, address(token), destination);
 
         vm.prank(tssAddress);
-        vm.expectRevert(InsufficientERC20Amount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         custody.withdrawAndCall(arbitraryCallMessageContext, address(receiver), address(token), amount, data);
     }
 
@@ -557,7 +557,7 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         bytes memory data = abi.encodePacked("hello");
 
         vm.prank(tssAddress);
-        vm.expectRevert(InsufficientERC20Amount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         custody.withdrawAndRevert(address(receiver), address(token), amount, data, revertContext);
     }
 
