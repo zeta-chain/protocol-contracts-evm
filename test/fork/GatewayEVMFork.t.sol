@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
+import { GatewayEVM } from "../../contracts/evm/GatewayEVM.sol";
 import "./BaseForkTest.sol";
-import {GatewayEVM} from "../../contracts/evm/GatewayEVM.sol";
 
 contract GatewayEVMForkTest is BaseForkTest {
     // GatewayEVM proxy addresses.
@@ -19,7 +19,9 @@ contract GatewayEVMForkTest is BaseForkTest {
         chains.push(ChainConfig(polygonForkId, POLYGON_GATEWAY_PROXY, POLYGON_ADMIN, POLYGON_RPC_URL, "Polygon"));
         chains.push(ChainConfig(baseForkId, BASE_GATEWAY_PROXY, BASE_ADMIN, BASE_RPC_URL, "Base"));
         chains.push(ChainConfig(arbitrumForkId, ARBITRUM_GATEWAY_PROXY, ARBITRUM_ADMIN, ARBITRUM_RPC_URL, "Arbitrum"));
-        chains.push(ChainConfig(avalancheForkId, AVALANCHE_GATEWAY_PROXY, AVALANCHE_ADMIN, AVALANCHE_RPC_URL, "Avalanche"));
+        chains.push(
+            ChainConfig(avalancheForkId, AVALANCHE_GATEWAY_PROXY, AVALANCHE_ADMIN, AVALANCHE_RPC_URL, "Avalanche")
+        );
     }
 
     function _testUpgradeContract(ChainConfig memory config) internal override {
