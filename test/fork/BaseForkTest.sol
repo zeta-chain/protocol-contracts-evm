@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-import "../../dependencies/forge-std-1.9.2/src/Test.sol";
-import "../../dependencies/forge-std-1.9.2/src/Vm.sol";
+import "forge-std/Test.sol";
+import "forge-std/Vm.sol";
 
 abstract contract BaseForkTest is Test {
     // RPCs of all supported chains.
