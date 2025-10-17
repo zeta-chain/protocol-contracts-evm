@@ -259,7 +259,7 @@ contract GatewayZEVM is
         whenNotPaused
     {
         // TODO: remove error and comment out code once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // ZETA is not currently supported for withdraws
         revert ZETANotSupported();
 
@@ -302,7 +302,7 @@ contract GatewayZEVM is
         whenNotPaused
     {
         // TODO: remove error and comment out code once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // ZETA is not currently supported for withdraws
         revert ZETANotSupported();
 

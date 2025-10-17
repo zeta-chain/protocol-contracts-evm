@@ -384,7 +384,7 @@ contract GatewayEVMUpgradeTest is
     function _transferFromToAssetHandler(address from, address token, uint256 amount) private {
         if (token == zetaToken) {
             // TODO: remove error and comment out code once ZETA supported back
-            // https://github.com/zeta-chain/protocol-contracts/issues/394
+            // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
             // ZETA token is currently not supported for deposit
             revert ZETANotSupported();
 

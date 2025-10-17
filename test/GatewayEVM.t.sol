@@ -552,7 +552,7 @@ contract GatewayEVMInboundTest is
         zeta.approve(address(gateway), amount);
 
         // TODO: replace error to check once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // vm.expectEmit(true, true, true, true, address(gateway));
         vm.expectRevert(ZETANotSupported.selector);
 
