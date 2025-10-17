@@ -146,12 +146,7 @@ contract GatewayZEVMUpgradeTest is
     /// @param amount The amount of tokens to withdraw.
     /// @param zrc20 The address of the ZRC20 token.
     /// @param revertOptions Revert options.
-    function withdraw(
-        bytes memory receiver,
-        uint256 amount,
-        address zrc20,
-        RevertOptions calldata revertOptions
-    )
+    function withdraw(bytes memory receiver, uint256 amount, address zrc20, RevertOptions calldata revertOptions)
         external
         nonReentrant
         whenNotPaused
@@ -257,12 +252,7 @@ contract GatewayZEVMUpgradeTest is
     /// @param receiver The receiver address on the external chain.
     /// @param amount The amount of tokens to withdraw.
     /// @param revertOptions Revert options.
-    function withdraw(
-        bytes memory receiver,
-        uint256 amount,
-        uint256 chainId,
-        RevertOptions calldata revertOptions
-    )
+    function withdraw(bytes memory receiver, uint256 amount, uint256 chainId, RevertOptions calldata revertOptions)
         external
         nonReentrant
         whenNotPaused
@@ -482,12 +472,7 @@ contract GatewayZEVMUpgradeTest is
     /// @param amount The amount of tokens to transfer.
     /// @param target The target contract to call.
     /// @param message The calldata to pass to the contract call.
-    function depositAndCall(
-        MessageContext calldata context,
-        uint256 amount,
-        address target,
-        bytes calldata message
-    )
+    function depositAndCall(MessageContext calldata context, uint256 amount, address target, bytes calldata message)
         external
         onlyProtocol
         whenNotPaused
@@ -514,12 +499,7 @@ contract GatewayZEVMUpgradeTest is
     /// @param amount The amount of tokens to revert.
     /// @param target The target contract to call.
     /// @param revertContext Revert context to pass to onRevert.
-    function depositAndRevert(
-        address zrc20,
-        uint256 amount,
-        address target,
-        RevertContext calldata revertContext
-    )
+    function depositAndRevert(address zrc20, uint256 amount, address target, RevertContext calldata revertContext)
         external
         onlyProtocol
         whenNotPaused
