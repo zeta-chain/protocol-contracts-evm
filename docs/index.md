@@ -159,11 +159,7 @@ This function can only be called by the TSS address and it is payable.
 
 
 ```solidity
-function executeRevert(
-    address destination,
-    bytes calldata data,
-    RevertContext calldata revertContext
-)
+function executeRevert(address destination, bytes calldata data, RevertContext calldata revertContext)
     public
     payable
     nonReentrant
@@ -187,11 +183,7 @@ This function can only be called by the TSS address and it is payable.
 
 
 ```solidity
-function execute(
-    MessageContext calldata messageContext,
-    address destination,
-    bytes calldata data
-)
+function execute(MessageContext calldata messageContext, address destination, bytes calldata data)
     external
     payable
     nonReentrant
@@ -299,12 +291,7 @@ Deposits ERC20 tokens to the custody or connector contract.
 
 
 ```solidity
-function deposit(
-    address receiver,
-    uint256 amount,
-    address asset,
-    RevertOptions calldata revertOptions
-)
+function deposit(address receiver, uint256 amount, address asset, RevertOptions calldata revertOptions)
     external
     whenNotPaused;
 ```
@@ -324,11 +311,7 @@ Deposits ETH to the TSS address and calls an omnichain smart contract.
 
 
 ```solidity
-function depositAndCall(
-    address receiver,
-    bytes calldata payload,
-    RevertOptions calldata revertOptions
-)
+function depositAndCall(address receiver, bytes calldata payload, RevertOptions calldata revertOptions)
     external
     payable
     whenNotPaused;
@@ -375,11 +358,7 @@ Calls an omnichain smart contract without asset transfer.
 
 
 ```solidity
-function call(
-    address receiver,
-    bytes calldata payload,
-    RevertOptions calldata revertOptions
-)
+function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions)
     external
     whenNotPaused;
 ```
@@ -510,11 +489,7 @@ Private function to execute an authenticated call to a destination address.
 
 
 ```solidity
-function _executeAuthenticatedCall(
-    MessageContext calldata messageContext,
-    address destination,
-    bytes calldata data
-)
+function _executeAuthenticatedCall(MessageContext calldata messageContext, address destination, bytes calldata data)
     private
     returns (bytes memory);
 ```
@@ -697,13 +672,7 @@ Private function to withdraw ZRC20 tokens with gas limit.
 
 
 ```solidity
-function _withdrawZRC20WithGasLimit(
-    uint256 amount,
-    address zrc20,
-    uint256 gasLimit
-)
-    private
-    returns (uint256);
+function _withdrawZRC20WithGasLimit(uint256 amount, address zrc20, uint256 gasLimit) private returns (uint256);
 ```
 **Parameters**
 
@@ -742,12 +711,7 @@ Withdraw ZRC20 tokens to an external chain.
 
 
 ```solidity
-function withdraw(
-    bytes memory receiver,
-    uint256 amount,
-    address zrc20,
-    RevertOptions calldata revertOptions
-)
+function withdraw(bytes memory receiver, uint256 amount, address zrc20, RevertOptions calldata revertOptions)
     external
     whenNotPaused;
 ```
@@ -978,12 +942,7 @@ Deposit ZETA and call a user-specified contract on ZEVM.
 
 
 ```solidity
-function depositAndCall(
-    MessageContext calldata context,
-    uint256 amount,
-    address target,
-    bytes calldata message
-)
+function depositAndCall(MessageContext calldata context, uint256 amount, address target, bytes calldata message)
     external
     nonReentrant
     onlyProtocol
@@ -1005,10 +964,7 @@ Revert a user-specified contract on ZEVM.
 
 
 ```solidity
-function executeRevert(
-    address target,
-    RevertContext calldata revertContext
-)
+function executeRevert(address target, RevertContext calldata revertContext)
     external
     nonReentrant
     onlyProtocol
@@ -1028,12 +984,7 @@ Deposit foreign coins into ZRC20 and revert a user-specified contract on ZEVM.
 
 
 ```solidity
-function depositAndRevert(
-    address zrc20,
-    uint256 amount,
-    address target,
-    RevertContext calldata revertContext
-)
+function depositAndRevert(address zrc20, uint256 amount, address target, RevertContext calldata revertContext)
     external
     nonReentrant
     onlyProtocol
@@ -1057,10 +1008,7 @@ the assets are deposited to the target contract even if onAbort reverts.
 
 
 ```solidity
-function executeAbort(
-    address target,
-    AbortContext calldata abortContext
-)
+function executeAbort(address target, AbortContext calldata abortContext)
     external
     nonReentrant
     onlyProtocol
@@ -1080,7 +1028,7 @@ Error indicating a zero address was provided.
 
 
 ```solidity
-error ZeroAddress();
+error ZeroAddress()
 ```
 
 
@@ -1095,13 +1043,13 @@ Interface for contracts that with non supported methods.
 #### ZETANotSupported
 
 ```solidity
-error ZETANotSupported();
+error ZETANotSupported()
 ```
 
 #### CallOnRevertNotSupported
 
 ```solidity
-error CallOnRevertNotSupported();
+error CallOnRevertNotSupported()
 ```
 
 
@@ -1285,11 +1233,7 @@ This function can only be called by the TSS address.
 
 
 ```solidity
-function withdraw(
-    address to,
-    address token,
-    uint256 amount
-)
+function withdraw(address to, address token, uint256 amount)
     external
     nonReentrant
     onlyRole(WITHDRAWER_ROLE)
@@ -1376,12 +1320,7 @@ deprecated: This method is deprecated.
 
 
 ```solidity
-function deposit(
-    bytes calldata recipient,
-    IERC20 asset,
-    uint256 amount,
-    bytes calldata message
-)
+function deposit(bytes calldata recipient, IERC20 asset, uint256 amount, bytes calldata message)
     external
     nonReentrant
     whenNotPaused;
@@ -1493,7 +1432,7 @@ Error for zero address input.
 
 
 ```solidity
-error ZeroAddress();
+error ZeroAddress()
 ```
 
 #### NotWhitelisted
@@ -1501,7 +1440,7 @@ Error for not whitelisted ERC20 token
 
 
 ```solidity
-error NotWhitelisted();
+error NotWhitelisted()
 ```
 
 #### LegacyMethodsNotSupported
@@ -1509,7 +1448,7 @@ Error for calling not supported legacy methods.
 
 
 ```solidity
-error LegacyMethodsNotSupported();
+error LegacyMethodsNotSupported()
 ```
 
 
@@ -1526,7 +1465,7 @@ Emitted when tokens are withdrawn.
 
 
 ```solidity
-event Withdrawn(address indexed to, address indexed token, uint256 amount);
+event Withdrawn(address indexed to, address indexed token, uint256 amount)
 ```
 
 **Parameters**
@@ -1542,7 +1481,7 @@ Emitted when tokens are withdrawn and a contract call is made.
 
 
 ```solidity
-event WithdrawnAndCalled(address indexed to, address indexed token, uint256 amount, bytes data);
+event WithdrawnAndCalled(address indexed to, address indexed token, uint256 amount, bytes data)
 ```
 
 **Parameters**
@@ -1561,7 +1500,7 @@ Emitted when tokens are withdrawn and a revertable contract call is made.
 ```solidity
 event WithdrawnAndReverted(
     address indexed to, address indexed token, uint256 amount, bytes data, RevertContext revertContext
-);
+)
 ```
 
 **Parameters**
@@ -1579,7 +1518,7 @@ Emitted when ERC20 token is whitelisted
 
 
 ```solidity
-event Whitelisted(address indexed token);
+event Whitelisted(address indexed token)
 ```
 
 **Parameters**
@@ -1593,7 +1532,7 @@ Emitted when ERC20 token is unwhitelisted
 
 
 ```solidity
-event Unwhitelisted(address indexed token);
+event Unwhitelisted(address indexed token)
 ```
 
 **Parameters**
@@ -1607,7 +1546,7 @@ Emitted in legacy deposit method.
 
 
 ```solidity
-event Deposited(bytes recipient, IERC20 indexed asset, uint256 amount, bytes message);
+event Deposited(bytes recipient, IERC20 indexed asset, uint256 amount, bytes message)
 ```
 
 #### UpdatedCustodyTSSAddress
@@ -1615,7 +1554,7 @@ Emitted when tss address is updated
 
 
 ```solidity
-event UpdatedCustodyTSSAddress(address oldTSSAddress, address newTSSAddress);
+event UpdatedCustodyTSSAddress(address oldTSSAddress, address newTSSAddress)
 ```
 
 **Parameters**
@@ -1638,13 +1577,7 @@ Interface implemented by contracts receiving authenticated calls.
 
 
 ```solidity
-function onCall(
-    MessageContext calldata context,
-    bytes calldata message
-)
-    external
-    payable
-    returns (bytes memory);
+function onCall(MessageContext calldata context, bytes calldata message) external payable returns (bytes memory);
 ```
 
 
@@ -1690,11 +1623,7 @@ This function can only be called by the TSS address and it is payable.
 
 
 ```solidity
-function executeRevert(
-    address destination,
-    bytes calldata data,
-    RevertContext calldata revertContext
-)
+function executeRevert(address destination, bytes calldata data, RevertContext calldata revertContext)
     external
     payable;
 ```
@@ -1715,11 +1644,7 @@ This function can only be called by the TSS address and it is payable.
 
 
 ```solidity
-function execute(
-    MessageContext calldata messageContext,
-    address destination,
-    bytes calldata data
-)
+function execute(MessageContext calldata messageContext, address destination, bytes calldata data)
     external
     payable
     returns (bytes memory);
@@ -1787,13 +1712,7 @@ Deposits ERC20 tokens to the custody or connector contract.
 
 
 ```solidity
-function deposit(
-    address receiver,
-    uint256 amount,
-    address asset,
-    RevertOptions calldata revertOptions
-)
-    external;
+function deposit(address receiver, uint256 amount, address asset, RevertOptions calldata revertOptions) external;
 ```
 **Parameters**
 
@@ -1811,11 +1730,7 @@ Deposits ETH to the TSS address and calls an omnichain smart contract.
 
 
 ```solidity
-function depositAndCall(
-    address receiver,
-    bytes calldata payload,
-    RevertOptions calldata revertOptions
-)
+function depositAndCall(address receiver, bytes calldata payload, RevertOptions calldata revertOptions)
     external
     payable;
 ```
@@ -1885,7 +1800,7 @@ Error for failed execution.
 
 
 ```solidity
-error ExecutionFailed();
+error ExecutionFailed()
 ```
 
 #### DepositFailed
@@ -1893,7 +1808,7 @@ Error for failed deposit.
 
 
 ```solidity
-error DepositFailed();
+error DepositFailed()
 ```
 
 #### InsufficientETHAmount
@@ -1901,7 +1816,7 @@ Error for insufficient ETH amount.
 
 
 ```solidity
-error InsufficientETHAmount();
+error InsufficientETHAmount()
 ```
 
 #### InsufficientERC20Amount
@@ -1909,7 +1824,7 @@ Error for insufficient ERC20 token amount.
 
 
 ```solidity
-error InsufficientERC20Amount();
+error InsufficientERC20Amount()
 ```
 
 #### ZeroAddress
@@ -1917,7 +1832,7 @@ Error for zero address input.
 
 
 ```solidity
-error ZeroAddress();
+error ZeroAddress()
 ```
 
 #### ApprovalFailed
@@ -1925,7 +1840,7 @@ Error for failed token approval.
 
 
 ```solidity
-error ApprovalFailed();
+error ApprovalFailed()
 ```
 
 #### CustodyInitialized
@@ -1933,7 +1848,7 @@ Error for already initialized custody.
 
 
 ```solidity
-error CustodyInitialized();
+error CustodyInitialized()
 ```
 
 #### ConnectorInitialized
@@ -1941,7 +1856,7 @@ Error for already initialized connector.
 
 
 ```solidity
-error ConnectorInitialized();
+error ConnectorInitialized()
 ```
 
 #### NotWhitelistedInCustody
@@ -1949,7 +1864,7 @@ Error when trying to transfer not whitelisted token to custody.
 
 
 ```solidity
-error NotWhitelistedInCustody();
+error NotWhitelistedInCustody()
 ```
 
 #### NotAllowedToCallOnCall
@@ -1957,7 +1872,7 @@ Error when trying to call onCall method using arbitrary call.
 
 
 ```solidity
-error NotAllowedToCallOnCall();
+error NotAllowedToCallOnCall()
 ```
 
 #### NotAllowedToCallOnRevert
@@ -1965,7 +1880,7 @@ Error when trying to call onRevert method using arbitrary call.
 
 
 ```solidity
-error NotAllowedToCallOnRevert();
+error NotAllowedToCallOnRevert()
 ```
 
 #### PayloadSizeExceeded
@@ -1973,7 +1888,7 @@ Error indicating payload size exceeded in external functions.
 
 
 ```solidity
-error PayloadSizeExceeded();
+error PayloadSizeExceeded()
 ```
 
 
@@ -1990,7 +1905,7 @@ Emitted when a contract call is executed.
 
 
 ```solidity
-event Executed(address indexed destination, uint256 value, bytes data);
+event Executed(address indexed destination, uint256 value, bytes data)
 ```
 
 **Parameters**
@@ -2006,7 +1921,7 @@ Emitted when a contract call is reverted.
 
 
 ```solidity
-event Reverted(address indexed to, address indexed token, uint256 amount, bytes data, RevertContext revertContext);
+event Reverted(address indexed to, address indexed token, uint256 amount, bytes data, RevertContext revertContext)
 ```
 
 **Parameters**
@@ -2024,7 +1939,7 @@ Emitted when a contract call with ERC20 tokens is executed.
 
 
 ```solidity
-event ExecutedWithERC20(address indexed token, address indexed to, uint256 amount, bytes data);
+event ExecutedWithERC20(address indexed token, address indexed to, uint256 amount, bytes data)
 ```
 
 **Parameters**
@@ -2048,7 +1963,7 @@ event Deposited(
     address asset,
     bytes payload,
     RevertOptions revertOptions
-);
+)
 ```
 
 **Parameters**
@@ -2074,7 +1989,7 @@ event DepositedAndCalled(
     address asset,
     bytes payload,
     RevertOptions revertOptions
-);
+)
 ```
 
 **Parameters**
@@ -2093,7 +2008,7 @@ Emitted when an omnichain smart contract call is made without asset transfer.
 
 
 ```solidity
-event Called(address indexed sender, address indexed receiver, bytes payload, RevertOptions revertOptions);
+event Called(address indexed sender, address indexed receiver, bytes payload, RevertOptions revertOptions)
 ```
 
 **Parameters**
@@ -2110,7 +2025,7 @@ Emitted when tss address is updated
 
 
 ```solidity
-event UpdatedGatewayTSSAddress(address oldTSSAddress, address newTSSAddress);
+event UpdatedGatewayTSSAddress(address oldTSSAddress, address newTSSAddress)
 ```
 
 **Parameters**
@@ -2193,7 +2108,7 @@ Emitted when tokens are withdrawn.
 
 
 ```solidity
-event Withdrawn(address indexed to, uint256 amount);
+event Withdrawn(address indexed to, uint256 amount)
 ```
 
 **Parameters**
@@ -2208,7 +2123,7 @@ Emitted when tokens are withdrawn and a contract is called.
 
 
 ```solidity
-event WithdrawnAndCalled(address indexed to, uint256 amount, bytes data);
+event WithdrawnAndCalled(address indexed to, uint256 amount, bytes data)
 ```
 
 **Parameters**
@@ -2224,7 +2139,7 @@ Emitted when tokens are withdrawn and a contract is called with a revert callbac
 
 
 ```solidity
-event WithdrawnAndReverted(address indexed to, uint256 amount, bytes data, RevertContext revertContext);
+event WithdrawnAndReverted(address indexed to, uint256 amount, bytes data, RevertContext revertContext)
 ```
 
 **Parameters**
@@ -2241,7 +2156,7 @@ Emitted when tss address is updated
 
 
 ```solidity
-event UpdatedZetaConnectorTSSAddress(address oldTSSAddress, address newTSSAddress);
+event UpdatedZetaConnectorTSSAddress(address oldTSSAddress, address newTSSAddress)
 ```
 
 **Parameters**
@@ -2309,37 +2224,37 @@ Interface with connector custom errors
 #### CallerIsNotPauser
 
 ```solidity
-error CallerIsNotPauser(address caller);
+error CallerIsNotPauser(address caller)
 ```
 
 #### CallerIsNotTss
 
 ```solidity
-error CallerIsNotTss(address caller);
+error CallerIsNotTss(address caller)
 ```
 
 #### CallerIsNotTssUpdater
 
 ```solidity
-error CallerIsNotTssUpdater(address caller);
+error CallerIsNotTssUpdater(address caller)
 ```
 
 #### CallerIsNotTssOrUpdater
 
 ```solidity
-error CallerIsNotTssOrUpdater(address caller);
+error CallerIsNotTssOrUpdater(address caller)
 ```
 
 #### ZetaTransferError
 
 ```solidity
-error ZetaTransferError();
+error ZetaTransferError()
 ```
 
 #### ExceedsMaxSupply
 
 ```solidity
-error ExceedsMaxSupply(uint256 maxSupply);
+error ExceedsMaxSupply(uint256 maxSupply)
 ```
 
 
@@ -2555,7 +2470,7 @@ event ZetaSent(
     uint256 destinationGasLimit,
     bytes message,
     bytes zetaParams
-);
+)
 ```
 
 #### ZetaReceived
@@ -2568,7 +2483,7 @@ event ZetaReceived(
     uint256 zetaValue,
     bytes message,
     bytes32 indexed internalSendHash
-);
+)
 ```
 
 #### ZetaReverted
@@ -2582,25 +2497,25 @@ event ZetaReverted(
     uint256 remainingZetaValue,
     bytes message,
     bytes32 indexed internalSendHash
-);
+)
 ```
 
 #### TSSAddressUpdated
 
 ```solidity
-event TSSAddressUpdated(address callerAddress, address newTssAddress);
+event TSSAddressUpdated(address callerAddress, address newTssAddress)
 ```
 
 #### TSSAddressUpdaterUpdated
 
 ```solidity
-event TSSAddressUpdaterUpdated(address callerAddress, address newTssUpdaterAddress);
+event TSSAddressUpdaterUpdated(address callerAddress, address newTssUpdaterAddress)
 ```
 
 #### PauserAddressUpdated
 
 ```solidity
-event PauserAddressUpdated(address callerAddress, address newTssAddress);
+event PauserAddressUpdated(address callerAddress, address newTssAddress)
 ```
 
 
@@ -2619,12 +2534,7 @@ unlock.
 
 
 ```solidity
-constructor(
-    address zetaToken_,
-    address tssAddress_,
-    address tssAddressUpdater_,
-    address pauserAddress_
-)
+constructor(address zetaToken_, address tssAddress_, address tssAddressUpdater_, address pauserAddress_)
     ZetaConnectorBase(zetaToken_, tssAddress_, tssAddressUpdater_, pauserAddress_);
 ```
 
@@ -2713,12 +2623,7 @@ uint256 public maxSupply = 2 ** 256 - 1
 
 
 ```solidity
-constructor(
-    address zetaTokenAddress_,
-    address tssAddress_,
-    address tssAddressUpdater_,
-    address pauserAddress_
-)
+constructor(address zetaTokenAddress_, address tssAddress_, address tssAddressUpdater_, address pauserAddress_)
     ZetaConnectorBase(zetaTokenAddress_, tssAddress_, tssAddressUpdater_, pauserAddress_);
 ```
 
@@ -2796,7 +2701,7 @@ function onRevert(
 #### MaxSupplyUpdated
 
 ```solidity
-event MaxSupplyUpdated(address callerAddress, uint256 newMaxSupply);
+event MaxSupplyUpdated(address callerAddress, uint256 newMaxSupply)
 ```
 
 
@@ -2811,37 +2716,37 @@ Common custom errors
 #### CallerIsNotTss
 
 ```solidity
-error CallerIsNotTss(address caller);
+error CallerIsNotTss(address caller)
 ```
 
 #### CallerIsNotConnector
 
 ```solidity
-error CallerIsNotConnector(address caller);
+error CallerIsNotConnector(address caller)
 ```
 
 #### CallerIsNotTssUpdater
 
 ```solidity
-error CallerIsNotTssUpdater(address caller);
+error CallerIsNotTssUpdater(address caller)
 ```
 
 #### CallerIsNotTssOrUpdater
 
 ```solidity
-error CallerIsNotTssOrUpdater(address caller);
+error CallerIsNotTssOrUpdater(address caller)
 ```
 
 #### InvalidAddress
 
 ```solidity
-error InvalidAddress();
+error InvalidAddress()
 ```
 
 #### ZetaTransferError
 
 ```solidity
-error ZetaTransferError();
+error ZetaTransferError()
 ```
 
 
@@ -2872,7 +2777,7 @@ constructor(address creator, uint256 initialSupply) ;
 #### InvalidAddress
 
 ```solidity
-error InvalidAddress();
+error InvalidAddress()
 ```
 
 
@@ -3018,11 +2923,7 @@ function getZetaFromToken(
 
 
 ```solidity
-function getEthFromZeta(
-    address destinationAddress,
-    uint256 minAmountOut,
-    uint256 zetaTokenAmount
-)
+function getEthFromZeta(address destinationAddress, uint256 minAmountOut, uint256 zetaTokenAmount)
     external
     returns (uint256);
 ```
@@ -3052,25 +2953,25 @@ function hasZetaLiquidity() external view returns (bool);
 #### EthExchangedForZeta
 
 ```solidity
-event EthExchangedForZeta(uint256 amountIn, uint256 amountOut);
+event EthExchangedForZeta(uint256 amountIn, uint256 amountOut)
 ```
 
 #### TokenExchangedForZeta
 
 ```solidity
-event TokenExchangedForZeta(address token, uint256 amountIn, uint256 amountOut);
+event TokenExchangedForZeta(address token, uint256 amountIn, uint256 amountOut)
 ```
 
 #### ZetaExchangedForEth
 
 ```solidity
-event ZetaExchangedForEth(uint256 amountIn, uint256 amountOut);
+event ZetaExchangedForEth(uint256 amountIn, uint256 amountOut)
 ```
 
 #### ZetaExchangedForToken
 
 ```solidity
-event ZetaExchangedForToken(address token, uint256 amountIn, uint256 amountOut);
+event ZetaExchangedForToken(address token, uint256 amountIn, uint256 amountOut)
 ```
 
 
@@ -3150,31 +3051,31 @@ function burnFrom(address account, uint256 amount) public override(IZetaNonEthIn
 #### Minted
 
 ```solidity
-event Minted(address indexed mintee, uint256 amount, bytes32 indexed internalSendHash);
+event Minted(address indexed mintee, uint256 amount, bytes32 indexed internalSendHash)
 ```
 
 #### Burnt
 
 ```solidity
-event Burnt(address indexed burnee, uint256 amount);
+event Burnt(address indexed burnee, uint256 amount)
 ```
 
 #### TSSAddressUpdated
 
 ```solidity
-event TSSAddressUpdated(address callerAddress, address newTssAddress);
+event TSSAddressUpdated(address callerAddress, address newTssAddress)
 ```
 
 #### TSSAddressUpdaterUpdated
 
 ```solidity
-event TSSAddressUpdaterUpdated(address callerAddress, address newTssUpdaterAddress);
+event TSSAddressUpdaterUpdated(address callerAddress, address newTssUpdaterAddress)
 ```
 
 #### ConnectorAddressUpdated
 
 ```solidity
-event ConnectorAddressUpdated(address callerAddress, address newConnectorAddress);
+event ConnectorAddressUpdated(address callerAddress, address newConnectorAddress)
 ```
 
 
@@ -3236,12 +3137,7 @@ Initialize the Registry contract
 
 
 ```solidity
-function initialize(
-    address admin_,
-    address registryManager_,
-    address gatewayEVM_,
-    address coreRegistry_
-)
+function initialize(address admin_, address registryManager_, address gatewayEVM_, address coreRegistry_)
     public
     initializer;
 ```
@@ -3261,10 +3157,7 @@ onCall is called by the GatewayEVM when a cross-chain message is received
 
 
 ```solidity
-function onCall(
-    MessageContext calldata context,
-    bytes calldata data
-)
+function onCall(MessageContext calldata context, bytes calldata data)
     external
     onlyRole(GATEWAY_ROLE)
     whenNotPaused
@@ -3286,12 +3179,7 @@ Only callable through onCall from CoreRegistry
 
 
 ```solidity
-function changeChainStatus(
-    uint256 chainId,
-    address gasZRC20,
-    bytes calldata registry,
-    bool activation
-)
+function changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation)
     external
     onlyRegistry
     whenNotPaused;
@@ -3314,11 +3202,7 @@ Only callable through onCall from CoreRegistry
 
 
 ```solidity
-function updateChainMetadata(
-    uint256 chainId,
-    string calldata key,
-    bytes calldata value
-)
+function updateChainMetadata(uint256 chainId, string calldata key, bytes calldata value)
     external
     onlyRegistry
     whenNotPaused;
@@ -3340,11 +3224,7 @@ Only callable through onCall from CoreRegistry
 
 
 ```solidity
-function registerContract(
-    uint256 chainId,
-    string calldata contractType,
-    bytes calldata addressBytes
-)
+function registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes)
     external
     onlyRegistry
     whenNotPaused;
@@ -3394,13 +3274,7 @@ Only callable through onCall from CoreRegistry
 
 
 ```solidity
-function setContractActive(
-    uint256 chainId,
-    string calldata contractType,
-    bool active
-)
-    external
-    onlyRegistry;
+function setContractActive(uint256 chainId, string calldata contractType, bool active) external onlyRegistry;
 ```
 **Parameters**
 
@@ -3469,10 +3343,7 @@ This function can only be called by an address with the REGISTRY_MANAGER_ROLE.
 
 
 ```solidity
-function bootstrapChains(
-    ChainInfoDTO[] calldata chains,
-    ChainMetadataEntry[] calldata metadataEntries
-)
+function bootstrapChains(ChainInfoDTO[] calldata chains, ChainMetadataEntry[] calldata metadataEntries)
     external
     onlyRole(REGISTRY_MANAGER_ROLE)
     whenNotPaused;
@@ -3493,10 +3364,7 @@ This function can only be called by an address with the REGISTRY_MANAGER_ROLE.
 
 
 ```solidity
-function bootstrapContracts(
-    ContractInfoDTO[] calldata contracts,
-    ContractConfigEntry[] calldata configEntries
-)
+function bootstrapContracts(ContractInfoDTO[] calldata contracts, ContractConfigEntry[] calldata configEntries)
     external
     onlyRole(REGISTRY_MANAGER_ROLE)
     whenNotPaused;
@@ -3600,12 +3468,7 @@ Set admin as default admin and pauser, and tssAddress as tss role.
 
 
 ```solidity
-function initialize(
-    address gateway_,
-    address zetaToken_,
-    address tssAddress_,
-    address admin_
-)
+function initialize(address gateway_, address zetaToken_, address tssAddress_, address admin_)
     public
     virtual
     initializer;
@@ -3751,7 +3614,7 @@ Error indicating that a zero address was provided.
 
 
 ```solidity
-error ZeroAddress();
+error ZeroAddress()
 ```
 
 
@@ -3769,12 +3632,7 @@ This contract directly transfers Zeta tokens and interacts with the Gateway cont
 
 
 ```solidity
-function initialize(
-    address gateway_,
-    address zetaToken_,
-    address tssAddress_,
-    address admin_
-)
+function initialize(address gateway_, address zetaToken_, address tssAddress_, address admin_)
     public
     override
     initializer;
@@ -3912,12 +3770,7 @@ uint256 public maxSupply
 
 
 ```solidity
-function initialize(
-    address gateway_,
-    address zetaToken_,
-    address tssAddress_,
-    address admin_
-)
+function initialize(address gateway_, address zetaToken_, address tssAddress_, address admin_)
     public
     override
     initializer;
@@ -3948,11 +3801,7 @@ This function can only be called by the TSS address.
 
 
 ```solidity
-function withdraw(
-    address to,
-    uint256 amount,
-    bytes32 internalSendHash
-)
+function withdraw(address to, uint256 amount, bytes32 internalSendHash)
     external
     override
     nonReentrant
@@ -4062,7 +3911,7 @@ Event triggered when max supply is updated.
 
 
 ```solidity
-event MaxSupplyUpdated(uint256 maxSupply);
+event MaxSupplyUpdated(uint256 maxSupply)
 ```
 
 **Parameters**
@@ -4075,7 +3924,7 @@ event MaxSupplyUpdated(uint256 maxSupply);
 #### ExceedsMaxSupply
 
 ```solidity
-error ExceedsMaxSupply();
+error ExceedsMaxSupply()
 ```
 
 
@@ -4286,13 +4135,7 @@ Changes status of the chain to activated/deactivated.
 
 
 ```solidity
-function _changeChainStatus(
-    uint256 chainId,
-    address gasZRC20,
-    bytes calldata registry,
-    bool activation
-)
-    internal;
+function _changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation) internal;
 ```
 **Parameters**
 
@@ -4327,12 +4170,7 @@ Registers a new contract address for a specific chain.
 
 
 ```solidity
-function _registerContract(
-    uint256 chainId,
-    string calldata contractType,
-    bytes calldata addressBytes
-)
-    internal;
+function _registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes) internal;
 ```
 **Parameters**
 
@@ -4471,10 +4309,7 @@ Gets information about a specific contract
 
 
 ```solidity
-function getContractInfo(
-    uint256 chainId,
-    string calldata contractType
-)
+function getContractInfo(uint256 chainId, string calldata contractType)
     external
     view
     returns (bool active, bytes memory addressBytes);
@@ -4500,11 +4335,7 @@ Gets contract-specific configuration
 
 
 ```solidity
-function getContractConfiguration(
-    uint256 chainId,
-    string calldata contractType,
-    string calldata key
-)
+function getContractConfiguration(uint256 chainId, string calldata contractType, string calldata key)
     external
     view
     returns (bytes memory);
@@ -4566,10 +4397,7 @@ Gets the ZRC20 token address for a specific asset on a foreign chain.
 
 
 ```solidity
-function getZRC20AddressByForeignAsset(
-    uint256 originChainId,
-    bytes calldata originAddress
-)
+function getZRC20AddressByForeignAsset(uint256 originChainId, bytes calldata originAddress)
     external
     view
     returns (address);
@@ -4678,13 +4506,7 @@ Changes status of the chain to activated/deactivated.
 
 
 ```solidity
-function changeChainStatus(
-    uint256 chainId,
-    address gasZRC20,
-    bytes calldata registry,
-    bool activation
-)
-    external;
+function changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation) external;
 ```
 **Parameters**
 
@@ -4719,12 +4541,7 @@ Registers a new contract address for a specific chain.
 
 
 ```solidity
-function registerContract(
-    uint256 chainId,
-    string calldata contractType,
-    bytes calldata addressBytes
-)
-    external;
+function registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes) external;
 ```
 **Parameters**
 
@@ -4860,10 +4677,7 @@ Gets information about a specific contract.
 
 
 ```solidity
-function getContractInfo(
-    uint256 chainId,
-    string calldata contractType
-)
+function getContractInfo(uint256 chainId, string calldata contractType)
     external
     view
     returns (bool active, bytes memory addressBytes);
@@ -4889,11 +4703,7 @@ Gets contract-specific configuration.
 
 
 ```solidity
-function getContractConfiguration(
-    uint256 chainId,
-    string calldata contractType,
-    string calldata key
-)
+function getContractConfiguration(uint256 chainId, string calldata contractType, string calldata key)
     external
     view
     returns (bytes memory);
@@ -4955,10 +4765,7 @@ Gets the ZRC20 token address for a specific asset on a foreign chain.
 
 
 ```solidity
-function getZRC20AddressByForeignAsset(
-    uint256 originChainId,
-    bytes calldata originAddress
-)
+function getZRC20AddressByForeignAsset(uint256 originChainId, bytes calldata originAddress)
     external
     view
     returns (address);
@@ -5051,7 +4858,7 @@ Error thrown when a zero address is provided where a non-zero address is require
 
 
 ```solidity
-error ZeroAddress();
+error ZeroAddress()
 ```
 
 #### InvalidSender
@@ -5059,7 +4866,7 @@ Error thrown when the sender is invalid
 
 
 ```solidity
-error InvalidSender();
+error InvalidSender()
 ```
 
 #### TransferFailed
@@ -5067,7 +4874,7 @@ Error thrown when a ZRC20 token transfer failed.
 
 
 ```solidity
-error TransferFailed();
+error TransferFailed()
 ```
 
 #### ChainActive
@@ -5075,7 +4882,7 @@ Error thrown when a chain is already active.
 
 
 ```solidity
-error ChainActive(uint256 chainId);
+error ChainActive(uint256 chainId)
 ```
 
 **Parameters**
@@ -5089,7 +4896,7 @@ Error thrown when a chain is not active.
 
 
 ```solidity
-error ChainNonActive(uint256 chainId);
+error ChainNonActive(uint256 chainId)
 ```
 
 **Parameters**
@@ -5103,7 +4910,7 @@ Error thrown when a contract type is invalid.
 
 
 ```solidity
-error InvalidContractType(string message);
+error InvalidContractType(string message)
 ```
 
 **Parameters**
@@ -5117,7 +4924,7 @@ Error thrown when a contract is already registered.
 
 
 ```solidity
-error ContractAlreadyRegistered(uint256 chainId, string contractType, bytes addressBytes);
+error ContractAlreadyRegistered(uint256 chainId, string contractType, bytes addressBytes)
 ```
 
 **Parameters**
@@ -5133,7 +4940,7 @@ Error thrown when a contract is not found in the registry.
 
 
 ```solidity
-error ContractNotFound(uint256 chainId, string contractType);
+error ContractNotFound(uint256 chainId, string contractType)
 ```
 
 **Parameters**
@@ -5148,7 +4955,7 @@ Error thrown when a ZRC20 token is already registered.
 
 
 ```solidity
-error ZRC20AlreadyRegistered(address address_);
+error ZRC20AlreadyRegistered(address address_)
 ```
 
 **Parameters**
@@ -5162,7 +4969,7 @@ Error thrown when a ZRC20 token symbol is already in use.
 
 
 ```solidity
-error ZRC20SymbolAlreadyInUse(string symbol);
+error ZRC20SymbolAlreadyInUse(string symbol)
 ```
 
 **Parameters**
@@ -5185,7 +4992,7 @@ Emitted when a chain status has changed.
 
 
 ```solidity
-event ChainStatusChanged(uint256 indexed chainId, bool newStatus);
+event ChainStatusChanged(uint256 indexed chainId, bool newStatus)
 ```
 
 **Parameters**
@@ -5200,7 +5007,7 @@ Emitted when a chain metadata is set.
 
 
 ```solidity
-event ChainMetadataUpdated(uint256 indexed chainId, string key, bytes value);
+event ChainMetadataUpdated(uint256 indexed chainId, string key, bytes value)
 ```
 
 **Parameters**
@@ -5216,7 +5023,7 @@ Emitted when a new contract is registered.
 
 
 ```solidity
-event ContractRegistered(uint256 indexed chainId, string indexed contractType, bytes addressBytes);
+event ContractRegistered(uint256 indexed chainId, string indexed contractType, bytes addressBytes)
 ```
 
 **Parameters**
@@ -5232,7 +5039,7 @@ Emitted when a contract status has changed.
 
 
 ```solidity
-event ContractStatusChanged(bytes addressBytes);
+event ContractStatusChanged(bytes addressBytes)
 ```
 
 **Parameters**
@@ -5246,7 +5053,7 @@ Emitted when a contract configuration is updated.
 
 
 ```solidity
-event ContractConfigurationUpdated(uint256 indexed chainId, string contractType, string key, bytes value);
+event ContractConfigurationUpdated(uint256 indexed chainId, string contractType, string key, bytes value)
 ```
 
 **Parameters**
@@ -5265,7 +5072,7 @@ Emitted when a ZRC20 token is registered.
 ```solidity
 event ZRC20TokenRegistered(
     bytes indexed originAddress, address indexed address_, uint8 decimals, uint256 originChainId, string symbol
-);
+)
 ```
 
 **Parameters**
@@ -5283,7 +5090,7 @@ Emitted when a ZRC20 token is updated.
 
 
 ```solidity
-event ZRC20TokenUpdated(address address_, bool active);
+event ZRC20TokenUpdated(address address_, bool active)
 ```
 
 **Parameters**
@@ -5298,7 +5105,7 @@ Emitted when admin address is changed.
 
 
 ```solidity
-event AdminChanged(address oldAdmin, address newAdmin);
+event AdminChanged(address oldAdmin, address newAdmin)
 ```
 
 **Parameters**
@@ -5313,7 +5120,7 @@ Emitted when registry manager address is changed.
 
 
 ```solidity
-event RegistryManagerChanged(address oldRegistryManager, address newRegistryManager);
+event RegistryManagerChanged(address oldRegistryManager, address newRegistryManager)
 ```
 
 **Parameters**
@@ -5636,12 +5443,7 @@ Changes status of the chain to activated/deactivated.
 
 
 ```solidity
-function changeChainStatus(
-    uint256 chainId,
-    address gasZRC20,
-    bytes calldata registry,
-    bool activation
-)
+function changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation)
     external
     onlyRole(REGISTRY_MANAGER_ROLE)
     whenNotPaused;
@@ -5662,11 +5464,7 @@ Updates chain metadata, only for the active chains.
 
 
 ```solidity
-function updateChainMetadata(
-    uint256 chainId,
-    string calldata key,
-    bytes calldata value
-)
+function updateChainMetadata(uint256 chainId, string calldata key, bytes calldata value)
     external
     onlyRole(REGISTRY_MANAGER_ROLE)
     whenNotPaused;
@@ -5686,11 +5484,7 @@ Registers a new contract address for a specific chain.
 
 
 ```solidity
-function registerContract(
-    uint256 chainId,
-    string calldata contractType,
-    bytes calldata addressBytes
-)
+function registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes)
     external
     onlyRole(REGISTRY_MANAGER_ROLE)
     whenNotPaused;
@@ -5736,11 +5530,7 @@ Sets a contract's active status
 
 
 ```solidity
-function setContractActive(
-    uint256 chainId,
-    string calldata contractType,
-    bool active
-)
+function setContractActive(uint256 chainId, string calldata contractType, bool active)
     external
     onlyRole(REGISTRY_MANAGER_ROLE)
     whenNotPaused;
@@ -5790,13 +5580,7 @@ Updates ZRC20 token active status.
 
 
 ```solidity
-function setZRC20TokenActive(
-    address address_,
-    bool active
-)
-    external
-    onlyRole(REGISTRY_MANAGER_ROLE)
-    whenNotPaused;
+function setZRC20TokenActive(address address_, bool active) external onlyRole(REGISTRY_MANAGER_ROLE) whenNotPaused;
 ```
 
 #### _broadcastChainActivation
@@ -5805,12 +5589,7 @@ Broadcast chain activation update to all satellite registries.
 
 
 ```solidity
-function _broadcastChainActivation(
-    uint256 chainId,
-    address gasZRC20,
-    bytes calldata registry,
-    bool activation
-)
+function _broadcastChainActivation(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation)
     internal;
 ```
 **Parameters**
@@ -5850,11 +5629,7 @@ addressBytes The bytes representation of the non-EVM address
 
 
 ```solidity
-function _broadcastContractRegistration(
-    uint256 chainId,
-    string calldata contractType,
-    bytes calldata addressBytes
-)
+function _broadcastContractRegistration(uint256 chainId, string calldata contractType, bytes calldata addressBytes)
     private;
 ```
 **Parameters**
@@ -5906,12 +5681,7 @@ active Whether the contract should be active
 
 
 ```solidity
-function _broadcastContractStatusUpdate(
-    uint256 chainId,
-    string calldata contractType,
-    bool active
-)
-    private;
+function _broadcastContractStatusUpdate(uint256 chainId, string calldata contractType, bool active) private;
 ```
 **Parameters**
 
@@ -6028,12 +5798,7 @@ Withdraw ZRC20 tokens to an external chain.
 
 
 ```solidity
-function withdraw(
-    bytes memory receiver,
-    uint256 amount,
-    address zrc20,
-    RevertOptions calldata revertOptions
-)
+function withdraw(bytes memory receiver, uint256 amount, address zrc20, RevertOptions calldata revertOptions)
     external;
 ```
 **Parameters**
@@ -6052,12 +5817,7 @@ Withdraw ZETA tokens to an external chain.
 
 
 ```solidity
-function withdraw(
-    bytes memory receiver,
-    uint256 amount,
-    uint256 chainId,
-    RevertOptions calldata revertOptions
-)
+function withdraw(bytes memory receiver, uint256 amount, uint256 chainId, RevertOptions calldata revertOptions)
     external;
 ```
 **Parameters**
@@ -6227,12 +5987,7 @@ Deposit ZETA and call a user-specified contract on ZEVM.
 
 
 ```solidity
-function depositAndCall(
-    MessageContext calldata context,
-    uint256 amount,
-    address target,
-    bytes calldata message
-)
+function depositAndCall(MessageContext calldata context, uint256 amount, address target, bytes calldata message)
     external;
 ```
 **Parameters**
@@ -6267,12 +6022,7 @@ Deposit foreign coins into ZRC20 and revert a user-specified contract on ZEVM.
 
 
 ```solidity
-function depositAndRevert(
-    address zrc20,
-    uint256 amount,
-    address target,
-    RevertContext calldata revertContext
-)
+function depositAndRevert(address zrc20, uint256 amount, address target, RevertContext calldata revertContext)
     external;
 ```
 **Parameters**
@@ -6299,7 +6049,7 @@ Error indicating a withdrawal failure.
 
 
 ```solidity
-error WithdrawalFailed();
+error WithdrawalFailed()
 ```
 
 #### InsufficientZRC20Amount
@@ -6307,7 +6057,7 @@ Error indicating an insufficient ZRC20 token amount.
 
 
 ```solidity
-error InsufficientZRC20Amount();
+error InsufficientZRC20Amount()
 ```
 
 #### InsufficientZetaAmount
@@ -6315,7 +6065,7 @@ Error indicating an insufficient zeta amount.
 
 
 ```solidity
-error InsufficientZetaAmount();
+error InsufficientZetaAmount()
 ```
 
 #### ZRC20BurnFailed
@@ -6323,7 +6073,7 @@ Error indicating a failure to burn ZRC20 tokens.
 
 
 ```solidity
-error ZRC20BurnFailed();
+error ZRC20BurnFailed()
 ```
 
 #### ZRC20TransferFailed
@@ -6331,7 +6081,7 @@ Error indicating a failure to transfer ZRC20 tokens.
 
 
 ```solidity
-error ZRC20TransferFailed();
+error ZRC20TransferFailed()
 ```
 
 #### ZRC20DepositFailed
@@ -6339,7 +6089,7 @@ Error indicating a failure to deposit ZRC20 tokens.
 
 
 ```solidity
-error ZRC20DepositFailed();
+error ZRC20DepositFailed()
 ```
 
 #### GasFeeTransferFailed
@@ -6347,7 +6097,7 @@ Error indicating a failure to transfer gas fee.
 
 
 ```solidity
-error GasFeeTransferFailed();
+error GasFeeTransferFailed()
 ```
 
 #### CallerIsNotProtocol
@@ -6355,7 +6105,7 @@ Error indicating that the caller is not the protocol account.
 
 
 ```solidity
-error CallerIsNotProtocol();
+error CallerIsNotProtocol()
 ```
 
 #### InvalidTarget
@@ -6363,7 +6113,7 @@ Error indicating an invalid target address.
 
 
 ```solidity
-error InvalidTarget();
+error InvalidTarget()
 ```
 
 #### FailedZetaSent
@@ -6371,7 +6121,7 @@ Error indicating a failure to send ZETA tokens.
 
 
 ```solidity
-error FailedZetaSent();
+error FailedZetaSent()
 ```
 
 #### OnlyWZETAOrProtocol
@@ -6379,7 +6129,7 @@ Error indicating that only WZETA or the protocol address can call the function.
 
 
 ```solidity
-error OnlyWZETAOrProtocol();
+error OnlyWZETAOrProtocol()
 ```
 
 #### InsufficientGasLimit
@@ -6387,7 +6137,7 @@ Error indicating an insufficient gas limit.
 
 
 ```solidity
-error InsufficientGasLimit();
+error InsufficientGasLimit()
 ```
 
 #### MessageSizeExceeded
@@ -6395,7 +6145,7 @@ Error indicating message size exceeded in external functions.
 
 
 ```solidity
-error MessageSizeExceeded();
+error MessageSizeExceeded()
 ```
 
 
@@ -6419,7 +6169,7 @@ event Called(
     bytes message,
     CallOptions callOptions,
     RevertOptions revertOptions
-);
+)
 ```
 
 **Parameters**
@@ -6449,7 +6199,7 @@ event Withdrawn(
     bytes message,
     CallOptions callOptions,
     RevertOptions revertOptions
-);
+)
 ```
 
 **Parameters**
@@ -6483,7 +6233,7 @@ event WithdrawnAndCalled(
     bytes message,
     CallOptions callOptions,
     RevertOptions revertOptions
-);
+)
 ```
 
 **Parameters**
@@ -6645,25 +6395,25 @@ function withdraw(uint256 wad) external;
 #### Approval
 
 ```solidity
-event Approval(address indexed owner, address indexed spender, uint256 value);
+event Approval(address indexed owner, address indexed spender, uint256 value)
 ```
 
 #### Transfer
 
 ```solidity
-event Transfer(address indexed from, address indexed to, uint256 value);
+event Transfer(address indexed from, address indexed to, uint256 value)
 ```
 
 #### Deposit
 
 ```solidity
-event Deposit(address indexed dst, uint256 wad);
+event Deposit(address indexed dst, uint256 wad)
 ```
 
 #### Withdrawal
 
 ```solidity
-event Withdrawal(address indexed src, uint256 wad);
+event Withdrawal(address indexed src, uint256 wad)
 ```
 
 
@@ -6851,49 +6601,49 @@ Interface for the ZRC20 events.
 #### Transfer
 
 ```solidity
-event Transfer(address indexed from, address indexed to, uint256 value);
+event Transfer(address indexed from, address indexed to, uint256 value)
 ```
 
 #### Approval
 
 ```solidity
-event Approval(address indexed owner, address indexed spender, uint256 value);
+event Approval(address indexed owner, address indexed spender, uint256 value)
 ```
 
 #### Deposit
 
 ```solidity
-event Deposit(bytes from, address indexed to, uint256 value);
+event Deposit(bytes from, address indexed to, uint256 value)
 ```
 
 #### Withdrawal
 
 ```solidity
-event Withdrawal(address indexed from, bytes to, uint256 value, uint256 gasFee, uint256 protocolFlatFee);
+event Withdrawal(address indexed from, bytes to, uint256 value, uint256 gasFee, uint256 protocolFlatFee)
 ```
 
 #### UpdatedSystemContract
 
 ```solidity
-event UpdatedSystemContract(address systemContract);
+event UpdatedSystemContract(address systemContract)
 ```
 
 #### UpdatedGateway
 
 ```solidity
-event UpdatedGateway(address gateway);
+event UpdatedGateway(address gateway)
 ```
 
 #### UpdatedGasLimit
 
 ```solidity
-event UpdatedGasLimit(uint256 gasLimit);
+event UpdatedGasLimit(uint256 gasLimit)
 ```
 
 #### UpdatedProtocolFlatFee
 
 ```solidity
-event UpdatedProtocolFlatFee(uint256 protocolFlatFee);
+event UpdatedProtocolFlatFee(uint256 protocolFlatFee)
 ```
 
 
@@ -6968,12 +6718,7 @@ Function to handle cross-chain calls with ZRC20 token transfers
 
 
 ```solidity
-function onCall(
-    MessageContext calldata context,
-    address zrc20,
-    uint256 amount,
-    bytes calldata message
-)
+function onCall(MessageContext calldata context, address zrc20, uint256 amount, bytes calldata message)
     external
     virtual;
 ```
@@ -6984,7 +6729,7 @@ Error thrown when a function is called by an unauthorized address
 
 
 ```solidity
-error Unauthorized();
+error Unauthorized()
 ```
 
 
@@ -7002,13 +6747,7 @@ UniversalContract should be used
 
 
 ```solidity
-function onCrossChainCall(
-    zContext calldata context,
-    address zrc20,
-    uint256 amount,
-    bytes calldata message
-)
-    external;
+function onCrossChainCall(zContext calldata context, address zrc20, uint256 amount, bytes calldata message) external;
 ```
 
 
@@ -7174,7 +6913,7 @@ function onRevert(
 #### SetWZETA
 
 ```solidity
-event SetWZETA(address wzeta_);
+event SetWZETA(address wzeta_)
 ```
 
 #### ZetaSent
@@ -7189,7 +6928,7 @@ event ZetaSent(
     uint256 destinationGasLimit,
     bytes message,
     bytes zetaParams
-);
+)
 ```
 
 #### ZetaReceived
@@ -7202,7 +6941,7 @@ event ZetaReceived(
     uint256 zetaValue,
     bytes message,
     bytes32 indexed internalSendHash
-);
+)
 ```
 
 #### ZetaReverted
@@ -7216,7 +6955,7 @@ event ZetaReverted(
     uint256 remainingZetaValue,
     bytes message,
     bytes32 indexed internalSendHash
-);
+)
 ```
 
 ### Errors
@@ -7225,31 +6964,31 @@ Contract custom errors.
 
 
 ```solidity
-error OnlyWZETAOrFungible();
+error OnlyWZETAOrFungible()
 ```
 
 #### WZETATransferFailed
 
 ```solidity
-error WZETATransferFailed();
+error WZETATransferFailed()
 ```
 
 #### OnlyFungibleModule
 
 ```solidity
-error OnlyFungibleModule();
+error OnlyFungibleModule()
 ```
 
 #### FailedZetaSent
 
 ```solidity
-error FailedZetaSent();
+error FailedZetaSent()
 ```
 
 #### WrongValue
 
 ```solidity
-error WrongValue();
+error WrongValue()
 ```
 
 
@@ -7583,37 +7322,37 @@ Custom SystemContract errors.
 
 
 ```solidity
-event SystemContractDeployed();
+event SystemContractDeployed()
 ```
 
 #### SetGasPrice
 
 ```solidity
-event SetGasPrice(uint256, uint256);
+event SetGasPrice(uint256, uint256)
 ```
 
 #### SetGasCoin
 
 ```solidity
-event SetGasCoin(uint256, address);
+event SetGasCoin(uint256, address)
 ```
 
 #### SetGasZetaPool
 
 ```solidity
-event SetGasZetaPool(uint256, address);
+event SetGasZetaPool(uint256, address)
 ```
 
 #### SetWZeta
 
 ```solidity
-event SetWZeta(address);
+event SetWZeta(address)
 ```
 
 #### SetConnectorZEVM
 
 ```solidity
-event SetConnectorZEVM(address);
+event SetConnectorZEVM(address)
 ```
 
 
@@ -7628,31 +7367,31 @@ Custom errors for SystemContract
 #### CallerIsNotFungibleModule
 
 ```solidity
-error CallerIsNotFungibleModule();
+error CallerIsNotFungibleModule()
 ```
 
 #### InvalidTarget
 
 ```solidity
-error InvalidTarget();
+error InvalidTarget()
 ```
 
 #### CantBeIdenticalAddresses
 
 ```solidity
-error CantBeIdenticalAddresses();
+error CantBeIdenticalAddresses()
 ```
 
 #### CantBeZeroAddress
 
 ```solidity
-error CantBeZeroAddress();
+error CantBeZeroAddress()
 ```
 
 #### ZeroAddress
 
 ```solidity
-error ZeroAddress();
+error ZeroAddress()
 ```
 
 
@@ -7751,25 +7490,25 @@ function transferFrom(address src, address dst, uint256 wad) public returns (boo
 #### Approval
 
 ```solidity
-event Approval(address indexed src, address indexed guy, uint256 wad);
+event Approval(address indexed src, address indexed guy, uint256 wad)
 ```
 
 #### Transfer
 
 ```solidity
-event Transfer(address indexed src, address indexed dst, uint256 wad);
+event Transfer(address indexed src, address indexed dst, uint256 wad)
 ```
 
 #### Deposit
 
 ```solidity
-event Deposit(address indexed dst, uint256 wad);
+event Deposit(address indexed dst, uint256 wad)
 ```
 
 #### Withdrawal
 
 ```solidity
-event Withdrawal(address indexed src, uint256 wad);
+event Withdrawal(address indexed src, uint256 wad)
 ```
 
 
@@ -8314,48 +8053,48 @@ Custom errors for ZRC20
 #### CallerIsNotFungibleModule
 
 ```solidity
-error CallerIsNotFungibleModule();
+error CallerIsNotFungibleModule()
 ```
 
 #### InvalidSender
 
 ```solidity
-error InvalidSender();
+error InvalidSender()
 ```
 
 #### GasFeeTransferFailed
 
 ```solidity
-error GasFeeTransferFailed();
+error GasFeeTransferFailed()
 ```
 
 #### ZeroGasCoin
 
 ```solidity
-error ZeroGasCoin();
+error ZeroGasCoin()
 ```
 
 #### ZeroGasPrice
 
 ```solidity
-error ZeroGasPrice();
+error ZeroGasPrice()
 ```
 
 #### LowAllowance
 
 ```solidity
-error LowAllowance();
+error LowAllowance()
 ```
 
 #### LowBalance
 
 ```solidity
-error LowBalance();
+error LowBalance()
 ```
 
 #### ZeroAddress
 
 ```solidity
-error ZeroAddress();
+error ZeroAddress()
 ```
 
