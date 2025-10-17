@@ -14,12 +14,7 @@ import "./ZetaInterfaces.sol";
  * unlock.
  */
 contract ZetaConnectorEth is ZetaConnectorBase {
-    constructor(
-        address zetaToken_,
-        address tssAddress_,
-        address tssAddressUpdater_,
-        address pauserAddress_
-    )
+    constructor(address zetaToken_, address tssAddress_, address tssAddressUpdater_, address pauserAddress_)
         ZetaConnectorBase(zetaToken_, tssAddress_, tssAddressUpdater_, pauserAddress_)
     { }
 

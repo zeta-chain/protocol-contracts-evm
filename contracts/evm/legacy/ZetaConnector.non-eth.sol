@@ -18,12 +18,7 @@ contract ZetaConnectorNonEth is ZetaConnectorBase {
 
     event MaxSupplyUpdated(address callerAddress, uint256 newMaxSupply);
 
-    constructor(
-        address zetaTokenAddress_,
-        address tssAddress_,
-        address tssAddressUpdater_,
-        address pauserAddress_
-    )
+    constructor(address zetaTokenAddress_, address tssAddress_, address tssAddressUpdater_, address pauserAddress_)
         ZetaConnectorBase(zetaTokenAddress_, tssAddress_, tssAddressUpdater_, pauserAddress_)
     { }
 
@@ -73,7 +68,9 @@ contract ZetaConnectorNonEth is ZetaConnectorBase {
         override
         onlyTssAddress
     {
-        if (zetaValue + IZetaNonEthInterface(zetaToken).totalSupply() > maxSupply) revert ExceedsMaxSupply(maxSupply);
+        if (zetaValue + IZetaNonEthInterface(zetaToken).totalSupply() > maxSupply) {
+            revert ExceedsMaxSupply(maxSupply);
+        }
         IZetaNonEthInterface(zetaToken).mint(destinationAddress, zetaValue, internalSendHash);
 
         if (message.length > 0) {

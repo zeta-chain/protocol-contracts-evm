@@ -15,12 +15,7 @@ contract ZetaConnectorNativeUpgradeTest is ZetaConnectorBase {
     /// @dev Modified event for testing upgrade.
     event WithdrawnV2(address indexed to, uint256 amount);
 
-    function initialize(
-        address gateway_,
-        address zetaToken_,
-        address tssAddress_,
-        address admin_
-    )
+    function initialize(address gateway_, address zetaToken_, address tssAddress_, address admin_)
         public
         override
         initializer

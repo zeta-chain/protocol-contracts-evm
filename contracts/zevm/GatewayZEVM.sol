@@ -107,14 +107,7 @@ contract GatewayZEVM is
     /// @param zrc20 The address of the ZRC20 token.
     /// @param gasLimit Gas limit.
     /// @return The gas fee for the withdrawal.
-    function _withdrawZRC20WithGasLimit(
-        uint256 amount,
-        address zrc20,
-        uint256 gasLimit
-    )
-        private
-        returns (uint256)
-    {
+    function _withdrawZRC20WithGasLimit(uint256 amount, address zrc20, uint256 gasLimit) private returns (uint256) {
         (address gasZRC20, uint256 gasFee) = IZRC20(zrc20).withdrawGasFeeWithGasLimit(gasLimit);
         if (!IZRC20(gasZRC20).transferFrom(msg.sender, PROTOCOL_ADDRESS, gasFee)) {
             revert GasFeeTransferFailed();
@@ -144,12 +137,7 @@ contract GatewayZEVM is
     /// @param amount The amount of tokens to withdraw.
     /// @param zrc20 The address of the ZRC20 token.
     /// @param revertOptions Revert options.
-    function withdraw(
-        bytes memory receiver,
-        uint256 amount,
-        address zrc20,
-        RevertOptions calldata revertOptions
-    )
+    function withdraw(bytes memory receiver, uint256 amount, address zrc20, RevertOptions calldata revertOptions)
         external
         whenNotPaused
     {
@@ -432,12 +420,7 @@ contract GatewayZEVM is
     /// @param amount The amount of tokens to transfer.
     /// @param target The target contract to call.
     /// @param message The calldata to pass to the contract call.
-    function depositAndCall(
-        MessageContext calldata context,
-        uint256 amount,
-        address target,
-        bytes calldata message
-    )
+    function depositAndCall(MessageContext calldata context, uint256 amount, address target, bytes calldata message)
         external
         nonReentrant
         onlyProtocol
@@ -454,10 +437,7 @@ contract GatewayZEVM is
     /// @notice Revert a user-specified contract on ZEVM.
     /// @param target The target contract to call.
     /// @param revertContext Revert context to pass to onRevert.
-    function executeRevert(
-        address target,
-        RevertContext calldata revertContext
-    )
+    function executeRevert(address target, RevertContext calldata revertContext)
         external
         nonReentrant
         onlyProtocol
@@ -473,12 +453,7 @@ contract GatewayZEVM is
     /// @param amount The amount of tokens to revert.
     /// @param target The target contract to call.
     /// @param revertContext Revert context to pass to onRevert.
-    function depositAndRevert(
-        address zrc20,
-        uint256 amount,
-        address target,
-        RevertContext calldata revertContext
-    )
+    function depositAndRevert(address zrc20, uint256 amount, address target, RevertContext calldata revertContext)
         external
         nonReentrant
         onlyProtocol
@@ -497,10 +472,7 @@ contract GatewayZEVM is
     /// the assets are deposited to the target contract even if onAbort reverts.
     /// @param target The target contract to call.
     /// @param abortContext Abort context to pass to onAbort.
-    function executeAbort(
-        address target,
-        AbortContext calldata abortContext
-    )
+    function executeAbort(address target, AbortContext calldata abortContext)
         external
         nonReentrant
         onlyProtocol
