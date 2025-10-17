@@ -174,8 +174,7 @@ contract ZetaConnectorBase is ConnectorErrors, Pausable {
         bytes32 internalSendHash
     )
         external
-        virtual
-    { }
+        virtual { }
 
     /**
      * @dev Handler to receive errors from other chain.
@@ -191,6 +190,5 @@ contract ZetaConnectorBase is ConnectorErrors, Pausable {
         bytes32 internalSendHash
     )
         external
-        virtual
-    { }
+        virtual { }
 }

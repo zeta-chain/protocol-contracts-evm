@@ -440,13 +440,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
     }
 }
 
-contract GatewayEVMInboundTest is
-    Test,
-    IGatewayEVMErrors,
-    IGatewayEVMEvents,
-    IReceiverEVMEvents,
-    INotSupportedMethods
-{
+contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiverEVMEvents, INotSupportedMethods {
     using SafeERC20 for IERC20;
 
     address proxy;

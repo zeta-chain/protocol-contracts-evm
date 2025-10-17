@@ -118,6 +118,19 @@
     "type": "zrc20"
   },
   {
+    "address": "0x0BB6086F94585c3CC8d6c587627f09877B452FD3",
+    "asset": "0x17c8e162996E877dE23e96D0AF0780636bb6E8D8",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDTT on Arbitrum Sepolia",
+    "foreign_chain_id": "421614",
+    "symbol": "USDTT.ARBSEP",
+    "type": "zrc20"
+  },
+  {
     "address": "0x0ca762FA958194795320635c11fF0C45C6412958",
     "asset": "0x6B513B40eBc0B4D7B197730476ed3324346F2822",
     "category": "omnichain",
@@ -180,6 +193,19 @@
     "description": "ZetaChain ZRC20 SUI on Sui Testnet",
     "foreign_chain_id": "103",
     "symbol": "SUI.SUI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x4888591FC8529b6a9B3B67b7aE93D3Ef4226BcE4",
+    "asset": "0x6B513B40eBc0B4D7B197730476ed3324346F2822",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDCT on Base Sepolia",
+    "foreign_chain_id": "84532",
+    "symbol": "USDCT.BASESEP",
     "type": "zrc20"
   },
   {
@@ -248,6 +274,45 @@
     "type": "zrc20"
   },
   {
+    "address": "0x8eb120dFDeD678E681559Ae1586Fd0F55077a1A1",
+    "asset": "0xA017203F31E817911D63820Ea81b1061AcE42FD5",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDCT on Arbitrum Sepolia",
+    "foreign_chain_id": "421614",
+    "symbol": "USDCT.ARBSEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x93dEB52A99EFe14c1383f3bd0F58bb29Ad6dA0FC",
+    "asset": "0x5339b82D437bf83304DD3695AFCC5088B2bDc1AD",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDCT on Avalanche Fuji C-Chain",
+    "foreign_chain_id": "43113",
+    "symbol": "USDCT.FUJI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x960eC27edE698F8F1977C6A32a75ac937a9c8381",
+    "asset": "0x2254a33Ee9F600ed6574FAA9Ad8ED1Dc4a44820e",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDTT on Base Sepolia",
+    "foreign_chain_id": "84532",
+    "symbol": "USDTT.BASESEP",
+    "type": "zrc20"
+  },
+  {
     "address": "0xADF73ebA3Ebaa7254E859549A44c74eF7cff7501",
     "asset": "",
     "category": "omnichain",
@@ -258,6 +323,19 @@
     "description": "ZetaChain ZRC20 SOL on Solana Devnet",
     "foreign_chain_id": "901",
     "symbol": "SOL.SOL",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xc96dBbC62235f8B7f498DB95eBcbe7EE2128C17f",
+    "asset": "0x7158D538f1b3E91d469f5A20BA2518B404bBe500",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDTT on Avalanche Fuji C-Chain",
+    "foreign_chain_id": "43113",
+    "symbol": "USDTT.FUJI",
     "type": "zrc20"
   },
   {
@@ -300,6 +378,19 @@
     "type": "zrc20"
   },
   {
+    "address": "0xD45F47412073b75B7c70728aD9A45Dee0ee01bac",
+    "asset": "0x58f64263c3896DD7B3D3E8097EaDdB79f903e71D",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDTT on Sepolia",
+    "foreign_chain_id": "11155111",
+    "symbol": "USDTT.SEPOLIA",
+    "type": "zrc20"
+  },
+  {
     "address": "0xd97B1de3619ed2c6BEb3860147E30cA8A7dC9891",
     "asset": "",
     "category": "omnichain",
@@ -323,6 +414,19 @@
     "description": "ZetaChain ZRC20 BTC on Bitcoin Signet",
     "foreign_chain_id": "18333",
     "symbol": "sBTC.BTC",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xe134d947644F90486C8106Ee528b1CD3e54A385e",
+    "asset": "0x9a9D6FF4463d3329024C25601857C039060a04fA",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDCT on Sepolia",
+    "foreign_chain_id": "11155111",
+    "symbol": "USDCT.SEPOLIA",
     "type": "zrc20"
   },
   {
