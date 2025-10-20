@@ -73,13 +73,18 @@ contract ZetaConnectorNonEth is ZetaConnectorBase {
         override
         onlyTssAddress
     {
-        if (zetaValue + IZetaNonEthInterface(zetaToken).totalSupply() > maxSupply) revert ExceedsMaxSupply(maxSupply);
+        if (zetaValue + IZetaNonEthInterface(zetaToken).totalSupply() > maxSupply) {
+            revert ExceedsMaxSupply(maxSupply);
+        }
         IZetaNonEthInterface(zetaToken).mint(destinationAddress, zetaValue, internalSendHash);
 
         if (message.length > 0) {
-            ZetaReceiver(destinationAddress).onZetaMessage(
-                ZetaInterfaces.ZetaMessage(zetaTxSenderAddress, sourceChainId, destinationAddress, zetaValue, message)
-            );
+            ZetaReceiver(destinationAddress)
+                .onZetaMessage(
+                    ZetaInterfaces.ZetaMessage(
+                        zetaTxSenderAddress, sourceChainId, destinationAddress, zetaValue, message
+                    )
+                );
         }
 
         emit ZetaReceived(zetaTxSenderAddress, sourceChainId, destinationAddress, zetaValue, message, internalSendHash);
@@ -111,16 +116,17 @@ contract ZetaConnectorNonEth is ZetaConnectorBase {
         IZetaNonEthInterface(zetaToken).mint(zetaTxSenderAddress, remainingZetaValue, internalSendHash);
 
         if (message.length > 0) {
-            ZetaReceiver(zetaTxSenderAddress).onZetaRevert(
-                ZetaInterfaces.ZetaRevert(
-                    zetaTxSenderAddress,
-                    sourceChainId,
-                    destinationAddress,
-                    destinationChainId,
-                    remainingZetaValue,
-                    message
-                )
-            );
+            ZetaReceiver(zetaTxSenderAddress)
+                .onZetaRevert(
+                    ZetaInterfaces.ZetaRevert(
+                        zetaTxSenderAddress,
+                        sourceChainId,
+                        destinationAddress,
+                        destinationChainId,
+                        remainingZetaValue,
+                        message
+                    )
+                );
         }
 
         emit ZetaReverted(

@@ -137,7 +137,9 @@ contract ZetaConnectorZEVM {
      */
     function send(ZetaInterfaces.SendInput calldata input) external {
         // Transfer wzeta to "fungible" module, which will be burnt by the protocol post processing via hooks.
-        if (!IWETH9(wzeta).transferFrom(msg.sender, address(this), input.zetaValueAndGas)) revert WZETATransferFailed();
+        if (!IWETH9(wzeta).transferFrom(msg.sender, address(this), input.zetaValueAndGas)) {
+            revert WZETATransferFailed();
+        }
         IWETH9(wzeta).withdraw(input.zetaValueAndGas);
         (bool sent,) = FUNGIBLE_MODULE_ADDRESS.call{ value: input.zetaValueAndGas }("");
         if (!sent) revert FailedZetaSent();
@@ -176,9 +178,12 @@ contract ZetaConnectorZEVM {
         if (!IWETH9(wzeta).transferFrom(address(this), destinationAddress, zetaValue)) revert WZETATransferFailed();
 
         if (message.length > 0) {
-            ZetaReceiver(destinationAddress).onZetaMessage(
-                ZetaInterfaces.ZetaMessage(zetaTxSenderAddress, sourceChainId, destinationAddress, zetaValue, message)
-            );
+            ZetaReceiver(destinationAddress)
+                .onZetaMessage(
+                    ZetaInterfaces.ZetaMessage(
+                        zetaTxSenderAddress, sourceChainId, destinationAddress, zetaValue, message
+                    )
+                );
         }
 
         emit ZetaReceived(zetaTxSenderAddress, sourceChainId, destinationAddress, zetaValue, message, internalSendHash);
@@ -209,16 +214,17 @@ contract ZetaConnectorZEVM {
         }
 
         if (message.length > 0) {
-            ZetaReceiver(zetaTxSenderAddress).onZetaRevert(
-                ZetaInterfaces.ZetaRevert(
-                    zetaTxSenderAddress,
-                    sourceChainId,
-                    destinationAddress,
-                    destinationChainId,
-                    remainingZetaValue,
-                    message
-                )
-            );
+            ZetaReceiver(zetaTxSenderAddress)
+                .onZetaRevert(
+                    ZetaInterfaces.ZetaRevert(
+                        zetaTxSenderAddress,
+                        sourceChainId,
+                        destinationAddress,
+                        destinationChainId,
+                        remainingZetaValue,
+                        message
+                    )
+                );
         }
 
         emit ZetaReverted(

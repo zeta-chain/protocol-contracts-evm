@@ -183,7 +183,13 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param amount Amount of tokens to deposit.
     /// @param asset Address of the ERC20 token.
     /// @param revertOptions Revert options.
-    function deposit(address receiver, uint256 amount, address asset, RevertOptions calldata revertOptions) external;
+    function deposit(
+        address receiver,
+        uint256 amount,
+        address asset,
+        RevertOptions calldata revertOptions
+    )
+        external;
 
     /// @notice Deposits ETH to the TSS address and calls an omnichain smart contract.
     /// @param receiver Address of the receiver.
@@ -227,5 +233,11 @@ struct MessageContext {
 
 /// @notice Interface implemented by contracts receiving authenticated calls.
 interface Callable {
-    function onCall(MessageContext calldata context, bytes calldata message) external payable returns (bytes memory);
+    function onCall(
+        MessageContext calldata context,
+        bytes calldata message
+    )
+        external
+        payable
+        returns (bytes memory);
 }
