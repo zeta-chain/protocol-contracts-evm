@@ -32,12 +32,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @param registryManager_ Address with REGISTRY_MANAGER_ROLE, authorized for all registry write actions.
     /// @param gatewayEVM_ Address of the GatewayEVM contract for cross-chain messaging
     /// @param coreRegistry_ Address of the CoreRegistry contract deployed on ZetaChain
-    function initialize(
-        address admin_,
-        address registryManager_,
-        address gatewayEVM_,
-        address coreRegistry_
-    )
+    function initialize(address admin_, address registryManager_, address gatewayEVM_, address coreRegistry_)
         public
         initializer
     {
@@ -67,10 +62,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @notice onCall is called by the GatewayEVM when a cross-chain message is received
     /// @param context Information about the cross-chain message
     /// @param data The encoded function call to execute
-    function onCall(
-        MessageContext calldata context,
-        bytes calldata data
-    )
+    function onCall(MessageContext calldata context, bytes calldata data)
         external
         onlyRole(GATEWAY_ROLE)
         whenNotPaused
@@ -101,12 +93,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @param gasZRC20 The address of the ZRC20 token that represents gas token for the chain.
     /// @param registry Address of the Registry contract on the connected chain.
     /// @param activation Whether activate or deactivate the chain
-    function changeChainStatus(
-        uint256 chainId,
-        address gasZRC20,
-        bytes calldata registry,
-        bool activation
-    )
+    function changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation)
         external
         onlyRegistry
         whenNotPaused
@@ -120,11 +107,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @param chainId The ID of the chain
     /// @param key The metadata key to update
     /// @param value The new value for the metadata
-    function updateChainMetadata(
-        uint256 chainId,
-        string calldata key,
-        bytes calldata value
-    )
+    function updateChainMetadata(uint256 chainId, string calldata key, bytes calldata value)
         external
         onlyRegistry
         whenNotPaused
@@ -138,11 +121,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @param chainId The ID of the chain where the contract is deployed
     /// @param contractType The type of the contract (e.g., "connector", "gateway")
     /// @param addressBytes The address of the contract
-    function registerContract(
-        uint256 chainId,
-        string calldata contractType,
-        bytes calldata addressBytes
-    )
+    function registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes)
         external
         onlyRegistry
         whenNotPaused
@@ -218,10 +197,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @dev This function can only be called by an address with the REGISTRY_MANAGER_ROLE.
     /// @param chains Array of chain data structures to bootstrap
     /// @param metadataEntries Array of chain metadata entries
-    function bootstrapChains(
-        ChainInfoDTO[] calldata chains,
-        ChainMetadataEntry[] calldata metadataEntries
-    )
+    function bootstrapChains(ChainInfoDTO[] calldata chains, ChainMetadataEntry[] calldata metadataEntries)
         external
         onlyRole(REGISTRY_MANAGER_ROLE)
         whenNotPaused
@@ -243,10 +219,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @dev This function can only be called by an address with the REGISTRY_MANAGER_ROLE.
     /// @param contracts Array of contract data structures to bootstrap
     /// @param configEntries Array of contract configuration entries
-    function bootstrapContracts(
-        ContractInfoDTO[] calldata contracts,
-        ContractConfigEntry[] calldata configEntries
-    )
+    function bootstrapContracts(ContractInfoDTO[] calldata contracts, ContractConfigEntry[] calldata configEntries)
         external
         onlyRole(REGISTRY_MANAGER_ROLE)
         whenNotPaused
