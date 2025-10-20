@@ -103,7 +103,11 @@ contract GatewayEVM is
     /// @dev This function can only be called by the TSS address and it is payable.
     /// @param destination Address to call.
     /// @param data Calldata to pass to the call.
-    function executeRevert(address destination, bytes calldata data, RevertContext calldata revertContext)
+    function executeRevert(
+        address destination,
+        bytes calldata data,
+        RevertContext calldata revertContext
+    )
         public
         payable
         nonReentrant
@@ -124,7 +128,11 @@ contract GatewayEVM is
     /// @param destination Address to call.
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
-    function execute(MessageContext calldata messageContext, address destination, bytes calldata data)
+    function execute(
+        MessageContext calldata messageContext,
+        address destination,
+        bytes calldata data
+    )
         external
         payable
         nonReentrant
@@ -243,7 +251,12 @@ contract GatewayEVM is
     /// @param amount Amount of tokens to deposit.
     /// @param asset Address of the ERC20 token.
     /// @param revertOptions Revert options.
-    function deposit(address receiver, uint256 amount, address asset, RevertOptions calldata revertOptions)
+    function deposit(
+        address receiver,
+        uint256 amount,
+        address asset,
+        RevertOptions calldata revertOptions
+    )
         external
         whenNotPaused
     {
@@ -260,7 +273,11 @@ contract GatewayEVM is
     /// @param receiver Address of the receiver.
     /// @param payload Calldata to pass to the call.
     /// @param revertOptions Revert options.
-    function depositAndCall(address receiver, bytes calldata payload, RevertOptions calldata revertOptions)
+    function depositAndCall(
+        address receiver,
+        bytes calldata payload,
+        RevertOptions calldata revertOptions
+    )
         external
         payable
         whenNotPaused
@@ -305,7 +322,11 @@ contract GatewayEVM is
     /// @param receiver Address of the receiver.
     /// @param payload Calldata to pass to the call.
     /// @param revertOptions Revert options.
-    function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions)
+    function call(
+        address receiver,
+        bytes calldata payload,
+        RevertOptions calldata revertOptions
+    )
         external
         whenNotPaused
     {
@@ -423,7 +444,11 @@ contract GatewayEVM is
     /// @param destination Address to call.
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.
-    function _executeAuthenticatedCall(MessageContext calldata messageContext, address destination, bytes calldata data)
+    function _executeAuthenticatedCall(
+        MessageContext calldata messageContext,
+        address destination,
+        bytes calldata data
+    )
         private
         returns (bytes memory)
     {

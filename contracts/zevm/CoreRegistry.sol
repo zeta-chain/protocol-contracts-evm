@@ -48,7 +48,12 @@ contract CoreRegistry is BaseRegistry {
     /// @param gasZRC20 The address of the ZRC20 token that represents gas token for the chain.
     /// @param registry Address of the Registry contract on the connected chain.
     /// @param activation Whether activate or deactivate the chain
-    function changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation)
+    function changeChainStatus(
+        uint256 chainId,
+        address gasZRC20,
+        bytes calldata registry,
+        bool activation
+    )
         external
         onlyRole(REGISTRY_MANAGER_ROLE)
         whenNotPaused
@@ -64,7 +69,11 @@ contract CoreRegistry is BaseRegistry {
     /// @param chainId The ID of the chain.
     /// @param key The metadata key to update.
     /// @param value The new value for the metadata.
-    function updateChainMetadata(uint256 chainId, string calldata key, bytes calldata value)
+    function updateChainMetadata(
+        uint256 chainId,
+        string calldata key,
+        bytes calldata value
+    )
         external
         onlyRole(REGISTRY_MANAGER_ROLE)
         whenNotPaused
@@ -80,7 +89,11 @@ contract CoreRegistry is BaseRegistry {
     /// @param chainId The ID of the chain where the contract is deployed.
     /// @param contractType The type of the contract (e.g., "connector", "gateway").
     /// @param addressBytes The bytes representation of the non-EVM address.
-    function registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes)
+    function registerContract(
+        uint256 chainId,
+        string calldata contractType,
+        bytes calldata addressBytes
+    )
         external
         onlyRole(REGISTRY_MANAGER_ROLE)
         whenNotPaused
@@ -118,7 +131,11 @@ contract CoreRegistry is BaseRegistry {
     /// @param chainId The ID of the chain where the contract is deployed.
     /// @param contractType The type of the contract.
     /// @param active Whether the contract should be active.
-    function setContractActive(uint256 chainId, string calldata contractType, bool active)
+    function setContractActive(
+        uint256 chainId,
+        string calldata contractType,
+        bool active
+    )
         external
         onlyRole(REGISTRY_MANAGER_ROLE)
         whenNotPaused
@@ -157,7 +174,14 @@ contract CoreRegistry is BaseRegistry {
     }
 
     /// @notice Updates ZRC20 token active status.
-    function setZRC20TokenActive(address address_, bool active) external onlyRole(REGISTRY_MANAGER_ROLE) whenNotPaused {
+    function setZRC20TokenActive(
+        address address_,
+        bool active
+    )
+        external
+        onlyRole(REGISTRY_MANAGER_ROLE)
+        whenNotPaused
+    {
         // Change state on ZetaChain
         _setZRC20TokenActive(address_, active);
         // Broadcast update to satellite registries
@@ -170,7 +194,12 @@ contract CoreRegistry is BaseRegistry {
     /// @param gasZRC20 The address of the ZRC20 token that represents gas token for the chain.
     /// @param registry Address of the Registry contract on the connected chain.
     /// @param activation Whether activate or deactivate the chain
-    function _broadcastChainActivation(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation)
+    function _broadcastChainActivation(
+        uint256 chainId,
+        address gasZRC20,
+        bytes calldata registry,
+        bool activation
+    )
         internal
     {
         // Encode the function call for the Registry contract on the target chain
@@ -194,7 +223,11 @@ contract CoreRegistry is BaseRegistry {
     /// @param chainId The ID of the chain where the contract is deployed
     /// @notice contractType The type of the contract
     /// @notice addressBytes The bytes representation of the non-EVM address
-    function _broadcastContractRegistration(uint256 chainId, string calldata contractType, bytes calldata addressBytes)
+    function _broadcastContractRegistration(
+        uint256 chainId,
+        string calldata contractType,
+        bytes calldata addressBytes
+    )
         private
     {
         bytes memory message =
@@ -226,7 +259,13 @@ contract CoreRegistry is BaseRegistry {
     /// @param chainId The ID of the chain where the contract is deployed
     /// @notice contractType The type of the contract
     /// @notice active Whether the contract should be active
-    function _broadcastContractStatusUpdate(uint256 chainId, string calldata contractType, bool active) private {
+    function _broadcastContractStatusUpdate(
+        uint256 chainId,
+        string calldata contractType,
+        bool active
+    )
+        private
+    {
         // Encode the function call for the Registry contract on the target chain
         bytes memory message =
             abi.encodeWithSignature("setContractActive(uint256,string,bool)", chainId, contractType, active);

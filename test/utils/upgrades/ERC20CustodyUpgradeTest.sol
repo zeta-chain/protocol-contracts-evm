@@ -125,7 +125,11 @@ contract ERC20CustodyUpgradeTest is
     /// @param to Destination address for the tokens.
     /// @param token Address of the ERC20 token.
     /// @param amount Amount of tokens to withdraw.
-    function withdraw(address to, address token, uint256 amount)
+    function withdraw(
+        address to,
+        address token,
+        uint256 amount
+    )
         external
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
@@ -201,7 +205,12 @@ contract ERC20CustodyUpgradeTest is
 
     /// @notice Deposits asset to custody and pay fee in zeta erc20.
     /// @custom:deprecated This method is deprecated.
-    function deposit(bytes calldata recipient, IERC20 asset, uint256 amount, bytes calldata message)
+    function deposit(
+        bytes calldata recipient,
+        IERC20 asset,
+        uint256 amount,
+        bytes calldata message
+    )
         external
         nonReentrant
         whenNotPaused
