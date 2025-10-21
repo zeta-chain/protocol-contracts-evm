@@ -268,7 +268,13 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param receiver Address of the receiver.
     /// @param payload Calldata to pass to the call.
     /// @param revertOptions Revert options.
-    function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions) external payable;
+    function call(
+        address receiver,
+        bytes calldata payload,
+        RevertOptions calldata revertOptions
+    )
+        external
+        payable;
 }
 
 /// @notice Message context passed to execute function.
@@ -279,5 +285,11 @@ struct MessageContext {
 
 /// @notice Interface implemented by contracts receiving authenticated calls.
 interface Callable {
-    function onCall(MessageContext calldata context, bytes calldata message) external payable returns (bytes memory);
+    function onCall(
+        MessageContext calldata context,
+        bytes calldata message
+    )
+        external
+        payable
+        returns (bytes memory);
 }

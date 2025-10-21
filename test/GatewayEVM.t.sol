@@ -440,13 +440,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
     }
 }
 
-contract GatewayEVMInboundTest is
-    Test,
-    IGatewayEVMErrors,
-    IGatewayEVMEvents,
-    IReceiverEVMEvents,
-    INotSupportedMethods
-{
+contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiverEVMEvents, INotSupportedMethods {
     using SafeERC20 for IERC20;
 
     address proxy;
@@ -935,9 +929,9 @@ contract GatewayEVMInboundTest is
 
         vm.expectEmit(true, true, true, true);
         emit DepositedAndCalled(owner, destination, amount, address(token), payload, revertOptions);
-        gateway.depositAndCall{ value: ADDITIONAL_ACTION_FEE_WEI }(
-            destination, amount, address(token), payload, revertOptions
-        );
+        gateway.depositAndCall{
+            value: ADDITIONAL_ACTION_FEE_WEI
+        }(destination, amount, address(token), payload, revertOptions);
 
         uint256 custodyBalanceAfter = token.balanceOf(address(custody));
         uint256 ownerBalanceAfter = token.balanceOf(owner);
@@ -983,9 +977,9 @@ contract GatewayEVMInboundTest is
 
         vm.expectEmit(true, true, true, true);
         emit DepositedAndCalled(owner, destination, amount, address(token), payload, revertOptions);
-        gateway.depositAndCall{ value: ADDITIONAL_ACTION_FEE_WEI }(
-            destination, amount, address(token), payload, revertOptions
-        );
+        gateway.depositAndCall{
+            value: ADDITIONAL_ACTION_FEE_WEI
+        }(destination, amount, address(token), payload, revertOptions);
 
         vm.expectEmit(true, true, true, true);
         emit Called(owner, destination, payload, revertOptions);
@@ -1076,9 +1070,9 @@ contract GatewayEVMInboundTest is
                 ExcessETHProvided.selector, ADDITIONAL_ACTION_FEE_WEI, ADDITIONAL_ACTION_FEE_WEI + excessEth
             )
         );
-        gateway.deposit{ value: ADDITIONAL_ACTION_FEE_WEI + excessEth }(
-            destination, amount, address(token), revertOptions
-        );
+        gateway.deposit{
+            value: ADDITIONAL_ACTION_FEE_WEI + excessEth
+        }(destination, amount, address(token), revertOptions);
     }
 
     function testCallFailsIfExcessEthProvided() public {
@@ -1134,9 +1128,9 @@ contract GatewayEVMInboundTest is
                 ExcessETHProvided.selector, ADDITIONAL_ACTION_FEE_WEI, ADDITIONAL_ACTION_FEE_WEI + excessEth
             )
         );
-        gateway.depositAndCall{ value: ADDITIONAL_ACTION_FEE_WEI + excessEth }(
-            destination, amount, address(token), payload, revertOptions
-        );
+        gateway.depositAndCall{
+            value: ADDITIONAL_ACTION_FEE_WEI + excessEth
+        }(destination, amount, address(token), payload, revertOptions);
     }
 
     function testDepositERC20ToCustodyFailsIfInsufficientFee() public {
@@ -1250,9 +1244,9 @@ contract GatewayEVMInboundTest is
                 amount + ADDITIONAL_ACTION_FEE_WEI + 1
             )
         );
-        gateway.depositAndCall{ value: amount + ADDITIONAL_ACTION_FEE_WEI + 1 }(
-            destination, amount, payload, revertOptions
-        );
+        gateway.depositAndCall{
+            value: amount + ADDITIONAL_ACTION_FEE_WEI + 1
+        }(destination, amount, payload, revertOptions);
     }
 
     function testDepositEthToTssFailsForSubsequentActions() public {
