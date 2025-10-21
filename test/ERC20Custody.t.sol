@@ -308,8 +308,9 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
 
     function testForwardCallToReceiveERC20PartialThroughCustody() public {
         uint256 amount = 100_000;
-        bytes memory data =
-            abi.encodeWithSignature("receiveERC20Partial(uint256,address,address)", amount, address(token), destination);
+        bytes memory data = abi.encodeWithSignature(
+            "receiveERC20Partial(uint256,address,address)", amount, address(token), destination
+        );
         uint256 balanceBefore = token.balanceOf(destination);
         assertEq(balanceBefore, 0);
         uint256 balanceBeforeCustody = token.balanceOf(address(custody));
@@ -394,8 +395,9 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
 
     function testForwardCallToReceiveERC20PartialThroughCustodyFailsIfSenderIsNotWithdrawer() public {
         uint256 amount = 100_000;
-        bytes memory data =
-            abi.encodeWithSignature("receiveERC20Partial(uint256,address,address)", amount, address(token), destination);
+        bytes memory data = abi.encodeWithSignature(
+            "receiveERC20Partial(uint256,address,address)", amount, address(token), destination
+        );
 
         vm.prank(owner);
         vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, owner, WITHDRAWER_ROLE));
@@ -404,8 +406,9 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
 
     function testForwardCallToReceiveERC20PartialThroughCustodyFailsIfAmountIs0() public {
         uint256 amount = 0;
-        bytes memory data =
-            abi.encodeWithSignature("receiveERC20Partial(uint256,address,address)", amount, address(token), destination);
+        bytes memory data = abi.encodeWithSignature(
+            "receiveERC20Partial(uint256,address,address)", amount, address(token), destination
+        );
 
         vm.prank(tssAddress);
         vm.expectRevert(InsufficientERC20Amount.selector);
