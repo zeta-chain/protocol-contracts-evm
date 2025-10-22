@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-import { RevertContext } from "../../../contracts/Revert.sol";
+import { RevertOptions, RevertContext, AbortContext } from "../../../contracts/Revert.sol";
 import "../interfaces/IGatewayZEVM.sol";
+import "../interfaces/IZRC20.sol";
+import "../interfaces/IWZETA.sol";
 import "./ICoreRegistry.sol";
 
 /// @custom:deprecated should be removed once v2 SystemContract is not used anymore.
