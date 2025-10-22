@@ -50,7 +50,12 @@ abstract contract ZetaConnectorBase is
 
     /// @notice Initializer for ZetaConnectors.
     /// @dev Set admin as default admin and pauser, and tssAddress as tss role.
-    function initialize(address gateway_, address zetaToken_, address tssAddress_, address admin_)
+    function initialize(
+        address gateway_,
+        address zetaToken_,
+        address tssAddress_,
+        address admin_
+    )
         public
         virtual
         initializer

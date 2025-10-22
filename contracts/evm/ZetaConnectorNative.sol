@@ -11,7 +11,12 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 contract ZetaConnectorNative is ZetaConnectorBase {
     using SafeERC20 for IERC20;
 
-    function initialize(address gateway_, address zetaToken_, address tssAddress_, address admin_)
+    function initialize(
+        address gateway_,
+        address zetaToken_,
+        address tssAddress_,
+        address admin_
+    )
         public
         override
         initializer

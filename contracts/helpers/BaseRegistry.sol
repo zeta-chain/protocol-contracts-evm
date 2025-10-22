@@ -101,7 +101,14 @@ abstract contract BaseRegistry is
     /// @param gasZRC20 The address of the ZRC20 token that represents gas token for the chain.
     /// @param registry Address of the Registry contract on the connected chain.
     /// @param activation Whether activate or deactivate the chain
-    function _changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation) internal {
+    function _changeChainStatus(
+        uint256 chainId,
+        address gasZRC20,
+        bytes calldata registry,
+        bool activation
+    )
+        internal
+    {
         // In the case chain is already activated
         if (_chains[chainId].active && activation) revert ChainActive(chainId);
         // In the case chain is inactive
@@ -140,7 +147,13 @@ abstract contract BaseRegistry is
     /// @param chainId The ID of the chain where the contract is deployed.
     /// @param contractType The type of the contract (e.g., "connector", "gateway").
     /// @param addressBytes The bytes representation of the non-EVM address.
-    function _registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes) internal {
+    function _registerContract(
+        uint256 chainId,
+        string calldata contractType,
+        bytes calldata addressBytes
+    )
+        internal
+    {
         // Validate inputs
         if (!_chains[chainId].active) revert ChainNonActive(chainId);
         if (bytes(contractType).length == 0) revert InvalidContractType(contractType);
@@ -281,7 +294,10 @@ abstract contract BaseRegistry is
     /// @param contractType The type of the contract
     /// @return active Whether the contract is active
     /// @return addressBytes The address of the contract
-    function getContractInfo(uint256 chainId, string calldata contractType)
+    function getContractInfo(
+        uint256 chainId,
+        string calldata contractType
+    )
         external
         view
         returns (bool active, bytes memory addressBytes)
@@ -295,7 +311,11 @@ abstract contract BaseRegistry is
     /// @param contractType The type of the contract
     /// @param key The configuration key to retrieve
     /// @return The value of the requested configuration
-    function getContractConfiguration(uint256 chainId, string calldata contractType, string calldata key)
+    function getContractConfiguration(
+        uint256 chainId,
+        string calldata contractType,
+        string calldata key
+    )
         external
         view
         returns (bytes memory)
@@ -336,7 +356,10 @@ abstract contract BaseRegistry is
     /// @param originChainId The ID of the foreign chain
     /// @param originAddress The address or identifier of the asset on its native chain.
     /// @return The address of the corresponding ZRC20 token on ZetaChain.
-    function getZRC20AddressByForeignAsset(uint256 originChainId, bytes calldata originAddress)
+    function getZRC20AddressByForeignAsset(
+        uint256 originChainId,
+        bytes calldata originAddress
+    )
         external
         view
         returns (address)
