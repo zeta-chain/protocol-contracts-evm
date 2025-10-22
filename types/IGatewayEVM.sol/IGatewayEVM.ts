@@ -68,7 +68,9 @@ export interface IGatewayEVMInterface extends Interface {
     nameOrSignature:
       | "call"
       | "deposit(address,uint256,address,(address,bool,address,bytes,uint256))"
+      | "deposit(address,uint256,(address,bool,address,bytes,uint256))"
       | "deposit(address,(address,bool,address,bytes,uint256))"
+      | "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))"
       | "depositAndCall(address,bytes,(address,bool,address,bytes,uint256))"
       | "depositAndCall(address,uint256,address,bytes,(address,bool,address,bytes,uint256))"
       | "execute"
@@ -85,6 +87,7 @@ export interface IGatewayEVMInterface extends Interface {
       | "Executed"
       | "ExecutedWithERC20"
       | "Reverted"
+      | "UpdatedAdditionalActionFee"
       | "UpdatedGatewayTSSAddress"
   ): EventFragment;
 
@@ -97,8 +100,16 @@ export interface IGatewayEVMInterface extends Interface {
     values: [AddressLike, BigNumberish, AddressLike, RevertOptionsStruct]
   ): string;
   encodeFunctionData(
+    functionFragment: "deposit(address,uint256,(address,bool,address,bytes,uint256))",
+    values: [AddressLike, BigNumberish, RevertOptionsStruct]
+  ): string;
+  encodeFunctionData(
     functionFragment: "deposit(address,(address,bool,address,bytes,uint256))",
     values: [AddressLike, RevertOptionsStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))",
+    values: [AddressLike, BigNumberish, BytesLike, RevertOptionsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "depositAndCall(address,bytes,(address,bool,address,bytes,uint256))",
@@ -149,7 +160,15 @@ export interface IGatewayEVMInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "deposit(address,uint256,(address,bool,address,bytes,uint256))",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "deposit(address,(address,bool,address,bytes,uint256))",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -333,6 +352,19 @@ export namespace RevertedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
+export namespace UpdatedAdditionalActionFeeEvent {
+  export type InputTuple = [oldFeeWei: BigNumberish, newFeeWei: BigNumberish];
+  export type OutputTuple = [oldFeeWei: bigint, newFeeWei: bigint];
+  export interface OutputObject {
+    oldFeeWei: bigint;
+    newFeeWei: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export namespace UpdatedGatewayTSSAddressEvent {
   export type InputTuple = [
     oldTSSAddress: AddressLike,
@@ -399,7 +431,7 @@ export interface IGatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "nonpayable"
+    "payable"
   >;
 
   "deposit(address,uint256,address,(address,bool,address,bytes,uint256))": TypedContractMethod<
@@ -410,11 +442,32 @@ export interface IGatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "nonpayable"
+    "payable"
+  >;
+
+  "deposit(address,uint256,(address,bool,address,bytes,uint256))": TypedContractMethod<
+    [
+      receiver: AddressLike,
+      amount: BigNumberish,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "payable"
   >;
 
   "deposit(address,(address,bool,address,bytes,uint256))": TypedContractMethod<
     [receiver: AddressLike, revertOptions: RevertOptionsStruct],
+    [void],
+    "payable"
+  >;
+
+  "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))": TypedContractMethod<
+    [
+      receiver: AddressLike,
+      amount: BigNumberish,
+      payload: BytesLike,
+      revertOptions: RevertOptionsStruct
+    ],
     [void],
     "payable"
   >;
@@ -438,7 +491,7 @@ export interface IGatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "nonpayable"
+    "payable"
   >;
 
   execute: TypedContractMethod<
@@ -498,7 +551,7 @@ export interface IGatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "nonpayable"
+    "payable"
   >;
   getFunction(
     nameOrSignature: "deposit(address,uint256,address,(address,bool,address,bytes,uint256))"
@@ -510,12 +563,35 @@ export interface IGatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "nonpayable"
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "deposit(address,uint256,(address,bool,address,bytes,uint256))"
+  ): TypedContractMethod<
+    [
+      receiver: AddressLike,
+      amount: BigNumberish,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "payable"
   >;
   getFunction(
     nameOrSignature: "deposit(address,(address,bool,address,bytes,uint256))"
   ): TypedContractMethod<
     [receiver: AddressLike, revertOptions: RevertOptionsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))"
+  ): TypedContractMethod<
+    [
+      receiver: AddressLike,
+      amount: BigNumberish,
+      payload: BytesLike,
+      revertOptions: RevertOptionsStruct
+    ],
     [void],
     "payable"
   >;
@@ -541,7 +617,7 @@ export interface IGatewayEVM extends BaseContract {
       revertOptions: RevertOptionsStruct
     ],
     [void],
-    "nonpayable"
+    "payable"
   >;
   getFunction(
     nameOrSignature: "execute"
@@ -635,6 +711,13 @@ export interface IGatewayEVM extends BaseContract {
     RevertedEvent.OutputObject
   >;
   getEvent(
+    key: "UpdatedAdditionalActionFee"
+  ): TypedContractEvent<
+    UpdatedAdditionalActionFeeEvent.InputTuple,
+    UpdatedAdditionalActionFeeEvent.OutputTuple,
+    UpdatedAdditionalActionFeeEvent.OutputObject
+  >;
+  getEvent(
     key: "UpdatedGatewayTSSAddress"
   ): TypedContractEvent<
     UpdatedGatewayTSSAddressEvent.InputTuple,
@@ -707,6 +790,17 @@ export interface IGatewayEVM extends BaseContract {
       RevertedEvent.InputTuple,
       RevertedEvent.OutputTuple,
       RevertedEvent.OutputObject
+    >;
+
+    "UpdatedAdditionalActionFee(uint256,uint256)": TypedContractEvent<
+      UpdatedAdditionalActionFeeEvent.InputTuple,
+      UpdatedAdditionalActionFeeEvent.OutputTuple,
+      UpdatedAdditionalActionFeeEvent.OutputObject
+    >;
+    UpdatedAdditionalActionFee: TypedContractEvent<
+      UpdatedAdditionalActionFeeEvent.InputTuple,
+      UpdatedAdditionalActionFeeEvent.OutputTuple,
+      UpdatedAdditionalActionFeeEvent.OutputObject
     >;
 
     "UpdatedGatewayTSSAddress(address,address)": TypedContractEvent<

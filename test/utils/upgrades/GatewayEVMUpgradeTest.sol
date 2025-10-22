@@ -49,7 +49,17 @@ contract GatewayEVMUpgradeTest is
     /// @notice New role identifier for pauser role.
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     /// @notice Max size of payload + revertOptions revert message.
-    uint256 public constant MAX_PAYLOAD_SIZE = 1024;
+    uint256 public constant MAX_PAYLOAD_SIZE = 2880;
+
+    /// @notice Fee charged for additional cross-chain actions within the same transaction.
+    /// @dev The first action in a transaction is free, subsequent actions incur this fee.
+    /// @dev This is configurable by the admin role to allow for fee adjustments.
+    uint256 public additionalActionFeeWei;
+
+    /// @notice Storage slot key for tracking transaction action count.
+    /// @dev Uses transient storage (tload/tstore) for gas efficiency.
+    /// @dev Value 0x01 is used as a unique identifier for this storage slot.
+    uint256 private constant _TRANSACTION_ACTION_COUNT_KEY = 0x01;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -74,6 +84,11 @@ contract GatewayEVMUpgradeTest is
         _grantRole(TSS_ROLE, tssAddress_);
 
         zetaToken = zetaToken_;
+
+        // Initialize the additional action fee to 0 (disabled by default)
+        // Note: Fee is denominated in wei and should be adjusted based on the chain's native token decimals
+        // Setting to 0 disables additional action fees entirely.
+        additionalActionFeeWei = 0;
     }
 
     /// @dev Authorizes the upgrade of the contract, sender must be owner.
@@ -101,6 +116,17 @@ contract GatewayEVMUpgradeTest is
     /// @notice Unpause contract.
     function unpause() external onlyRole(PAUSER_ROLE) {
         _unpause();
+    }
+
+    /// @notice Update the additional action fee.
+    /// @dev Only callable by admin role. This allows for fee adjustments based on network conditions.
+    /// @dev Setting fee to 0 disables additional action fees entirely.
+    /// @param newFeeWei The new fee amount in wei for additional actions in the same transaction.
+    /// @dev Fee should be adjusted based on the chain's native token decimals.
+    function updateAdditionalActionFee(uint256 newFeeWei) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        uint256 oldFee = additionalActionFeeWei;
+        additionalActionFeeWei = newFeeWei;
+        emit UpdatedAdditionalActionFee(oldFee, newFeeWei);
     }
 
     /// @notice Transfers msg.value to destination contract and executes it's onRevert function.
@@ -245,11 +271,45 @@ contract GatewayEVMUpgradeTest is
         if (receiver == address(0)) revert ZeroAddress();
         if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
 
+        // Check if this is a subsequent action (action index > 0)
+        uint256 currentIndex = _getNextActionIndex();
+        if (currentIndex > 0) {
+            revert AdditionalActionDisabled();
+        }
+
         (bool deposited,) = tssAddress.call{ value: msg.value }("");
 
         if (!deposited) revert DepositFailed();
 
         emit Deposited(msg.sender, receiver, msg.value, address(0), "", revertOptions);
+    }
+
+    // @notice Deposits ETH to the TSS address with specified amount.
+    /// @param receiver Address of the receiver.
+    /// @param amount Amount of ETH to deposit (excluding fees).
+    /// @param revertOptions Revert options.
+    /// @dev msg.value must equal amount + required fee for the action.
+    function deposit(
+        address receiver,
+        uint256 amount,
+        RevertOptions calldata revertOptions
+    )
+        external
+        payable
+        whenNotPaused
+    {
+        if (amount == 0) revert InsufficientETHAmount();
+        if (receiver == address(0)) revert ZeroAddress();
+        if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+
+        uint256 feeCharged = _processFee();
+        _validateChargedFeeForETHWithAmount(amount, feeCharged);
+
+        (bool deposited,) = tssAddress.call{ value: amount }("");
+
+        if (!deposited) revert DepositFailed();
+
+        emit Deposited(msg.sender, receiver, amount, address(0), "", revertOptions);
     }
 
     /// @notice Deposits ERC20 tokens to the custody or connector contract.
@@ -264,12 +324,16 @@ contract GatewayEVMUpgradeTest is
         RevertOptions calldata revertOptions
     )
         external
+        payable
         whenNotPaused
         nonReentrant
     {
         if (amount == 0) revert InsufficientERC20Amount();
         if (receiver == address(0)) revert ZeroAddress();
         if (revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+
+        uint256 feeCharged = _processFee();
+        _validateChargedFeeForERC20(feeCharged);
 
         _transferFromToAssetHandler(msg.sender, asset, amount);
 
@@ -280,6 +344,8 @@ contract GatewayEVMUpgradeTest is
     /// @param receiver Address of the receiver.
     /// @param payload Calldata to pass to the call.
     /// @param revertOptions Revert options.
+    /// @dev This function only works for the first action in a transaction (backward compatibility).
+    /// @dev For subsequent actions, use the overloaded version with amount parameter.
     function depositAndCall(
         address receiver,
         bytes calldata payload,
@@ -288,17 +354,52 @@ contract GatewayEVMUpgradeTest is
         external
         payable
         whenNotPaused
-        nonReentrant
     {
         if (msg.value == 0) revert InsufficientETHAmount();
         if (receiver == address(0)) revert ZeroAddress();
         if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
 
+        // Check if this is a subsequent action (action index > 0)
+        uint256 currentIndex = _getNextActionIndex();
+        if (currentIndex > 0) {
+            revert AdditionalActionDisabled();
+        }
+
         (bool deposited,) = tssAddress.call{ value: msg.value }("");
 
         if (!deposited) revert DepositFailed();
 
-        emit Deposited(msg.sender, receiver, msg.value, address(0), payload, revertOptions);
+        emit DepositedAndCalled(msg.sender, receiver, msg.value, address(0), payload, revertOptions);
+    }
+
+    /// @notice Deposits ETH to the TSS address and calls an omnichain smart contract with specified amount.
+    /// @param receiver Address of the receiver.
+    /// @param amount Amount of ETH to deposit (excluding fees).
+    /// @param payload Calldata to pass to the call.
+    /// @param revertOptions Revert options.
+    /// @dev msg.value must equal amount + required fee for the action.
+    function depositAndCall(
+        address receiver,
+        uint256 amount,
+        bytes calldata payload,
+        RevertOptions calldata revertOptions
+    )
+        external
+        payable
+        whenNotPaused
+    {
+        if (msg.value == 0) revert InsufficientETHAmount();
+        if (receiver == address(0)) revert ZeroAddress();
+        if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+
+        uint256 feeCharged = _processFee();
+        _validateChargedFeeForETHWithAmount(amount, feeCharged);
+
+        (bool deposited,) = tssAddress.call{ value: amount }("");
+
+        if (!deposited) revert DepositFailed();
+
+        emit DepositedAndCalled(msg.sender, receiver, amount, address(0), payload, revertOptions);
     }
 
     /// @notice Deposits ERC20 tokens to the custody or connector contract and calls an omnichain smart contract.
@@ -315,12 +416,16 @@ contract GatewayEVMUpgradeTest is
         RevertOptions calldata revertOptions
     )
         external
+        payable
         whenNotPaused
         nonReentrant
     {
         if (amount == 0) revert InsufficientERC20Amount();
         if (receiver == address(0)) revert ZeroAddress();
         if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+
+        uint256 feeCharged = _processFee();
+        _validateChargedFeeForERC20(feeCharged);
 
         _transferFromToAssetHandler(msg.sender, asset, amount);
 
@@ -337,11 +442,15 @@ contract GatewayEVMUpgradeTest is
         RevertOptions calldata revertOptions
     )
         external
+        payable
         whenNotPaused
         nonReentrant
     {
         if (receiver == address(0)) revert ZeroAddress();
         if (payload.length + revertOptions.revertMessage.length > MAX_PAYLOAD_SIZE) revert PayloadSizeExceeded();
+
+        uint256 feeCharged = _processFee();
+        _validateChargedFeeForERC20(feeCharged);
 
         emit Called(msg.sender, receiver, payload, revertOptions);
     }
@@ -464,6 +573,73 @@ contract GatewayEVMUpgradeTest is
             if (functionSelector == Revertable.onRevert.selector) {
                 revert NotAllowedToCallOnRevert();
             }
+        }
+    }
+
+    /// @notice Processes fee collection for cross-chain actions within a transaction.
+    /// @dev The first action in a transaction is free, subsequent actions incur ADDITIONAL_ACTION_FEE_WEI.
+    /// @dev If fee is 0, the entire functionality is disabled and will revert.
+    /// @return feeCharged The fee amount actually charged (0 for first action, ADDITIONAL_ACTION_FEE_WEI for
+    /// subsequent actions).
+    function _processFee() internal returns (uint256 feeCharged) {
+        uint256 actionIndex = _getNextActionIndex();
+
+        // First action is free
+        if (actionIndex == 0) {
+            return 0;
+        }
+
+        // If fee is 0, functionality is disabled
+        if (additionalActionFeeWei == 0) {
+            revert AdditionalActionDisabled();
+        }
+
+        // Subsequent actions require fee payment
+        feeCharged = additionalActionFeeWei;
+        if (msg.value < feeCharged) {
+            revert InsufficientFee(feeCharged, msg.value);
+        }
+
+        // Transfer fee to TSS address
+        (bool success,) = tssAddress.call{ value: feeCharged }("");
+        if (!success) {
+            revert FeeTransferFailed();
+        }
+
+        return feeCharged;
+    }
+
+    /// @notice Validates fee payment for ERC20 operations (deposit, depositAndCall, call).
+    /// @dev Validates that msg.value equals the required fee (no excess ETH allowed).
+    /// @param feeCharged The fee amount that was charged.
+    function _validateChargedFeeForERC20(uint256 feeCharged) internal view {
+        // For ERC20 operations, msg.value must equal the required fee
+        if (msg.value > feeCharged) {
+            revert ExcessETHProvided(feeCharged, msg.value);
+        }
+    }
+
+    /// @notice Validates fee payment for ETH operations with specified amount.
+    /// @dev Validates that msg.value equals amount + feeCharged.
+    /// @param amount The amount to deposit (excluding fees).
+    /// @param feeCharged The fee amount that was charged.
+    function _validateChargedFeeForETHWithAmount(uint256 amount, uint256 feeCharged) internal view {
+        uint256 expectedValue = amount + feeCharged;
+        if (msg.value != expectedValue) {
+            revert IncorrectValueProvided(expectedValue, msg.value);
+        }
+    }
+
+    /// @notice Gets and increments the transaction action counter using transient storage.
+    /// @dev Uses assembly for gas efficiency with tload/tstore operations.
+    /// @dev Transient storage is transaction-scoped and automatically cleared after each transaction.
+    /// @return currentIndex The current action index within the transaction (0-based).
+    function _getNextActionIndex() internal returns (uint256 currentIndex) {
+        assembly {
+            // Load current count from transient storage
+            currentIndex := tload(_TRANSACTION_ACTION_COUNT_KEY)
+            // Increment and store back to transient storage
+            tstore(_TRANSACTION_ACTION_COUNT_KEY, add(currentIndex, 1))
         }
     }
 }

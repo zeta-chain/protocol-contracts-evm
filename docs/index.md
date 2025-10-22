@@ -45,6 +45,19 @@ address public zetaToken
 ```
 
 
+#### additionalActionFeeWei
+Fee charged for additional cross-chain actions within the same transaction.
+
+The first action in a transaction is free, subsequent actions incur this fee.
+
+This is configurable by the admin role to allow for fee adjustments.
+
+
+```solidity
+uint256 public additionalActionFeeWei
+```
+
+
 #### TSS_ROLE
 New role identifier for tss role.
 
@@ -78,6 +91,19 @@ Max size of payload + revertOptions revert message.
 
 ```solidity
 uint256 public constant MAX_PAYLOAD_SIZE = 2880
+```
+
+
+#### _TRANSACTION_ACTION_COUNT_KEY
+Storage slot key for tracking transaction action count.
+
+Uses transient storage (tload/tstore) for gas efficiency.
+
+Value 0x01 is used as a unique identifier for this storage slot.
+
+
+```solidity
+uint256 private constant _TRANSACTION_ACTION_COUNT_KEY = 0x01
 ```
 
 
@@ -150,6 +176,27 @@ Unpause contract.
 ```solidity
 function unpause() external onlyRole(PAUSER_ROLE);
 ```
+
+#### updateAdditionalActionFee
+
+Update the additional action fee.
+
+Only callable by admin role. This allows for fee adjustments based on network conditions.
+
+Setting fee to 0 disables additional action fees entirely.
+
+Fee should be adjusted based on the chain's native token decimals.
+
+
+```solidity
+function updateAdditionalActionFee(uint256 newFeeWei) external onlyRole(DEFAULT_ADMIN_ROLE);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newFeeWei`|`uint256`|The new fee amount in wei for additional actions in the same transaction.|
+
 
 #### executeRevert
 
@@ -281,6 +328,10 @@ function revertWithERC20(
 
 Deposits ETH to the TSS address.
 
+This function only works for the first action in a transaction (backward compatibility).
+
+For subsequent actions, use the overloaded version with amount parameter.
+
 
 ```solidity
 function deposit(address receiver, RevertOptions calldata revertOptions) external payable whenNotPaused;
@@ -290,6 +341,32 @@ function deposit(address receiver, RevertOptions calldata revertOptions) externa
 |Name|Type|Description|
 |----|----|-----------|
 |`receiver`|`address`|Address of the receiver.|
+|`revertOptions`|`RevertOptions`|Revert options.|
+
+
+#### deposit
+
+Deposits ETH to the TSS address with specified amount.
+
+msg.value must equal amount + required fee for the action.
+
+
+```solidity
+function deposit(
+    address receiver,
+    uint256 amount,
+    RevertOptions calldata revertOptions
+)
+    external
+    payable
+    whenNotPaused;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|Address of the receiver.|
+|`amount`|`uint256`|Amount of ETH to deposit (excluding fees).|
 |`revertOptions`|`RevertOptions`|Revert options.|
 
 
@@ -306,6 +383,7 @@ function deposit(
     RevertOptions calldata revertOptions
 )
     external
+    payable
     whenNotPaused;
 ```
 **Parameters**
@@ -321,6 +399,10 @@ function deposit(
 #### depositAndCall
 
 Deposits ETH to the TSS address and calls an omnichain smart contract.
+
+This function only works for the first action in a transaction (backward compatibility).
+
+For subsequent actions, use the overloaded version with amount parameter.
 
 
 ```solidity
@@ -344,6 +426,34 @@ function depositAndCall(
 
 #### depositAndCall
 
+Deposits ETH to the TSS address and calls an omnichain smart contract with specified amount.
+
+msg.value must equal amount + required fee for the action.
+
+
+```solidity
+function depositAndCall(
+    address receiver,
+    uint256 amount,
+    bytes calldata payload,
+    RevertOptions calldata revertOptions
+)
+    external
+    payable
+    whenNotPaused;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|Address of the receiver.|
+|`amount`|`uint256`|Amount of ETH to deposit (excluding fees).|
+|`payload`|`bytes`|Calldata to pass to the call.|
+|`revertOptions`|`RevertOptions`|Revert options.|
+
+
+#### depositAndCall
+
 Deposits ERC20 tokens to the custody or connector contract and calls an omnichain smart contract.
 
 
@@ -356,6 +466,7 @@ function depositAndCall(
     RevertOptions calldata revertOptions
 )
     external
+    payable
     whenNotPaused;
 ```
 **Parameters**
@@ -381,6 +492,7 @@ function call(
     RevertOptions calldata revertOptions
 )
     external
+    payable
     whenNotPaused;
 ```
 **Parameters**
@@ -539,6 +651,79 @@ function _executeAuthenticatedCall(
 ```solidity
 function _revertIfOnCallOrOnRevert(bytes calldata data) private pure;
 ```
+
+#### _processFee
+
+Processes fee collection for cross-chain actions within a transaction.
+
+The first action in a transaction is free, subsequent actions incur ADDITIONAL_ACTION_FEE_WEI.
+
+If fee is 0, the entire functionality is disabled and will revert.
+
+
+```solidity
+function _processFee() internal returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The fee amount actually charged (0 for first action, ADDITIONAL_ACTION_FEE_WEI for subsequent actions).|
+
+
+#### _validateChargedFeeForERC20
+
+Validates fee payment for ERC20 operations (deposit, depositAndCall, call).
+
+Validates that msg.value equals the required fee (no excess ETH allowed).
+
+
+```solidity
+function _validateChargedFeeForERC20(uint256 feeCharged) internal view;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`feeCharged`|`uint256`|The fee amount that was charged.|
+
+
+#### _validateChargedFeeForETHWithAmount
+
+Validates fee payment for ETH operations with specified amount.
+
+Validates that msg.value equals amount + feeCharged.
+
+
+```solidity
+function _validateChargedFeeForETHWithAmount(uint256 amount, uint256 feeCharged) internal view;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`amount`|`uint256`|The amount to deposit (excluding fees).|
+|`feeCharged`|`uint256`|The fee amount that was charged.|
+
+
+#### _getNextActionIndex
+
+Gets and increments the transaction action counter using transient storage.
+
+Uses assembly for gas efficiency with tload/tstore operations.
+
+Transient storage is transaction-scoped and automatically cleared after each transaction.
+
+
+```solidity
+function _getNextActionIndex() internal returns (uint256 currentIndex);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`currentIndex`|`uint256`|The current action index within the transaction (0-based).|
+
 
 
 
@@ -1783,6 +1968,23 @@ function deposit(address receiver, RevertOptions calldata revertOptions) externa
 
 #### deposit
 
+Deposits ETH to the TSS address with specified amount.
+
+
+```solidity
+function deposit(address receiver, uint256 amount, RevertOptions calldata revertOptions) external payable;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|Address of the receiver.|
+|`amount`|`uint256`|Amount of ETH to deposit.|
+|`revertOptions`|`RevertOptions`|Revert options.|
+
+
+#### deposit
+
 Deposits ERC20 tokens to the custody or connector contract.
 
 
@@ -1793,7 +1995,8 @@ function deposit(
     address asset,
     RevertOptions calldata revertOptions
 )
-    external;
+    external
+    payable;
 ```
 **Parameters**
 
@@ -1830,6 +2033,31 @@ function depositAndCall(
 
 #### depositAndCall
 
+Deposits ETH to the TSS address and calls an omnichain smart contract with specified amount.
+
+
+```solidity
+function depositAndCall(
+    address receiver,
+    uint256 amount,
+    bytes calldata payload,
+    RevertOptions calldata revertOptions
+)
+    external
+    payable;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|Address of the receiver.|
+|`amount`|`uint256`|Amount of ETH to deposit.|
+|`payload`|`bytes`|Calldata to pass to the call.|
+|`revertOptions`|`RevertOptions`|Revert options.|
+
+
+#### depositAndCall
+
 Deposits ERC20 tokens to the custody or connector contract and calls an omnichain smart contract.
 
 
@@ -1841,7 +2069,8 @@ function depositAndCall(
     bytes calldata payload,
     RevertOptions calldata revertOptions
 )
-    external;
+    external
+    payable;
 ```
 **Parameters**
 
@@ -1860,7 +2089,13 @@ Calls an omnichain smart contract without asset transfer.
 
 
 ```solidity
-function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions) external;
+function call(
+    address receiver,
+    bytes calldata payload,
+    RevertOptions calldata revertOptions
+)
+    external
+    payable;
 ```
 **Parameters**
 
@@ -1975,6 +2210,69 @@ Error indicating payload size exceeded in external functions.
 ```solidity
 error PayloadSizeExceeded();
 ```
+
+#### FeeTransferFailed
+Error thrown when fee transfer to TSS address fails.
+
+This error occurs when the low-level call to transfer fees fails.
+
+
+```solidity
+error FeeTransferFailed();
+```
+
+#### InsufficientFee
+Error thrown when insufficient fee is provided for additional actions.
+
+
+```solidity
+error InsufficientFee(uint256 required, uint256 provided);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`required`|`uint256`|The fee amount required for the action.|
+|`provided`|`uint256`|The fee amount actually provided by the caller.|
+
+#### ExcessETHProvided
+Error thrown when excess ETH is sent for non-ETH operations.
+
+
+```solidity
+error ExcessETHProvided(uint256 required, uint256 provided);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`required`|`uint256`|The fee amount required for the action.|
+|`provided`|`uint256`|The ETH amount actually provided by the caller.|
+
+#### AdditionalActionDisabled
+Error thrown when additional action functionality is disabled (fee set to 0).
+
+
+```solidity
+error AdditionalActionDisabled();
+```
+
+#### IncorrectValueProvided
+Error thrown when msg.value doesn't match expected amount + fee.
+
+
+```solidity
+error IncorrectValueProvided(uint256 expected, uint256 provided);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`expected`|`uint256`|The expected value (amount + fee).|
+|`provided`|`uint256`|The actual msg.value provided.|
 
 
 
@@ -2106,7 +2404,7 @@ event Called(address indexed sender, address indexed receiver, bytes payload, Re
 |`revertOptions`|`RevertOptions`|Revert options.|
 
 #### UpdatedGatewayTSSAddress
-Emitted when tss address is updated
+Emitted when tss address is updated.
 
 
 ```solidity
@@ -2117,8 +2415,23 @@ event UpdatedGatewayTSSAddress(address oldTSSAddress, address newTSSAddress);
 
 |Name|Type|Description|
 |----|----|-----------|
-|`oldTSSAddress`|`address`|old tss address|
-|`newTSSAddress`|`address`|new tss address|
+|`oldTSSAddress`|`address`|old tss address.|
+|`newTSSAddress`|`address`|new tss address.|
+
+#### UpdatedAdditionalActionFee
+Emitted when additional action fee is updated.
+
+
+```solidity
+event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`oldFeeWei`|`uint256`|old fee value.|
+|`newFeeWei`|`uint256`|new fee value.|
 
 
 
@@ -5490,7 +5803,7 @@ Called when a revertable call is made.
 
 
 ```solidity
-function onRevert(RevertContext calldata revertContext) external payable;
+function onRevert(RevertContext calldata revertContext) external;
 ```
 **Parameters**
 
@@ -6951,15 +7264,6 @@ If the gateway is not active or not found, the gateway will remain uninitialized
 
 ```solidity
 constructor() ;
-```
-
-#### onCall
-
-Function to handle cross-chain calls with native ZETA transfers
-
-
-```solidity
-function onCall(MessageContext calldata context, bytes calldata message) external payable virtual;
 ```
 
 #### onCall
