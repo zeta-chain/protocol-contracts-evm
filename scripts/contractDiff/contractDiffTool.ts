@@ -42,8 +42,8 @@ const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
     },
     avalanche_mainnet: {
         name: "Avalanche C-Chain",
-        apiUrl: "https://api.etherscan.io/v2/api?chainid=43114",
-        apiKeyEnv: process.env.ETHERSCAN_API_KEY!,
+        apiUrl: "https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan",
+        apiKeyEnv: "snowtrace",
         explorerType: "etherscan",
     },
     zeta_mainnet: {
