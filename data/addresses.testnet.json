@@ -1,1 +1,656 @@
-
+[
+  {
+    "address": "0x0000ecb8cdd25a18f12daa23f6422e07fbf8b9e1",
+    "category": "messaging",
+    "chain_id": 97,
+    "chain_name": "bsc_testnet",
+    "type": "connector"
+  },
+  {
+    "address": "0xd80be3710f08d280f51115e072e5d2a778946cd7",
+    "category": "omnichain",
+    "chain_id": 97,
+    "chain_name": "bsc_testnet",
+    "type": "erc20Custody"
+  },
+  {
+    "address": "0x0c487a766110c85d301d96e33579c5b317fa4995",
+    "category": "omnichain",
+    "chain_id": 97,
+    "chain_name": "bsc_testnet",
+    "type": "gateway"
+  },
+  {
+    "address": "0x0000c9ec4042283e8139c74f4c64bcd1e0b9b54f",
+    "category": "messaging",
+    "chain_id": 97,
+    "chain_name": "bsc_testnet",
+    "type": "zetaToken"
+  },
+  {
+    "address": "0x6b2fe12c605d64e14ca69f9aba51550593ba92ff43376d0a6cc26a5ca226f9bd,0x6fc08f682551e52c2cc34362a20f744ba6a3d8d17f6583fa2f774887c4079700",
+    "category": "omnichain",
+    "chain_id": 103,
+    "chain_name": "sui_testnet",
+    "type": "gateway"
+  },
+  {
+    "address": "ZETAjseVjuFsxdRxo6MmTCvqFwb3ZHUx56Co3vCmGis",
+    "category": "omnichain",
+    "chain_id": 901,
+    "chain_name": "solana_devnet",
+    "type": "gateway"
+  },
+  {
+    "address": "0x07fe085d0af54eceb1af1cf73bed92afefdb8364",
+    "category": "omnichain",
+    "chain_id": 1001,
+    "chain_name": "kaia_testnet",
+    "type": "erc20Custody"
+  },
+  {
+    "address": "0x17c57f0b20ff169f779aceb320c8d7297d8cb1de",
+    "category": "omnichain",
+    "chain_id": 1001,
+    "chain_name": "kaia_testnet",
+    "type": "gateway"
+  },
+  {
+    "address": "0x239e96c8f17C85c30100AC26F635Ea15f23E9c67",
+    "category": "messaging",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "type": "connector"
+  },
+  {
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "address": "0x735b14BB79463307AAcBED86DAf3322B1e6226aB",
+    "type": "fungibleModule"
+  },
+  {
+    "address": "0x6c533f7fe93fae114d0954697069df33c9b74fd7",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "type": "gateway"
+  },
+  {
+    "address": "0xEdf1c3275d13489aCdC6cD6eD246E72458B8795B",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "type": "systemContract"
+  },
+  {
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "address": "0x9fd96203f7b22bCF72d9DCb40ff98302376cE09c",
+    "type": "uniswapV2Factory"
+  },
+  {
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "address": "0x2ca7d64A7EFE2D62A725E2B35Cf7230D6677FfEe",
+    "type": "uniswapV2Router02"
+  },
+  {
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "address": "0x5F0b1a82749cb4E2278EC87F8BF6B618dC71a8bf",
+    "type": "zetaToken"
+  },
+  {
+    "address": "0x05BA149A7bd6dC1F937fA9046A9e05C05f3b18b0",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 18,
+    "description": "ZetaChain ZRC20 ETH on Ethereum Sepolia",
+    "foreign_chain_id": "11155111",
+    "symbol": "ETH.ETHSEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x0BB6086F94585c3CC8d6c587627f09877B452FD3",
+    "asset": "0x17c8e162996E877dE23e96D0AF0780636bb6E8D8",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDTT on Arbitrum Sepolia",
+    "foreign_chain_id": "421614",
+    "symbol": "USDTT.ARBSEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x0ca762FA958194795320635c11fF0C45C6412958",
+    "asset": "0x6B513B40eBc0B4D7B197730476ed3324346F2822",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 UPKRW on Arbitrum Sepolia",
+    "foreign_chain_id": "421614",
+    "symbol": "UPKRW.ARBSEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x1de70f3e971B62A0707dA18100392af14f7fB677",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 18,
+    "description": "ZetaChain ZRC20 ETH on Arbitrum Sepolia",
+    "foreign_chain_id": "421614",
+    "symbol": "ETH.ARBSEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x236b0DE675cC8F46AE186897fCCeFe3370C9eDeD",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 18,
+    "description": "ZetaChain ZRC20 ETH on Base Sepolia",
+    "foreign_chain_id": "84532",
+    "symbol": "ETH.BASESEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x2Db395976CDb9eeFCc8920F4F2f0736f1D575794",
+    "asset": "0x2254a33Ee9F600ed6574FAA9Ad8ED1Dc4a44820e",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 KBKRW on Kaia Kairos",
+    "foreign_chain_id": "1001",
+    "symbol": "KBKRW.KAIROS",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x3e128c169564DD527C8e9bd85124BF6A890E5a5f",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 9,
+    "description": "ZetaChain ZRC20 SUI on Sui Testnet",
+    "foreign_chain_id": "103",
+    "symbol": "SUI.SUI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x4888591FC8529b6a9B3B67b7aE93D3Ef4226BcE4",
+    "asset": "0x6B513B40eBc0B4D7B197730476ed3324346F2822",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDCT on Base Sepolia",
+    "foreign_chain_id": "84532",
+    "symbol": "USDCT.BASESEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x4bC32034caCcc9B7e02536945eDbC286bACbA073",
+    "asset": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDC on Arbitrum Sepolia",
+    "foreign_chain_id": "421614",
+    "symbol": "USDC.ARBSEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x54Bf2B1E91FCb56853097BD2545750d218E245e1",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 9,
+    "description": "ZetaChain ZRC20 TON on TON Testnet",
+    "foreign_chain_id": "2015141",
+    "symbol": "TON.TON",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x777915D031d1e8144c90D025C594b3b8Bf07a08d",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 18,
+    "description": "ZetaChain ZRC20 POL on Amoy Testnet",
+    "foreign_chain_id": "80002",
+    "symbol": "POL.AMOY",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x7c8dDa80bbBE1254a7aACf3219EBe1481c6E01d7",
+    "asset": "0x64544969ed7EBf5f083679233325356EbE738930",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDC on BSC Testnet",
+    "foreign_chain_id": "97",
+    "symbol": "USDC.BSC",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x8344d6f84d26f998fa070BbEA6D2E15E359e2641",
+    "asset": "0x5425890298aed601595a70AB815c96711a31Bc65",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDC on Avalanche Fuji C-Chain",
+    "foreign_chain_id": "43113",
+    "symbol": "USDC.FUJI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x8eb120dFDeD678E681559Ae1586Fd0F55077a1A1",
+    "asset": "0xA017203F31E817911D63820Ea81b1061AcE42FD5",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDCT on Arbitrum Sepolia",
+    "foreign_chain_id": "421614",
+    "symbol": "USDCT.ARBSEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x93dEB52A99EFe14c1383f3bd0F58bb29Ad6dA0FC",
+    "asset": "0x5339b82D437bf83304DD3695AFCC5088B2bDc1AD",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDCT on Avalanche Fuji C-Chain",
+    "foreign_chain_id": "43113",
+    "symbol": "USDCT.FUJI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0x960eC27edE698F8F1977C6A32a75ac937a9c8381",
+    "asset": "0x2254a33Ee9F600ed6574FAA9Ad8ED1Dc4a44820e",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDTT on Base Sepolia",
+    "foreign_chain_id": "84532",
+    "symbol": "USDTT.BASESEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xADF73ebA3Ebaa7254E859549A44c74eF7cff7501",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 9,
+    "description": "ZetaChain ZRC20 SOL on Solana Devnet",
+    "foreign_chain_id": "901",
+    "symbol": "SOL.SOL",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xc96dBbC62235f8B7f498DB95eBcbe7EE2128C17f",
+    "asset": "0x7158D538f1b3E91d469f5A20BA2518B404bBe500",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDTT on Avalanche Fuji C-Chain",
+    "foreign_chain_id": "43113",
+    "symbol": "USDTT.FUJI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xcC683A782f4B30c138787CB5576a86AF66fdc31d",
+    "asset": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDC on Ethereum Sepolia",
+    "foreign_chain_id": "11155111",
+    "symbol": "USDC.ETHSEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xd0eFed75622e7AA4555EE44F296dA3744E3ceE19",
+    "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDC on Base Sepolia",
+    "foreign_chain_id": "84532",
+    "symbol": "USDC.BASESEP",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xD10932EB3616a937bd4a2652c87E9FeBbAce53e5",
+    "asset": "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDC on Solana Devnet",
+    "foreign_chain_id": "901",
+    "symbol": "USDC.SOL",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xD45F47412073b75B7c70728aD9A45Dee0ee01bac",
+    "asset": "0x58f64263c3896DD7B3D3E8097EaDdB79f903e71D",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDTT on Sepolia",
+    "foreign_chain_id": "11155111",
+    "symbol": "USDTT.SEPOLIA",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xd97B1de3619ed2c6BEb3860147E30cA8A7dC9891",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 18,
+    "description": "ZetaChain ZRC20 BNB on BSC Testnet",
+    "foreign_chain_id": "97",
+    "symbol": "BNB.BSC",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xdbfF6471a79E5374d771922F2194eccc42210B9F",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 8,
+    "description": "ZetaChain ZRC20 BTC on Bitcoin Signet",
+    "foreign_chain_id": "18333",
+    "symbol": "sBTC.BTC",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xe134d947644F90486C8106Ee528b1CD3e54A385e",
+    "asset": "0x9a9D6FF4463d3329024C25601857C039060a04fA",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDCT on Sepolia",
+    "foreign_chain_id": "11155111",
+    "symbol": "USDCT.SEPOLIA",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xe1A4f44b12eb72DC6da556Be9Ed1185141d7C23c",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 18,
+    "description": "ZetaChain ZRC20 Kaia Kairos Testnet KAIA",
+    "foreign_chain_id": "1001",
+    "symbol": "KAIA.KAIROS",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xe573a6e11f8506620F123DBF930222163D46BCB6",
+    "asset": "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDC on Polygon Amoy",
+    "foreign_chain_id": "80002",
+    "symbol": "USDC.AMOY",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xE80e3e8Ac1C19c744d4c2147172489BEAF23E3C5",
+    "asset": "a1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 USDC on Sui Testnet",
+    "foreign_chain_id": "103",
+    "symbol": "USDC.SUI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xE8d7796535F1cd63F0fe8D631E68eACe6839869B",
+    "asset": "0x6B513B40eBc0B4D7B197730476ed3324346F2822",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 HanaKRW on Avalanche Fuji C-Chain",
+    "foreign_chain_id": "43113",
+    "symbol": "HanaKRW.FUJI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xEb646191FcCb5Bfc1e7A121D3847590aAc840a53",
+    "asset": "0x90fDDe887468D282090D12208d6e171e1632008c",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "erc20",
+    "decimals": 6,
+    "description": "ZetaChain ZRC20 TSKRW on Kaia Kairos",
+    "foreign_chain_id": "1001",
+    "symbol": "TSKRW.KAIROS",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xEe9CC614D03e7Dbe994b514079f4914a605B4719",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 18,
+    "description": "ZetaChain ZRC20 AVAX on Avalanche Fuji C-Chain",
+    "foreign_chain_id": "43113",
+    "symbol": "AVAX.FUJI",
+    "type": "zrc20"
+  },
+  {
+    "address": "0xfC9201f4116aE6b054722E10b98D904829b469c3",
+    "asset": "",
+    "category": "omnichain",
+    "chain_id": 7001,
+    "chain_name": "zeta_testnet",
+    "coin_type": "gas",
+    "decimals": 8,
+    "description": "ZetaChain ZRC20 BTC on Bitcoin Testnet4",
+    "foreign_chain_id": "18334",
+    "symbol": "tBTC.BTC",
+    "type": "zrc20"
+  },
+  {
+    "address": "tb1qy9pqmk2pd9sv63g27jt8r657wy0d9ueeh0nqur",
+    "category": "omnichain",
+    "chain_id": "18332",
+    "chain_name": "btc_testnet",
+    "type": "tss"
+  },
+  {
+    "address": "0x1B088fbAfD7ab966022944AD7b90B9f1113DC027",
+    "category": "omnichain",
+    "chain_id": 43113,
+    "chain_name": "avalanche_testnet",
+    "type": "erc20Custody"
+  },
+  {
+    "address": "0x0dA86Dc3F9B71F84a0E97B0e2291e50B7a5df10f",
+    "category": "omnichain",
+    "chain_id": 43113,
+    "chain_name": "avalanche_testnet",
+    "type": "gateway"
+  },
+  {
+    "address": "0x60E6b70bC2761f878Ff992276612F67FbABC1761",
+    "category": "messaging",
+    "chain_id": 80002,
+    "chain_name": "amoy_testnet",
+    "type": "connector"
+  },
+  {
+    "address": "0xd80be3710f08d280f51115e072e5d2a778946cd7",
+    "category": "omnichain",
+    "chain_id": 80002,
+    "chain_name": "amoy_testnet",
+    "type": "erc20Custody"
+  },
+  {
+    "address": "0x0c487a766110c85d301d96e33579c5b317fa4995",
+    "category": "omnichain",
+    "chain_id": 80002,
+    "chain_name": "amoy_testnet",
+    "type": "gateway"
+  },
+  {
+    "address": "0x1432612E60cad487C857E7D38AFf57134916c902",
+    "category": "messaging",
+    "chain_id": 80002,
+    "chain_name": "amoy_testnet",
+    "type": "zetaToken"
+  },
+  {
+    "address": "0xc0B74d761ef4EC9e9473f65687d36B9F13DB0dCc",
+    "category": "messaging",
+    "chain_id": 84532,
+    "chain_name": "base_sepolia",
+    "type": "connector"
+  },
+  {
+    "address": "0xd80be3710f08d280f51115e072e5d2a778946cd7",
+    "category": "omnichain",
+    "chain_id": 84532,
+    "chain_name": "base_sepolia",
+    "type": "erc20Custody"
+  },
+  {
+    "address": "0x0c487a766110c85d301d96e33579c5b317fa4995",
+    "category": "omnichain",
+    "chain_id": 84532,
+    "chain_name": "base_sepolia",
+    "type": "gateway"
+  },
+  {
+    "address": "0xf4e63991E7475b659bd97Bba85f32a7259239D5d",
+    "category": "messaging",
+    "chain_id": 84532,
+    "chain_name": "base_sepolia",
+    "type": "zetaToken"
+  },
+  {
+    "address": "0x1B088fbAfD7ab966022944AD7b90B9f1113DC027",
+    "category": "omnichain",
+    "chain_id": 421614,
+    "chain_name": "arbitrum_sepolia",
+    "type": "erc20Custody"
+  },
+  {
+    "address": "0x0dA86Dc3F9B71F84a0E97B0e2291e50B7a5df10f",
+    "category": "omnichain",
+    "chain_id": 421614,
+    "chain_name": "arbitrum_sepolia",
+    "type": "gateway"
+  },
+  {
+    "address": "0:87115e4a012e747d9bce013ce2244010c6d5e3b0f88ddbc63420519b8619e5a0",
+    "category": "omnichain",
+    "chain_id": 2015141,
+    "chain_name": "ton_testnet",
+    "type": "gateway"
+  },
+  {
+    "address": "0x8531a5aB847ff5B22D855633C25ED1DA3255247e",
+    "category": "omnichain",
+    "chain_id": "11155111",
+    "chain_name": "sepolia_testnet",
+    "type": "tss"
+  },
+  {
+    "address": "0x3963341dad121c9CD33046089395D66eBF20Fb03",
+    "category": "messaging",
+    "chain_id": 11155111,
+    "chain_name": "sepolia_testnet",
+    "type": "connector"
+  },
+  {
+    "address": "0xd80be3710f08d280f51115e072e5d2a778946cd7",
+    "category": "omnichain",
+    "chain_id": 11155111,
+    "chain_name": "sepolia_testnet",
+    "type": "erc20Custody"
+  },
+  {
+    "address": "0x0c487a766110c85d301d96e33579c5b317fa4995",
+    "category": "omnichain",
+    "chain_id": 11155111,
+    "chain_name": "sepolia_testnet",
+    "type": "gateway"
+  },
+  {
+    "address": "0x0000c304D2934c00Db1d51995b9f6996AffD17c0",
+    "category": "messaging",
+    "chain_id": 11155111,
+    "chain_name": "sepolia_testnet",
+    "type": "zetaToken"
+  }
+]
