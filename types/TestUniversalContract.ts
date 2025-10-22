@@ -225,7 +225,7 @@ export interface TestUniversalContract extends BaseContract {
   onRevert: TypedContractMethod<
     [revertContext: RevertContextStruct],
     [void],
-    "nonpayable"
+    "payable"
   >;
 
   registry: TypedContractMethod<[], [string], "view">;
@@ -261,7 +261,7 @@ export interface TestUniversalContract extends BaseContract {
   ): TypedContractMethod<
     [revertContext: RevertContextStruct],
     [void],
-    "nonpayable"
+    "payable"
   >;
   getFunction(
     nameOrSignature: "registry"
