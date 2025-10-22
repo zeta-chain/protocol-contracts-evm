@@ -66,11 +66,14 @@ interface IGatewayEVMEvents {
     /// @param revertOptions Revert options.
     event Called(address indexed sender, address indexed receiver, bytes payload, RevertOptions revertOptions);
 
-    /// @notice Emitted when tss address is updated
-    /// @param oldTSSAddress old tss address
-    /// @param newTSSAddress new tss address
+    /// @notice Emitted when tss address is updated.
+    /// @param oldTSSAddress old tss address.
+    /// @param newTSSAddress new tss address.
     event UpdatedGatewayTSSAddress(address oldTSSAddress, address newTSSAddress);
 
+    /// @notice Emitted when additional action fee is updated.
+    /// @param oldFeeWei old fee value.
+    /// @param newFeeWei new fee value.
     event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 }
 
