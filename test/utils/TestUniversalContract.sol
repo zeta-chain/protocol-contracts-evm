@@ -50,7 +50,7 @@ contract TestUniversalContract is UniversalContract, Revertable, Abortable {
 
     /// @notice Handles a cross-chain call revert.
     /// @param revertContext Revert context.
-    function onRevert(RevertContext calldata revertContext) external payable override {
+    function onRevert(RevertContext calldata revertContext) external override {
         emit ContextDataRevert(revertContext);
     }
 
