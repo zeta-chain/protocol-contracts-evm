@@ -1237,4 +1237,155 @@ contract GatewayZEVMOutboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors
         vm.expectRevert(ZeroAddress.selector);
         gateway.executeAbort(address(0), abortContext);
     }
+
+    function testBurnGasFeeForZRC20Withdrawal() public {
+        uint256 amount = 1;
+
+        vm.prank(protocolAddress);
+        zrc20.updateGasLimit(50_000);
+
+        (, uint256 gasFee) = zrc20.withdrawGasFeeWithGasLimit(50_000);
+
+        uint256 initialTotalSupply = zrc20.totalSupply();
+        gateway.withdraw(abi.encodePacked(addr1), amount, address(zrc20), revertOptions);
+
+        uint256 finalTotalSupply = zrc20.totalSupply();
+        uint256 expectedBurnAmount = amount + gasFee;
+        assertEq(initialTotalSupply - expectedBurnAmount, finalTotalSupply, "ZRC20 tokens were not burned correctly");
+    }
+
+    function testBurnGasFeeForZRC20WithdrawAndCall() public {
+        uint256 amount = 1;
+        bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
+
+        vm.startPrank(protocolAddress);
+        zrc20.updateGasLimit(MIN_GAS_LIMIT);
+
+        (, uint256 gasFee) = zrc20.withdrawGasFeeWithGasLimit(MIN_GAS_LIMIT);
+
+        zrc20.deposit(owner, amount + gasFee);
+        vm.stopPrank();
+
+        vm.startPrank(owner);
+        zrc20.approve(address(gateway), amount + gasFee);
+        vm.stopPrank();
+
+        uint256 initialTotalSupply = zrc20.totalSupply();
+
+        gateway.withdrawAndCall(
+            abi.encodePacked(addr1),
+            amount,
+            address(zrc20),
+            message,
+            CallOptions({ gasLimit: MIN_GAS_LIMIT, isArbitraryCall: true }),
+            revertOptions
+        );
+
+        uint256 finalTotalSupply = zrc20.totalSupply();
+        uint256 expectedBurnAmount = amount + gasFee;
+        assertEq(
+            initialTotalSupply - expectedBurnAmount,
+            finalTotalSupply,
+            "ZRC20 tokens were not burned correctly for withdrawAndCall"
+        );
+    }
+
+    function testBurnGasFeeForDifferentZRC20Withdrawal() public {
+        vm.startPrank(protocolAddress);
+        ZRC20 secondZRC20 =
+            new ZRC20("SECOND", "SEC", 18, 1, CoinType.ERC20, 100_000, address(systemContract), address(gateway));
+        secondZRC20.deposit(owner, 100);
+        vm.stopPrank();
+
+        vm.startPrank(owner);
+        secondZRC20.approve(address(gateway), 100);
+        zrc20.approve(address(gateway), 100_000);
+        vm.stopPrank();
+
+        uint256 amount = 1;
+
+        (address gasZRC20, uint256 gasFee) = secondZRC20.withdrawGasFeeWithGasLimit(100_000);
+        assertEq(gasZRC20, address(zrc20));
+
+        uint256 initialGasZRC20Supply = zrc20.totalSupply();
+        uint256 initialSecondZRC20Supply = secondZRC20.totalSupply();
+
+        gateway.withdraw(abi.encodePacked(addr1), amount, address(secondZRC20), revertOptions);
+
+        uint256 finalGasZRC20Supply = zrc20.totalSupply();
+        uint256 finalSecondZRC20Supply = secondZRC20.totalSupply();
+
+        assertEq(initialGasZRC20Supply - gasFee, finalGasZRC20Supply, "Gas fee not burned correctly from gas ZRC20");
+
+        assertEq(
+            initialSecondZRC20Supply - amount,
+            finalSecondZRC20Supply,
+            "Withdrawal amount not burned correctly from second ZRC20"
+        );
+    }
+
+    function testBurnGasFeeForDifferentZRC20WithdrawAndCall() public {
+        vm.startPrank(protocolAddress);
+        ZRC20 secondZRC20 =
+            new ZRC20("SECOND", "SEC", 18, 1, CoinType.ERC20, 100_000, address(systemContract), address(gateway));
+        secondZRC20.deposit(owner, 100);
+        vm.stopPrank();
+
+        vm.startPrank(owner);
+        secondZRC20.approve(address(gateway), 100);
+        zrc20.approve(address(gateway), 100_000);
+        vm.stopPrank();
+
+        uint256 amount = 1;
+        bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
+
+        (address gasZRC20, uint256 gasFee) = secondZRC20.withdrawGasFeeWithGasLimit(100_000);
+        assertEq(gasZRC20, address(zrc20));
+
+        uint256 initialGasZRC20Supply = zrc20.totalSupply();
+        uint256 initialSecondZRC20Supply = secondZRC20.totalSupply();
+
+        gateway.withdrawAndCall(
+            abi.encodePacked(addr1),
+            amount,
+            address(secondZRC20),
+            message,
+            CallOptions({ gasLimit: 100_000, isArbitraryCall: true }),
+            revertOptions
+        );
+
+        uint256 finalGasZRC20Supply = zrc20.totalSupply();
+        uint256 finalSecondZRC20Supply = secondZRC20.totalSupply();
+
+        assertEq(initialGasZRC20Supply - gasFee, finalGasZRC20Supply, "Gas fee not burned correctly from gas ZRC20");
+
+        assertEq(
+            initialSecondZRC20Supply - amount,
+            finalSecondZRC20Supply,
+            "Withdrawal amount not burned correctly from second ZRC20"
+        );
+    }
+
+    function testBurnProtocolFeesFailsWithInsufficientAllowance() public {
+        vm.prank(protocolAddress);
+        zrc20.updateGasLimit(200_000);
+
+        (address gasZRC20, uint256 gasFee) = zrc20.withdrawGasFeeWithGasLimit(200_000);
+        assertEq(gasZRC20, address(zrc20));
+
+        vm.prank(protocolAddress);
+        zrc20.deposit(owner, gasFee);
+
+        vm.prank(owner);
+        zrc20.approve(address(gateway), gasFee - 1);
+
+        vm.expectRevert();
+        gateway.call(
+            abi.encodePacked(addr1),
+            address(zrc20),
+            abi.encodeWithSignature("hello()"),
+            CallOptions({ gasLimit: 200_000, isArbitraryCall: true }),
+            revertOptions
+        );
+    }
 }
