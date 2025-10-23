@@ -876,6 +876,28 @@ function _withdrawZRC20(uint256 amount, address zrc20) private returns (uint256)
 |`<none>`|`uint256`|The gas fee for the withdrawal.|
 
 
+#### _burnProtocolFees
+
+Helper function to burn gas fees.
+
+
+```solidity
+function _burnProtocolFees(address zrc20, uint256 gasLimit) private returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`zrc20`|`address`|The address of the ZRC20 token.|
+|`gasLimit`|`uint256`|Gas limit.|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|gasFee Gas fee amount.|
+
+
 #### _withdrawZRC20WithGasLimit
 
 Private function to withdraw ZRC20 tokens with gas limit.
