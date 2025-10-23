@@ -28,7 +28,7 @@ contract ZetaConnectorNative is ZetaConnectorBase {
     /// @param to The address to withdraw tokens to.
     /// @param amount The amount of tokens to withdraw.
     //// @param internalSendHash A hash used for internal tracking of the transaction (not used currently
-    // https://github.com/zeta-chain/protocol-contracts/issues/398)
+    // https://github.com/zeta-chain/protocol-contracts-evm/issues/398)
     /// @dev This function can only be called by the TSS address.
     function withdraw(
         address to,
@@ -51,7 +51,7 @@ contract ZetaConnectorNative is ZetaConnectorBase {
     /// @param amount The amount of tokens to withdraw.
     /// @param data The calldata to pass to the contract call.
     //// @param internalSendHash A hash used for internal tracking of the transaction (not used currently
-    // https://github.com/zeta-chain/protocol-contracts/issues/398)
+    // https://github.com/zeta-chain/protocol-contracts-evm/issues/398)
     /// @dev This function can only be called by the TSS address.
     function withdrawAndCall(
         MessageContext calldata messageContext,
@@ -80,7 +80,7 @@ contract ZetaConnectorNative is ZetaConnectorBase {
     /// @param amount The amount of tokens to withdraw.
     /// @param data The calldata to pass to the contract call.
     //// @param internalSendHash A hash used for internal tracking of the transaction (not used currently
-    // https://github.com/zeta-chain/protocol-contracts/issues/398)
+    // https://github.com/zeta-chain/protocol-contracts-evm/issues/398)
     /// @dev This function can only be called by the TSS address.
     /// @param revertContext Revert context to pass to onRevert.
     function withdrawAndRevert(

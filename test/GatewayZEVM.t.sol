@@ -488,7 +488,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testWithdrawZETAFailsIfAmountIsZero() public {
         // TODO: replace error to check once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // vm.expectRevert(InsufficientZetaAmount.selector);
         vm.expectRevert(ZETANotSupported.selector);
 
@@ -499,7 +499,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         revertOptions.revertMessage = new bytes(gateway.MAX_MESSAGE_SIZE() + 1);
 
         // TODO: replace error to check once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // vm.expectRevert(MessageSizeExceeded.selector);
         vm.expectRevert(ZETANotSupported.selector);
 
@@ -508,7 +508,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testWithdrawZETAFailsIfReceiverIsZeroAddress() public {
         // TODO: replace error to check once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // vm.expectRevert(ZeroAddress.selector);
         vm.expectRevert(ZETANotSupported.selector);
 
@@ -519,7 +519,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
 
         // TODO: replace error to check once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // vm.expectRevert(InsufficientZetaAmount.selector);
         vm.expectRevert(ZETANotSupported.selector);
 
@@ -531,7 +531,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         revertOptions.revertMessage = new bytes(gateway.MAX_MESSAGE_SIZE() / 2 + 1);
 
         // TODO: replace error to check once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // vm.expectRevert(MessageSizeExceeded.selector);
         vm.expectRevert(ZETANotSupported.selector);
 
@@ -542,7 +542,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
 
         // TODO: replace error to check once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // vm.expectRevert(ZeroAddress.selector);
         vm.expectRevert(ZETANotSupported.selector);
 
@@ -570,7 +570,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         );
 
         // TODO: remove error once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         vm.expectRevert(ZETANotSupported.selector);
 
         gateway.withdraw(abi.encodePacked(addr1), amount, chainId, revertOptions);
@@ -694,7 +694,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         callOptions.gasLimit = 0;
 
         // TODO: replace error to check once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // vm.expectRevert(InsufficientGasLimit.selector);
         vm.expectRevert(ZETANotSupported.selector);
 

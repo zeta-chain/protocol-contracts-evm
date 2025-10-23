@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-// TODO: https://github.com/zeta-chain/protocol-contracts/issues/384
+// TODO: https://github.com/zeta-chain/protocol-contracts-evm/issues/384
 
 // import "../../contracts/evm/ERC20Custody.sol";
 // import "../../contracts/evm/GatewayEVM.sol";
