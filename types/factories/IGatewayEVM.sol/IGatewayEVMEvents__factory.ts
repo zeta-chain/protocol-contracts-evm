@@ -324,6 +324,25 @@ const _abi = [
   },
   {
     type: "event",
+    name: "UpdatedAdditionalActionFee",
+    inputs: [
+      {
+        name: "oldFeeWei",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "newFeeWei",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "UpdatedGatewayTSSAddress",
     inputs: [
       {

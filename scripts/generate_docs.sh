@@ -15,9 +15,9 @@ else
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    find docs/src/ -type f -name "*.md" -exec sed -i '' -E 's|(https://github.com/zeta-chain/protocol-contracts/blob/)[^/]+/|\1main/|g' {} +
+    find docs/src/ -type f -name "*.md" -exec sed -i '' -E 's|(https://github.com/zeta-chain/protocol-contracts-evm/blob/)[^/]+/|\1main/|g' {} +
 else
-    find docs/src/ -type f -name "*.md" -exec sed -i -E 's|(https://github.com/zeta-chain/protocol-contracts/blob/)[^/]+/|\1main/|g' {} +
+    find docs/src/ -type f -name "*.md" -exec sed -i -E 's|(https://github.com/zeta-chain/protocol-contracts-evm/blob/)[^/]+/|\1main/|g' {} +
 fi
 
 # Create temporary files for prioritized and other docs
