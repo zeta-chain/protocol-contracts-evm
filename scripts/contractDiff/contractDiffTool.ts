@@ -64,7 +64,7 @@ const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
         explorerType: "etherscan",
     },
     amoy_testnet: {
-        name: "Polygon Mumbai",
+        name: "Polygon Amoy",
         apiUrl: "https://api.etherscan.io/v2/api?chainid=80002",
         apiKeyEnv: process.env.ETHERSCAN_API_KEY!,
         explorerType: "etherscan",
