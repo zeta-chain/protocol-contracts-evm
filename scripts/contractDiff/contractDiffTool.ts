@@ -51,6 +51,42 @@ const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
         apiUrl: "https://zetachain.blockscout.com/api",
         explorerType: "blockscout",
     },
+    sepolia_testnet: {
+        name: "Ethereum Sepolia",
+        apiUrl: "https://api.etherscan.io/v2/api?chainid=11155111",
+        apiKeyEnv: process.env.ETHERSCAN_API_KEY!,
+        explorerType: "etherscan",
+    },
+    bsc_testnet: {
+        name: "BNB Smart Chain Testnet",
+        apiUrl: "https://api.etherscan.io/v2/api?chainid=97",
+        apiKeyEnv: process.env.ETHERSCAN_API_KEY!,
+        explorerType: "etherscan",
+    },
+    amoy_testnet: {
+        name: "Polygon Mumbai",
+        apiUrl: "https://api.etherscan.io/v2/api?chainid=80002",
+        apiKeyEnv: process.env.ETHERSCAN_API_KEY!,
+        explorerType: "etherscan",
+    },
+    base_sepolia: {
+        name: "Base Sepolia",
+        apiUrl: "https://api.etherscan.io/v2/api?chainid=84532",
+        apiKeyEnv: process.env.ETHERSCAN_API_KEY!,
+        explorerType: "etherscan",
+    },
+    arbitrum_sepolia: {
+        name: "Arbitrum Sepolia",
+        apiUrl: "https://api.etherscan.io/v2/api?chainid=421614",
+        apiKeyEnv: process.env.ETHERSCAN_API_KEY!,
+        explorerType: "etherscan",
+    },
+    avalanche_testnet: {
+        name: "Avalanche Fuji",
+        apiUrl: "https://api.etherscan.io/v2/api?chainid=43113",
+        apiKeyEnv: process.env.ETHERSCAN_API_KEY!,
+        explorerType: "etherscan",
+    }
 }
 
 interface ContractSource {
