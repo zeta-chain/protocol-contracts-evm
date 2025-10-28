@@ -39,6 +39,11 @@ contract GatewayZEVMForkTest is BaseForkTest {
         assertEq(gateway.zetaToken(), zetaTokenBefore, "Zeta token address changed.");
         console.log("State preserved after upgrade");
 
+        // Check admin still has DEFAULT_ADMIN_ROLE after upgrade.
+        bytes32 adminRole = gateway.DEFAULT_ADMIN_ROLE();
+        bool adminHasRoleAfter = gateway.hasRole(adminRole, config.admin);
+        assertTrue(adminHasRoleAfter, "Admin lost DEFAULT_ADMIN_ROLE after upgrade.");
+
         vm.stopPrank();
     }
 }

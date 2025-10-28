@@ -57,6 +57,11 @@ contract ERC20CustodyForkTest is BaseForkTest {
         assertEq(custody.supportsLegacy(), supportsLegacyBefore, "Supports legacy changed.");
         console.log("State preserved after upgrade");
 
+        // Check admin still has DEFAULT_ADMIN_ROLE after upgrade.
+        bytes32 adminRole = custody.DEFAULT_ADMIN_ROLE();
+        bool adminHasRoleAfter = custody.hasRole(adminRole, config.admin);
+        assertTrue(adminHasRoleAfter, "Admin lost DEFAULT_ADMIN_ROLE after upgrade.");
+
         vm.stopPrank();
     }
 }
