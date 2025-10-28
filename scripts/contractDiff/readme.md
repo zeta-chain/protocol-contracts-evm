@@ -35,6 +35,6 @@ Flattened contract files can be compared using any diff tool:
   - [Text Compare](https://text-compare.com/)
 
 Or locally using the vimdiff utility:
-```
+```bash
 vimdiff contract-diffs/OLD_FLATTENED_CONTRACT.sol contract-diffs/NEW_FLATTENED_CONTRACT.sol
 ```
