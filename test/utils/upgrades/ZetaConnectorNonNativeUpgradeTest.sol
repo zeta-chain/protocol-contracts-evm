@@ -21,7 +21,12 @@ contract ZetaConnectorNonNativeUpgradeTest is ZetaConnectorBase {
     /// @dev Modified event for testing upgrade.
     event WithdrawnV2(address indexed to, uint256 amount);
 
-    function initialize(address gateway_, address zetaToken_, address tssAddress_, address admin_)
+    function initialize(
+        address gateway_,
+        address zetaToken_,
+        address tssAddress_,
+        address admin_
+    )
         public
         override
         initializer
@@ -44,7 +49,11 @@ contract ZetaConnectorNonNativeUpgradeTest is ZetaConnectorBase {
     /// @param amount The amount of tokens to withdraw.
     /// @param internalSendHash A hash used for internal tracking of the transaction.
     /// @dev This function can only be called by the TSS address.
-    function withdraw(address to, uint256 amount, bytes32 internalSendHash)
+    function withdraw(
+        address to,
+        uint256 amount,
+        bytes32 internalSendHash
+    )
         external
         override
         nonReentrant

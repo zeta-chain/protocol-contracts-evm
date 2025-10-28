@@ -93,7 +93,11 @@ interface ZetaTokenConsumer {
         external
         returns (uint256);
 
-    function getEthFromZeta(address destinationAddress, uint256 minAmountOut, uint256 zetaTokenAmount)
+    function getEthFromZeta(
+        address destinationAddress,
+        uint256 minAmountOut,
+        uint256 zetaTokenAmount
+    )
         external
         returns (uint256);
 

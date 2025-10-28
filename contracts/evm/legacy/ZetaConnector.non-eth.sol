@@ -18,7 +18,12 @@ contract ZetaConnectorNonEth is ZetaConnectorBase {
 
     event MaxSupplyUpdated(address callerAddress, uint256 newMaxSupply);
 
-    constructor(address zetaTokenAddress_, address tssAddress_, address tssAddressUpdater_, address pauserAddress_)
+    constructor(
+        address zetaTokenAddress_,
+        address tssAddress_,
+        address tssAddressUpdater_,
+        address pauserAddress_
+    )
         ZetaConnectorBase(zetaTokenAddress_, tssAddress_, tssAddressUpdater_, pauserAddress_)
     { }
 

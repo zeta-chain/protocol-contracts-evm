@@ -18,7 +18,13 @@ struct zContext {
 /// @custom:deprecated should be removed once v2 SystemContract is not used anymore.
 /// UniversalContract should be used
 interface zContract {
-    function onCrossChainCall(zContext calldata context, address zrc20, uint256 amount, bytes calldata message) external;
+    function onCrossChainCall(
+        zContext calldata context,
+        address zrc20,
+        uint256 amount,
+        bytes calldata message
+    )
+        external;
 }
 
 /// @notice Provides contextual information when executing a cross-chain call on ZetaChain.
@@ -66,7 +72,12 @@ abstract contract UniversalContract {
     }
 
     /// @notice Function to handle cross-chain calls with ZRC20 token transfers
-    function onCall(MessageContext calldata context, address zrc20, uint256 amount, bytes calldata message)
+    function onCall(
+        MessageContext calldata context,
+        address zrc20,
+        uint256 amount,
+        bytes calldata message
+    )
         external
         virtual;
 }
