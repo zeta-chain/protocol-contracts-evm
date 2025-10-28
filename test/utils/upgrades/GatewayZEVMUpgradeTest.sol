@@ -116,7 +116,14 @@ contract GatewayZEVMUpgradeTest is
     /// @param zrc20 The address of the ZRC20 token.
     /// @param gasLimit Gas limit.
     /// @return The gas fee for the withdrawal.
-    function _withdrawZRC20WithGasLimit(uint256 amount, address zrc20, uint256 gasLimit) private returns (uint256) {
+    function _withdrawZRC20WithGasLimit(
+        uint256 amount,
+        address zrc20,
+        uint256 gasLimit
+    )
+        private
+        returns (uint256)
+    {
         (address gasZRC20, uint256 gasFee) = IZRC20(zrc20).withdrawGasFeeWithGasLimit(gasLimit);
         if (!IZRC20(gasZRC20).transferFrom(msg.sender, PROTOCOL_ADDRESS, gasFee)) {
             revert GasFeeTransferFailed();
@@ -488,7 +495,14 @@ contract GatewayZEVMUpgradeTest is
     /// @notice Revert a user-specified contract on ZEVM.
     /// @param target The target contract to call.
     /// @param revertContext Revert context to pass to onRevert.
-    function executeRevert(address target, RevertContext calldata revertContext) external onlyProtocol whenNotPaused {
+    function executeRevert(
+        address target,
+        RevertContext calldata revertContext
+    )
+        external
+        onlyProtocol
+        whenNotPaused
+    {
         if (target == address(0)) revert ZeroAddress();
 
         Revertable(target).onRevert(revertContext);

@@ -38,7 +38,7 @@ type MessageContext struct {
 
 // UniversalContractMetaData contains all meta data concerning the UniversalContract contract.
 var UniversalContractMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"gateway\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractIGatewayZEVM\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"onCall\",\"inputs\":[{\"name\":\"context\",\"type\":\"tuple\",\"internalType\":\"structMessageContext\",\"components\":[{\"name\":\"sender\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"senderEVM\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"chainID\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"name\":\"zrc20\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"message\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"onCall\",\"inputs\":[{\"name\":\"context\",\"type\":\"tuple\",\"internalType\":\"structMessageContext\",\"components\":[{\"name\":\"sender\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"senderEVM\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"chainID\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"name\":\"message\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[],\"stateMutability\":\"payable\"},{\"type\":\"function\",\"name\":\"registry\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractICoreRegistry\"}],\"stateMutability\":\"view\"},{\"type\":\"error\",\"name\":\"Unauthorized\",\"inputs\":[]}]",
+	ABI: "[{\"type\":\"function\",\"name\":\"gateway\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractIGatewayZEVM\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"onCall\",\"inputs\":[{\"name\":\"context\",\"type\":\"tuple\",\"internalType\":\"structMessageContext\",\"components\":[{\"name\":\"sender\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"senderEVM\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"chainID\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]},{\"name\":\"zrc20\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"message\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"registry\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"contractICoreRegistry\"}],\"stateMutability\":\"view\"},{\"type\":\"error\",\"name\":\"Unauthorized\",\"inputs\":[]}]",
 }
 
 // UniversalContractABI is the input ABI used to generate the binding from.
@@ -268,25 +268,4 @@ func (_UniversalContract *UniversalContractSession) OnCall(context MessageContex
 // Solidity: function onCall((bytes,address,uint256) context, address zrc20, uint256 amount, bytes message) returns()
 func (_UniversalContract *UniversalContractTransactorSession) OnCall(context MessageContext, zrc20 common.Address, amount *big.Int, message []byte) (*types.Transaction, error) {
 	return _UniversalContract.Contract.OnCall(&_UniversalContract.TransactOpts, context, zrc20, amount, message)
-}
-
-// OnCall0 is a paid mutator transaction binding the contract method 0xebf9b2aa.
-//
-// Solidity: function onCall((bytes,address,uint256) context, bytes message) payable returns()
-func (_UniversalContract *UniversalContractTransactor) OnCall0(opts *bind.TransactOpts, context MessageContext, message []byte) (*types.Transaction, error) {
-	return _UniversalContract.contract.Transact(opts, "onCall0", context, message)
-}
-
-// OnCall0 is a paid mutator transaction binding the contract method 0xebf9b2aa.
-//
-// Solidity: function onCall((bytes,address,uint256) context, bytes message) payable returns()
-func (_UniversalContract *UniversalContractSession) OnCall0(context MessageContext, message []byte) (*types.Transaction, error) {
-	return _UniversalContract.Contract.OnCall0(&_UniversalContract.TransactOpts, context, message)
-}
-
-// OnCall0 is a paid mutator transaction binding the contract method 0xebf9b2aa.
-//
-// Solidity: function onCall((bytes,address,uint256) context, bytes message) payable returns()
-func (_UniversalContract *UniversalContractTransactorSession) OnCall0(context MessageContext, message []byte) (*types.Transaction, error) {
-	return _UniversalContract.Contract.OnCall0(&_UniversalContract.TransactOpts, context, message)
 }
