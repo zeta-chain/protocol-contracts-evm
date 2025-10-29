@@ -309,5 +309,11 @@ struct MessageContext {
 
 /// @notice Interface implemented by contracts receiving authenticated calls with new MessageContext.
 interface CallableV2 {
-    function onCall(MessageContext calldata context, bytes calldata message) external payable returns (bytes memory);
+    function onCall(
+        MessageContext calldata context,
+        bytes calldata message
+    )
+        external
+        payable
+        returns (bytes memory);
 }
