@@ -1027,6 +1027,37 @@ function withdrawAndCall(
 |`revertOptions`|`RevertOptions`|Revert options.|
 
 
+#### withdrawAndCall
+
+Withdraw ZRC20 tokens and call a smart contract on an external chain.
+
+
+```solidity
+function withdrawAndCall(
+    bytes memory receiver,
+    uint256 amount,
+    address zrc20,
+    bytes calldata message,
+    uint256 version,
+    CallOptions calldata callOptions,
+    RevertOptions calldata revertOptions
+)
+    external
+    whenNotPaused;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`bytes`|The receiver address on the external chain.|
+|`amount`|`uint256`|The amount of tokens to withdraw.|
+|`zrc20`|`address`|The address of the ZRC20 token.|
+|`message`|`bytes`|The calldata to pass to the contract call.|
+|`version`|`uint256`|The number representing message context version.|
+|`callOptions`|`CallOptions`|Call options including gas limit, arbirtrary call flag and message context version.|
+|`revertOptions`|`RevertOptions`|Revert options.|
+
+
 #### withdraw
 
 Withdraw ZETA tokens to an external chain.
@@ -1846,6 +1877,28 @@ Interface implemented by contracts receiving authenticated calls.
 
 ```solidity
 function onCall(
+    LegacyMessageContext calldata context,
+    bytes calldata message
+)
+    external
+    payable
+    returns (bytes memory);
+```
+
+
+
+## CallableV2
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+
+Interface implemented by contracts receiving authenticated calls with new MessageContext.
+
+
+### Functions
+#### onCall
+
+
+```solidity
+function onCall(
     MessageContext calldata context,
     bytes calldata message
 )
@@ -2457,14 +2510,14 @@ event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 
 
 
-## MessageContext
+## LegacyMessageContext
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
 
 Message context passed to execute function.
 
 
 ```solidity
-struct MessageContext {
+struct LegacyMessageContext {
 address sender;
 }
 ```
@@ -2474,6 +2527,30 @@ address sender;
 |Name|Type|Description|
 |----|----|-----------|
 |`sender`|`address`|Sender from omnichain contract.|
+
+
+
+## MessageContext
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+
+Message context passed to execute function.
+
+
+```solidity
+struct MessageContext {
+address sender;
+address asset;
+uint256 amount;
+}
+```
+
+**Properties**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`sender`|`address`|Sender from omnichain contract.|
+|`asset`|`address`|The address of the asset.|
+|`amount`|`uint256`|The amount of the asset.|
 
 
 
@@ -3597,7 +3674,7 @@ onCall is called by the GatewayEVM when a cross-chain message is received
 
 ```solidity
 function onCall(
-    MessageContext calldata context,
+    LegacyMessageContext calldata context,
     bytes calldata data
 )
     external
@@ -3609,7 +3686,7 @@ function onCall(
 
 |Name|Type|Description|
 |----|----|-----------|
-|`context`|`MessageContext`|Information about the cross-chain message|
+|`context`|`LegacyMessageContext`|Information about the cross-chain message|
 |`data`|`bytes`|The encoded function call to execute|
 
 
@@ -6435,6 +6512,36 @@ function withdrawAndCall(
 
 #### withdrawAndCall
 
+Withdraw ZRC20 tokens and call a smart contract on an external chain.
+
+
+```solidity
+function withdrawAndCall(
+    bytes memory receiver,
+    uint256 amount,
+    address zrc20,
+    bytes calldata message,
+    uint256 version,
+    CallOptions calldata callOptions,
+    RevertOptions calldata revertOptions
+)
+    external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`bytes`|The receiver address on the external chain.|
+|`amount`|`uint256`|The amount of tokens to withdraw.|
+|`zrc20`|`address`|The address of the ZRC20 token.|
+|`message`|`bytes`|The calldata to pass to the contract call.|
+|`version`|`uint256`|The number representing message context version.|
+|`callOptions`|`CallOptions`|Call options including gas limit, arbirtrary call flag and message context version.|
+|`revertOptions`|`RevertOptions`|Revert options.|
+
+
+#### withdrawAndCall
+
 Withdraw ZETA tokens and call a smart contract on an external chain.
 
 
@@ -6834,6 +6941,42 @@ event WithdrawnAndCalled(
 |`protocolFlatFee`|`uint256`|The protocol flat fee for the withdrawal.|
 |`message`|`bytes`|The calldata passed to the contract call.|
 |`callOptions`|`CallOptions`|Call options including gas limit and arbirtrary call flag.|
+|`revertOptions`|`RevertOptions`|Revert options.|
+
+#### WithdrawnAndCalledV2
+Emitted when a withdraw and call is made.
+
+
+```solidity
+event WithdrawnAndCalledV2(
+    address indexed sender,
+    uint256 indexed chainId,
+    bytes receiver,
+    address zrc20,
+    uint256 value,
+    uint256 gasfee,
+    uint256 protocolFlatFee,
+    bytes message,
+    uint256 version,
+    CallOptions callOptions,
+    RevertOptions revertOptions
+);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`sender`|`address`|The address from which the tokens are withdrawn.|
+|`chainId`|`uint256`|Chain id of external chain.|
+|`receiver`|`bytes`|The receiver address on the external chain.|
+|`zrc20`|`address`|The address of the ZRC20 token.|
+|`value`|`uint256`|The amount of tokens withdrawn.|
+|`gasfee`|`uint256`|The gas fee for the withdrawal.|
+|`protocolFlatFee`|`uint256`|The protocol flat fee for the withdrawal.|
+|`message`|`bytes`|The calldata passed to the contract call.|
+|`version`|`uint256`|The number representing message context version.|
+|`callOptions`|`CallOptions`|Call options including gas limit, arbirtrary call flag and message context version.|
 |`revertOptions`|`RevertOptions`|Revert options.|
 
 

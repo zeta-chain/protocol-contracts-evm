@@ -84,9 +84,11 @@ export type ZRC20InfoStructOutput = [
   decimals: bigint;
 };
 
-export type MessageContextStruct = { sender: AddressLike };
+export type LegacyMessageContextStruct = { sender: AddressLike };
 
-export type MessageContextStructOutput = [sender: string] & { sender: string };
+export type LegacyMessageContextStructOutput = [sender: string] & {
+  sender: string;
+};
 
 export declare namespace IRegistry {
   export type ChainMetadataEntryStruct = {
@@ -296,7 +298,7 @@ export interface RegistryInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "onCall",
-    values: [MessageContextStruct, BytesLike]
+    values: [LegacyMessageContextStruct, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
@@ -956,7 +958,7 @@ export interface Registry extends BaseContract {
   >;
 
   onCall: TypedContractMethod<
-    [context: MessageContextStruct, data: BytesLike],
+    [context: LegacyMessageContextStruct, data: BytesLike],
     [string],
     "nonpayable"
   >;
@@ -1211,7 +1213,7 @@ export interface Registry extends BaseContract {
   getFunction(
     nameOrSignature: "onCall"
   ): TypedContractMethod<
-    [context: MessageContextStruct, data: BytesLike],
+    [context: LegacyMessageContextStruct, data: BytesLike],
     [string],
     "nonpayable"
   >;

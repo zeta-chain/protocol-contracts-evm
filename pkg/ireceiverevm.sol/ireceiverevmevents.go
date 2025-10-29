@@ -39,7 +39,7 @@ type RevertContext struct {
 
 // IReceiverEVMEventsMetaData contains all meta data concerning the IReceiverEVMEvents contract.
 var IReceiverEVMEventsMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"event\",\"name\":\"ReceivedERC20\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"token\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"destination\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedNoParams\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedNonPayable\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"strs\",\"type\":\"string[]\",\"indexed\":false,\"internalType\":\"string[]\"},{\"name\":\"nums\",\"type\":\"uint256[]\",\"indexed\":false,\"internalType\":\"uint256[]\"},{\"name\":\"flag\",\"type\":\"bool\",\"indexed\":false,\"internalType\":\"bool\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedOnCall\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"message\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedPayable\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"str\",\"type\":\"string\",\"indexed\":false,\"internalType\":\"string\"},{\"name\":\"num\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"flag\",\"type\":\"bool\",\"indexed\":false,\"internalType\":\"bool\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedRevert\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"revertContext\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structRevertContext\",\"components\":[{\"name\":\"sender\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"asset\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"revertMessage\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]}],\"anonymous\":false}]",
+	ABI: "[{\"type\":\"event\",\"name\":\"ReceivedERC20\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"token\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"destination\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedNoParams\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedNonPayable\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"strs\",\"type\":\"string[]\",\"indexed\":false,\"internalType\":\"string[]\"},{\"name\":\"nums\",\"type\":\"uint256[]\",\"indexed\":false,\"internalType\":\"uint256[]\"},{\"name\":\"flag\",\"type\":\"bool\",\"indexed\":false,\"internalType\":\"bool\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedOnCall\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"message\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedOnCallV2\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"asset\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"message\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedPayable\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"str\",\"type\":\"string\",\"indexed\":false,\"internalType\":\"string\"},{\"name\":\"num\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"flag\",\"type\":\"bool\",\"indexed\":false,\"internalType\":\"bool\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"ReceivedRevert\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"revertContext\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structRevertContext\",\"components\":[{\"name\":\"sender\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"asset\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"revertMessage\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]}],\"anonymous\":false}]",
 }
 
 // IReceiverEVMEventsABI is the input ABI used to generate the binding from.
@@ -725,6 +725,143 @@ func (_IReceiverEVMEvents *IReceiverEVMEventsFilterer) WatchReceivedOnCall(opts 
 func (_IReceiverEVMEvents *IReceiverEVMEventsFilterer) ParseReceivedOnCall(log types.Log) (*IReceiverEVMEventsReceivedOnCall, error) {
 	event := new(IReceiverEVMEventsReceivedOnCall)
 	if err := _IReceiverEVMEvents.contract.UnpackLog(event, "ReceivedOnCall", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// IReceiverEVMEventsReceivedOnCallV2Iterator is returned from FilterReceivedOnCallV2 and is used to iterate over the raw logs and unpacked data for ReceivedOnCallV2 events raised by the IReceiverEVMEvents contract.
+type IReceiverEVMEventsReceivedOnCallV2Iterator struct {
+	Event *IReceiverEVMEventsReceivedOnCallV2 // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *IReceiverEVMEventsReceivedOnCallV2Iterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(IReceiverEVMEventsReceivedOnCallV2)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(IReceiverEVMEventsReceivedOnCallV2)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *IReceiverEVMEventsReceivedOnCallV2Iterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *IReceiverEVMEventsReceivedOnCallV2Iterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// IReceiverEVMEventsReceivedOnCallV2 represents a ReceivedOnCallV2 event raised by the IReceiverEVMEvents contract.
+type IReceiverEVMEventsReceivedOnCallV2 struct {
+	Sender  common.Address
+	Asset   common.Address
+	Amount  *big.Int
+	Message []byte
+	Raw     types.Log // Blockchain specific contextual infos
+}
+
+// FilterReceivedOnCallV2 is a free log retrieval operation binding the contract event 0x77c91f89244a04200aa9bae5695cacb5a2b6894a33d119ee69184324139feb9c.
+//
+// Solidity: event ReceivedOnCallV2(address sender, address asset, uint256 amount, bytes message)
+func (_IReceiverEVMEvents *IReceiverEVMEventsFilterer) FilterReceivedOnCallV2(opts *bind.FilterOpts) (*IReceiverEVMEventsReceivedOnCallV2Iterator, error) {
+
+	logs, sub, err := _IReceiverEVMEvents.contract.FilterLogs(opts, "ReceivedOnCallV2")
+	if err != nil {
+		return nil, err
+	}
+	return &IReceiverEVMEventsReceivedOnCallV2Iterator{contract: _IReceiverEVMEvents.contract, event: "ReceivedOnCallV2", logs: logs, sub: sub}, nil
+}
+
+// WatchReceivedOnCallV2 is a free log subscription operation binding the contract event 0x77c91f89244a04200aa9bae5695cacb5a2b6894a33d119ee69184324139feb9c.
+//
+// Solidity: event ReceivedOnCallV2(address sender, address asset, uint256 amount, bytes message)
+func (_IReceiverEVMEvents *IReceiverEVMEventsFilterer) WatchReceivedOnCallV2(opts *bind.WatchOpts, sink chan<- *IReceiverEVMEventsReceivedOnCallV2) (event.Subscription, error) {
+
+	logs, sub, err := _IReceiverEVMEvents.contract.WatchLogs(opts, "ReceivedOnCallV2")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(IReceiverEVMEventsReceivedOnCallV2)
+				if err := _IReceiverEVMEvents.contract.UnpackLog(event, "ReceivedOnCallV2", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseReceivedOnCallV2 is a log parse operation binding the contract event 0x77c91f89244a04200aa9bae5695cacb5a2b6894a33d119ee69184324139feb9c.
+//
+// Solidity: event ReceivedOnCallV2(address sender, address asset, uint256 amount, bytes message)
+func (_IReceiverEVMEvents *IReceiverEVMEventsFilterer) ParseReceivedOnCallV2(log types.Log) (*IReceiverEVMEventsReceivedOnCallV2, error) {
+	event := new(IReceiverEVMEventsReceivedOnCallV2)
+	if err := _IReceiverEVMEvents.contract.UnpackLog(event, "ReceivedOnCallV2", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

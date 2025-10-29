@@ -23,9 +23,23 @@ import type {
   TypedContractMethod,
 } from "./common";
 
-export type MessageContextStruct = { sender: AddressLike };
+export type MessageContextStruct = {
+  sender: AddressLike;
+  asset: AddressLike;
+  amount: BigNumberish;
+};
 
-export type MessageContextStructOutput = [sender: string] & { sender: string };
+export type MessageContextStructOutput = [
+  sender: string,
+  asset: string,
+  amount: bigint
+] & { sender: string; asset: string; amount: bigint };
+
+export type LegacyMessageContextStruct = { sender: AddressLike };
+
+export type LegacyMessageContextStructOutput = [sender: string] & {
+  sender: string;
+};
 
 export type RevertContextStruct = {
   sender: AddressLike;
@@ -44,7 +58,8 @@ export type RevertContextStructOutput = [
 export interface ReceiverEVMInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "onCall"
+      | "onCall((address,address,uint256),bytes)"
+      | "onCall((address),bytes)"
       | "onRevert"
       | "receiveERC20"
       | "receiveERC20Partial"
@@ -59,13 +74,18 @@ export interface ReceiverEVMInterface extends Interface {
       | "ReceivedNoParams"
       | "ReceivedNonPayable"
       | "ReceivedOnCall"
+      | "ReceivedOnCallV2"
       | "ReceivedPayable"
       | "ReceivedRevert"
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "onCall",
+    functionFragment: "onCall((address,address,uint256),bytes)",
     values: [MessageContextStruct, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "onCall((address),bytes)",
+    values: [LegacyMessageContextStruct, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "onRevert",
@@ -92,7 +112,14 @@ export interface ReceiverEVMInterface extends Interface {
     values: [string, BigNumberish, boolean]
   ): string;
 
-  decodeFunctionResult(functionFragment: "onCall", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "onCall((address,address,uint256),bytes)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "onCall((address),bytes)",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "onRevert", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "receiveERC20",
@@ -191,6 +218,31 @@ export namespace ReceivedOnCallEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
+export namespace ReceivedOnCallV2Event {
+  export type InputTuple = [
+    sender: AddressLike,
+    asset: AddressLike,
+    amount: BigNumberish,
+    message: BytesLike
+  ];
+  export type OutputTuple = [
+    sender: string,
+    asset: string,
+    amount: bigint,
+    message: string
+  ];
+  export interface OutputObject {
+    sender: string;
+    asset: string;
+    amount: bigint;
+    message: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export namespace ReceivedPayableEvent {
   export type InputTuple = [
     sender: AddressLike,
@@ -281,8 +333,14 @@ export interface ReceiverEVM extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  onCall: TypedContractMethod<
+  "onCall((address,address,uint256),bytes)": TypedContractMethod<
     [messageContext: MessageContextStruct, message: BytesLike],
+    [string],
+    "payable"
+  >;
+
+  "onCall((address),bytes)": TypedContractMethod<
+    [messageContext: LegacyMessageContextStruct, message: BytesLike],
     [string],
     "payable"
   >;
@@ -324,9 +382,16 @@ export interface ReceiverEVM extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "onCall"
+    nameOrSignature: "onCall((address,address,uint256),bytes)"
   ): TypedContractMethod<
     [messageContext: MessageContextStruct, message: BytesLike],
+    [string],
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "onCall((address),bytes)"
+  ): TypedContractMethod<
+    [messageContext: LegacyMessageContextStruct, message: BytesLike],
     [string],
     "payable"
   >;
@@ -398,6 +463,13 @@ export interface ReceiverEVM extends BaseContract {
     ReceivedOnCallEvent.OutputObject
   >;
   getEvent(
+    key: "ReceivedOnCallV2"
+  ): TypedContractEvent<
+    ReceivedOnCallV2Event.InputTuple,
+    ReceivedOnCallV2Event.OutputTuple,
+    ReceivedOnCallV2Event.OutputObject
+  >;
+  getEvent(
     key: "ReceivedPayable"
   ): TypedContractEvent<
     ReceivedPayableEvent.InputTuple,
@@ -455,6 +527,17 @@ export interface ReceiverEVM extends BaseContract {
       ReceivedOnCallEvent.InputTuple,
       ReceivedOnCallEvent.OutputTuple,
       ReceivedOnCallEvent.OutputObject
+    >;
+
+    "ReceivedOnCallV2(address,address,uint256,bytes)": TypedContractEvent<
+      ReceivedOnCallV2Event.InputTuple,
+      ReceivedOnCallV2Event.OutputTuple,
+      ReceivedOnCallV2Event.OutputObject
+    >;
+    ReceivedOnCallV2: TypedContractEvent<
+      ReceivedOnCallV2Event.InputTuple,
+      ReceivedOnCallV2Event.OutputTuple,
+      ReceivedOnCallV2Event.OutputObject
     >;
 
     "ReceivedPayable(address,uint256,string,uint256,bool)": TypedContractEvent<
