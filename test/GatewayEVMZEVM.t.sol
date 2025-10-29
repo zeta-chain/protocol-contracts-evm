@@ -102,11 +102,9 @@ contract GatewayEVMZEVMTest is
         receiverEVM = new ReceiverEVM();
 
         // zevm
-        proxyZEVM = payable(
-            Upgrades.deployUUPSProxy(
+        proxyZEVM = payable(Upgrades.deployUUPSProxy(
                 "GatewayZEVM.sol", abi.encodeCall(GatewayZEVM.initialize, (address(zeta), ownerZEVM))
-            )
-        );
+            ));
         gatewayZEVM = GatewayZEVM(proxyZEVM);
 
         senderZEVM = new SenderZEVM(address(gatewayZEVM));

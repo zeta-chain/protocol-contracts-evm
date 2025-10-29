@@ -54,7 +54,7 @@ struct AbortContext {
 interface Revertable {
     /// @notice Called when a revertable call is made.
     /// @param revertContext Revert context to pass to onRevert.
-    function onRevert(RevertContext calldata revertContext) external payable;
+    function onRevert(RevertContext calldata revertContext) external;
 }
 
 /// @title Abortable

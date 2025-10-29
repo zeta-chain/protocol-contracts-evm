@@ -1,5 +1,5 @@
 {
-  "name": "@zetachain/protocol-contracts",
+  "name": "@zetachain/protocol-contracts-evm",
   "version": "0.0.0-set-on-publish",
   "author": "zetachain",
   "files": [

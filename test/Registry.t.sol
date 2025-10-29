@@ -51,12 +51,10 @@ contract RegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
 
         mockGateway = new MockGatewayEVM();
 
-        proxy = payable(
-            Upgrades.deployUUPSProxy(
+        proxy = payable(Upgrades.deployUUPSProxy(
                 "Registry.sol",
                 abi.encodeCall(Registry.initialize, (admin, registryManager, address(mockGateway), coreRegistry))
-            )
-        );
+            ));
 
         registry = Registry(proxy);
     }

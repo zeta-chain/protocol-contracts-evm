@@ -1,4 +1,4 @@
-module github.com/zeta-chain/protocol-contracts
+module github.com/zeta-chain/protocol-contracts-evm
 
 go 1.19
 

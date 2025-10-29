@@ -30,11 +30,9 @@ contract ZRC20Test is Test, ZRC20Errors {
 
         zetaToken = new WETH9();
 
-        proxy = payable(
-            Upgrades.deployUUPSProxy(
+        proxy = payable(Upgrades.deployUUPSProxy(
                 "GatewayZEVM.sol", abi.encodeCall(GatewayZEVM.initialize, (address(zetaToken), owner))
-            )
-        );
+            ));
         gateway = GatewayZEVM(proxy);
         protocolAddress = gateway.PROTOCOL_ADDRESS();
 

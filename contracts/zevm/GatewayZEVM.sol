@@ -102,16 +102,36 @@ contract GatewayZEVM is
         return _withdrawZRC20WithGasLimit(amount, zrc20, IZRC20(zrc20).GAS_LIMIT());
     }
 
+    /// @notice Helper function to burn gas fees.
+    /// @param zrc20 The address of the ZRC20 token.
+    /// @param gasLimit Gas limit.
+    /// @return gasFee Gas fee amount.
+    function _burnProtocolFees(address zrc20, uint256 gasLimit) private returns (uint256) {
+        (address gasZRC20, uint256 gasFee) = IZRC20(zrc20).withdrawGasFeeWithGasLimit(gasLimit);
+
+        if (!IZRC20(gasZRC20).transferFrom(msg.sender, address(this), gasFee)) {
+            revert GasFeeTransferFailed();
+        }
+
+        if (!IZRC20(gasZRC20).burn(gasFee)) revert ZRC20BurnFailed();
+
+        return gasFee;
+    }
+
     /// @dev Private function to withdraw ZRC20 tokens with gas limit.
     /// @param amount The amount of tokens to withdraw.
     /// @param zrc20 The address of the ZRC20 token.
     /// @param gasLimit Gas limit.
     /// @return The gas fee for the withdrawal.
-    function _withdrawZRC20WithGasLimit(uint256 amount, address zrc20, uint256 gasLimit) private returns (uint256) {
-        (address gasZRC20, uint256 gasFee) = IZRC20(zrc20).withdrawGasFeeWithGasLimit(gasLimit);
-        if (!IZRC20(gasZRC20).transferFrom(msg.sender, PROTOCOL_ADDRESS, gasFee)) {
-            revert GasFeeTransferFailed();
-        }
+    function _withdrawZRC20WithGasLimit(
+        uint256 amount,
+        address zrc20,
+        uint256 gasLimit
+    )
+        private
+        returns (uint256)
+    {
+        uint256 gasFee = _burnProtocolFees(zrc20, gasLimit);
 
         if (!IZRC20(zrc20).transferFrom(msg.sender, address(this), amount)) {
             revert ZRC20TransferFailed();
@@ -300,7 +320,7 @@ contract GatewayZEVM is
         whenNotPaused
     {
         // TODO: remove error and comment out code once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // ZETA is not currently supported for withdraws
         revert ZETANotSupported();
 
@@ -343,7 +363,7 @@ contract GatewayZEVM is
         whenNotPaused
     {
         // TODO: remove error and comment out code once ZETA supported back
-        // https://github.com/zeta-chain/protocol-contracts/issues/394
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
         // ZETA is not currently supported for withdraws
         revert ZETANotSupported();
 
@@ -391,10 +411,7 @@ contract GatewayZEVM is
     {
         if (receiver.length == 0) revert ZeroAddress();
 
-        (address gasZRC20, uint256 gasFee) = IZRC20(zrc20).withdrawGasFeeWithGasLimit(callOptions.gasLimit);
-        if (!IZRC20(gasZRC20).transferFrom(msg.sender, PROTOCOL_ADDRESS, gasFee)) {
-            revert GasFeeTransferFailed();
-        }
+        _burnProtocolFees(zrc20, callOptions.gasLimit);
 
         emit Called(msg.sender, zrc20, receiver, message, callOptions, revertOptions);
     }
