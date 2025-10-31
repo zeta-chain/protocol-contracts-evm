@@ -12,7 +12,7 @@ It should be run after deployment/upgrade to verify that the new implementation 
 ## Usage
 ```bash
 # set your etherscan api key in .env file
-ETHERSCAN_API_KEY environment variable
+export ETHERSCAN_API_KEY=your_api_key_here
 
 # Compile contracts first to generate artifacts
 npx hardhat compile
@@ -24,12 +24,17 @@ npx hardhat contractDiff --network base_mainnet \
 ```
 
 ## Output
-- Flattened contracts will be saved in the ./contract-diffs directory with filenames like:
-    - 2025-10-02_OLD_ContractName_0x8bb9EC4a.sol
-    - 2025-10-02_NEW_ContractName_0x9ef630aB.sol
+- Flattened contracts will be saved in the `./contract-diffs` directory with filenames like:
+    - `2025-10-02_OLD_ContractName_0x8bb9EC4a.sol`
+    - `2025-10-02_NEW_ContractName_0x9ef630aB.sol`
 
 ## Comparing code
-- Flattened contract files can be compared using any diff tool:
-    - vimdiff contract-diffs/OLD_FLATTENED_CONTRACT.sol contract-diffs/NEW_FLATTENED_CONTRACT.sol
-    - [Diffchecker](https://www.diffchecker.com/text-compare/)
-    - [Text Compare](https://text-compare.com/)
+
+Flattened contract files can be compared using any diff tool:
+  - [Diffchecker](https://www.diffchecker.com/text-compare/)
+  - [Text Compare](https://text-compare.com/)
+
+Or locally using the vimdiff utility:
+```bash
+vimdiff contract-diffs/OLD_FLATTENED_CONTRACT.sol contract-diffs/NEW_FLATTENED_CONTRACT.sol
+```
