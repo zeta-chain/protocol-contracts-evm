@@ -246,9 +246,6 @@ contract GatewayZEVM is
         if (callOptions.gasLimit < MIN_GAS_LIMIT) revert InsufficientGasLimit();
         if (message.length + revertOptions.revertMessage.length > MAX_MESSAGE_SIZE) revert MessageSizeExceeded();
 
-        // Sui mainnet not supported for now
-        require(IZRC20(zrc20).CHAIN_ID() != 105);
-
         uint256 gasFee = _withdrawZRC20WithGasLimit(amount, zrc20, callOptions.gasLimit);
         emit WithdrawnAndCalled(
             msg.sender,
