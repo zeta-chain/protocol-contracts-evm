@@ -29,15 +29,15 @@ var (
 	_ = abi.ConvertType
 )
 
-// MessageContext is an auto generated low-level Go binding around an user-defined struct.
-type MessageContext struct {
+// LegacyMessageContext is an auto generated low-level Go binding around an user-defined struct.
+type LegacyMessageContext struct {
 	Sender common.Address
 }
 
 // MockGatewayEVMMetaData contains all meta data concerning the MockGatewayEVM contract.
 var MockGatewayEVMMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"onCall\",\"inputs\":[{\"name\":\"messageContext\",\"type\":\"tuple\",\"internalType\":\"structMessageContext\",\"components\":[{\"name\":\"sender\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"CallEmitted\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"message\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"},{\"name\":\"messageContext\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structMessageContext\",\"components\":[{\"name\":\"sender\",\"type\":\"address\",\"internalType\":\"address\"}]}],\"anonymous\":false}]",
-	Bin: "0x6080604052348015600e575f80fd5b506102518061001c5f395ff3fe608060405234801561000f575f80fd5b5060043610610029575f3560e01c8063676cc0541461002d575b5f80fd5b61004061003b3660046100ab565b610056565b60405161004d9190610130565b60405180910390f35b60607f13e79c97a555ca94839a23ea9ea3c2702c15dd006ffae3e0cf3a166c0fb2a3bd3384848760405161008d9493929190610183565b60405180910390a15060408051602081019091525f81529392505050565b5f805f83850360408112156100be575f80fd5b60208112156100cb575f80fd5b50839250602084013567ffffffffffffffff8111156100e8575f80fd5b8401601f810186136100f8575f80fd5b803567ffffffffffffffff81111561010e575f80fd5b86602082840101111561011f575f80fd5b939660209190910195509293505050565b602081525f82518060208401528060208501604085015e5f6040828501015260407fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f83011684010191505092915050565b73ffffffffffffffffffffffffffffffffffffffff8516815260606020820152826060820152828460808301375f608084830101525f60807fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f8601168301019050823573ffffffffffffffffffffffffffffffffffffffff811680821461020a575f80fd5b80604085015250509594505050505056fea26469706673582212208bb5b9f6959aaf7b13428bc290503efd87de97dfb6503fd2eff0847d0badc27564736f6c634300081a0033",
+	ABI: "[{\"type\":\"function\",\"name\":\"onCall\",\"inputs\":[{\"name\":\"messageContext\",\"type\":\"tuple\",\"internalType\":\"structLegacyMessageContext\",\"components\":[{\"name\":\"sender\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"CallEmitted\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"message\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"},{\"name\":\"messageContext\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structLegacyMessageContext\",\"components\":[{\"name\":\"sender\",\"type\":\"address\",\"internalType\":\"address\"}]}],\"anonymous\":false}]",
+	Bin: "0x6080604052348015600e575f80fd5b506102518061001c5f395ff3fe608060405234801561000f575f80fd5b5060043610610029575f3560e01c8063676cc0541461002d575b5f80fd5b61004061003b3660046100ab565b610056565b60405161004d9190610130565b60405180910390f35b60607f13e79c97a555ca94839a23ea9ea3c2702c15dd006ffae3e0cf3a166c0fb2a3bd3384848760405161008d9493929190610183565b60405180910390a15060408051602081019091525f81529392505050565b5f805f83850360408112156100be575f80fd5b60208112156100cb575f80fd5b50839250602084013567ffffffffffffffff8111156100e8575f80fd5b8401601f810186136100f8575f80fd5b803567ffffffffffffffff81111561010e575f80fd5b86602082840101111561011f575f80fd5b939660209190910195509293505050565b602081525f82518060208401528060208501604085015e5f6040828501015260407fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f83011684010191505092915050565b73ffffffffffffffffffffffffffffffffffffffff8516815260606020820152826060820152828460808301375f608084830101525f60807fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f8601168301019050823573ffffffffffffffffffffffffffffffffffffffff811680821461020a575f80fd5b80604085015250509594505050505056fea26469706673582212201b13e6a7ecdcb5eacff4cb864f612e426f55c8e68906a2bb44be74280143bf0264736f6c634300081a0033",
 }
 
 // MockGatewayEVMABI is the input ABI used to generate the binding from.
@@ -210,21 +210,21 @@ func (_MockGatewayEVM *MockGatewayEVMTransactorRaw) Transact(opts *bind.Transact
 // OnCall is a paid mutator transaction binding the contract method 0x676cc054.
 //
 // Solidity: function onCall((address) messageContext, bytes data) returns(bytes)
-func (_MockGatewayEVM *MockGatewayEVMTransactor) OnCall(opts *bind.TransactOpts, messageContext MessageContext, data []byte) (*types.Transaction, error) {
+func (_MockGatewayEVM *MockGatewayEVMTransactor) OnCall(opts *bind.TransactOpts, messageContext LegacyMessageContext, data []byte) (*types.Transaction, error) {
 	return _MockGatewayEVM.contract.Transact(opts, "onCall", messageContext, data)
 }
 
 // OnCall is a paid mutator transaction binding the contract method 0x676cc054.
 //
 // Solidity: function onCall((address) messageContext, bytes data) returns(bytes)
-func (_MockGatewayEVM *MockGatewayEVMSession) OnCall(messageContext MessageContext, data []byte) (*types.Transaction, error) {
+func (_MockGatewayEVM *MockGatewayEVMSession) OnCall(messageContext LegacyMessageContext, data []byte) (*types.Transaction, error) {
 	return _MockGatewayEVM.Contract.OnCall(&_MockGatewayEVM.TransactOpts, messageContext, data)
 }
 
 // OnCall is a paid mutator transaction binding the contract method 0x676cc054.
 //
 // Solidity: function onCall((address) messageContext, bytes data) returns(bytes)
-func (_MockGatewayEVM *MockGatewayEVMTransactorSession) OnCall(messageContext MessageContext, data []byte) (*types.Transaction, error) {
+func (_MockGatewayEVM *MockGatewayEVMTransactorSession) OnCall(messageContext LegacyMessageContext, data []byte) (*types.Transaction, error) {
 	return _MockGatewayEVM.Contract.OnCall(&_MockGatewayEVM.TransactOpts, messageContext, data)
 }
 
@@ -299,7 +299,7 @@ func (it *MockGatewayEVMCallEmittedIterator) Close() error {
 type MockGatewayEVMCallEmitted struct {
 	Receiver       common.Address
 	Message        []byte
-	MessageContext MessageContext
+	MessageContext LegacyMessageContext
 	Raw            types.Log // Blockchain specific contextual infos
 }
 

@@ -303,6 +303,118 @@ const _abi = [
     ],
     anonymous: false,
   },
+  {
+    type: "event",
+    name: "WithdrawnAndCalledV2",
+    inputs: [
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "chainId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        name: "receiver",
+        type: "bytes",
+        indexed: false,
+        internalType: "bytes",
+      },
+      {
+        name: "zrc20",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "value",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "gasfee",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "protocolFlatFee",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "message",
+        type: "bytes",
+        indexed: false,
+        internalType: "bytes",
+      },
+      {
+        name: "version",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "callOptions",
+        type: "tuple",
+        indexed: false,
+        internalType: "struct CallOptions",
+        components: [
+          {
+            name: "gasLimit",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "isArbitraryCall",
+            type: "bool",
+            internalType: "bool",
+          },
+        ],
+      },
+      {
+        name: "revertOptions",
+        type: "tuple",
+        indexed: false,
+        internalType: "struct RevertOptions",
+        components: [
+          {
+            name: "revertAddress",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "callOnRevert",
+            type: "bool",
+            internalType: "bool",
+          },
+          {
+            name: "abortAddress",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "revertMessage",
+            type: "bytes",
+            internalType: "bytes",
+          },
+          {
+            name: "onRevertGasLimit",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
+      },
+    ],
+    anonymous: false,
+  },
 ] as const;
 
 export class IGatewayZEVMEvents__factory {

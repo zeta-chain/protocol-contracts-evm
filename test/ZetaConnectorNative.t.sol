@@ -41,7 +41,7 @@ contract ZetaConnectorNativeTest is
     address tssAddress;
     address foo;
     RevertContext revertContext;
-    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0) });
+    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0), asset: address(0), amount: 0 });
 
     error EnforcedPause();
     error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);
@@ -239,12 +239,16 @@ contract ZetaConnectorNativeTest is
         uint256 balanceBeforeZetaConnector = zetaToken.balanceOf(address(zetaConnector));
 
         vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedOnCall(sender, message);
+        emit ReceivedOnCallV2(sender, address(zetaToken), amount, message);
         vm.expectEmit(true, true, true, true, address(zetaConnector));
         emit WithdrawnAndCalled(address(receiver), amount, message);
         vm.prank(tssAddress);
         zetaConnector.withdrawAndCall(
-            MessageContext({ sender: sender }), address(receiver), amount, message, internalSendHash
+            MessageContext({ sender: sender, asset: address(zetaToken), amount: amount }),
+            address(receiver),
+            amount,
+            message,
+            internalSendHash
         );
 
         // Verify that the no tokens were transferred to the destination address

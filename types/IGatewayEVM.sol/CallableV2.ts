@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
@@ -20,28 +21,34 @@ import type {
   TypedContractMethod,
 } from "../common";
 
-export type LegacyMessageContextStruct = { sender: AddressLike };
-
-export type LegacyMessageContextStructOutput = [sender: string] & {
-  sender: string;
+export type MessageContextStruct = {
+  sender: AddressLike;
+  asset: AddressLike;
+  amount: BigNumberish;
 };
 
-export interface CallableInterface extends Interface {
+export type MessageContextStructOutput = [
+  sender: string,
+  asset: string,
+  amount: bigint
+] & { sender: string; asset: string; amount: bigint };
+
+export interface CallableV2Interface extends Interface {
   getFunction(nameOrSignature: "onCall"): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "onCall",
-    values: [LegacyMessageContextStruct, BytesLike]
+    values: [MessageContextStruct, BytesLike]
   ): string;
 
   decodeFunctionResult(functionFragment: "onCall", data: BytesLike): Result;
 }
 
-export interface Callable extends BaseContract {
-  connect(runner?: ContractRunner | null): Callable;
+export interface CallableV2 extends BaseContract {
+  connect(runner?: ContractRunner | null): CallableV2;
   waitForDeployment(): Promise<this>;
 
-  interface: CallableInterface;
+  interface: CallableV2Interface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -81,7 +88,7 @@ export interface Callable extends BaseContract {
   ): Promise<this>;
 
   onCall: TypedContractMethod<
-    [context: LegacyMessageContextStruct, message: BytesLike],
+    [context: MessageContextStruct, message: BytesLike],
     [string],
     "payable"
   >;
@@ -93,7 +100,7 @@ export interface Callable extends BaseContract {
   getFunction(
     nameOrSignature: "onCall"
   ): TypedContractMethod<
-    [context: LegacyMessageContextStruct, message: BytesLike],
+    [context: MessageContextStruct, message: BytesLike],
     [string],
     "payable"
   >;

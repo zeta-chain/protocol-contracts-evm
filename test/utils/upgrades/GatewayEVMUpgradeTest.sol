@@ -555,7 +555,13 @@ contract GatewayEVMUpgradeTest is
         private
         returns (bytes memory)
     {
-        return Callable(destination).onCall{ value: msg.value }(messageContext, data);
+        if (messageContext.amount == 0) {
+            return Callable(destination).onCall{ value: msg.value }(
+                LegacyMessageContext({ sender: messageContext.sender }), data
+            );
+        } else {
+            return CallableV2(destination).onCall{ value: msg.value }(messageContext, data);
+        }
     }
 
     // @dev prevent spoofing onCall and onRevert functions
@@ -566,7 +572,7 @@ contract GatewayEVMUpgradeTest is
                 functionSelector := calldataload(data.offset)
             }
 
-            if (functionSelector == Callable.onCall.selector) {
+            if (functionSelector == Callable.onCall.selector || functionSelector == CallableV2.onCall.selector) {
                 revert NotAllowedToCallOnCall();
             }
 

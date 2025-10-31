@@ -50,7 +50,7 @@ contract GatewayEVMZEVMTest is
     address ownerEVM;
     address destination;
     address tssAddress;
-    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0) });
+    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0), asset: address(0), amount: 0 });
 
     // zevm
     address payable proxyZEVM;

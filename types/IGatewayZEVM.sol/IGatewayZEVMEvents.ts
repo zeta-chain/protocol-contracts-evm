@@ -55,7 +55,11 @@ export type RevertOptionsStructOutput = [
 
 export interface IGatewayZEVMEventsInterface extends Interface {
   getEvent(
-    nameOrSignatureOrTopic: "Called" | "Withdrawn" | "WithdrawnAndCalled"
+    nameOrSignatureOrTopic:
+      | "Called"
+      | "Withdrawn"
+      | "WithdrawnAndCalled"
+      | "WithdrawnAndCalledV2"
   ): EventFragment;
 }
 
@@ -176,6 +180,52 @@ export namespace WithdrawnAndCalledEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
+export namespace WithdrawnAndCalledV2Event {
+  export type InputTuple = [
+    sender: AddressLike,
+    chainId: BigNumberish,
+    receiver: BytesLike,
+    zrc20: AddressLike,
+    value: BigNumberish,
+    gasfee: BigNumberish,
+    protocolFlatFee: BigNumberish,
+    message: BytesLike,
+    version: BigNumberish,
+    callOptions: CallOptionsStruct,
+    revertOptions: RevertOptionsStruct
+  ];
+  export type OutputTuple = [
+    sender: string,
+    chainId: bigint,
+    receiver: string,
+    zrc20: string,
+    value: bigint,
+    gasfee: bigint,
+    protocolFlatFee: bigint,
+    message: string,
+    version: bigint,
+    callOptions: CallOptionsStructOutput,
+    revertOptions: RevertOptionsStructOutput
+  ];
+  export interface OutputObject {
+    sender: string;
+    chainId: bigint;
+    receiver: string;
+    zrc20: string;
+    value: bigint;
+    gasfee: bigint;
+    protocolFlatFee: bigint;
+    message: string;
+    version: bigint;
+    callOptions: CallOptionsStructOutput;
+    revertOptions: RevertOptionsStructOutput;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export interface IGatewayZEVMEvents extends BaseContract {
   connect(runner?: ContractRunner | null): IGatewayZEVMEvents;
   waitForDeployment(): Promise<this>;
@@ -244,6 +294,13 @@ export interface IGatewayZEVMEvents extends BaseContract {
     WithdrawnAndCalledEvent.OutputTuple,
     WithdrawnAndCalledEvent.OutputObject
   >;
+  getEvent(
+    key: "WithdrawnAndCalledV2"
+  ): TypedContractEvent<
+    WithdrawnAndCalledV2Event.InputTuple,
+    WithdrawnAndCalledV2Event.OutputTuple,
+    WithdrawnAndCalledV2Event.OutputObject
+  >;
 
   filters: {
     "Called(address,address,bytes,bytes,tuple,tuple)": TypedContractEvent<
@@ -277,6 +334,17 @@ export interface IGatewayZEVMEvents extends BaseContract {
       WithdrawnAndCalledEvent.InputTuple,
       WithdrawnAndCalledEvent.OutputTuple,
       WithdrawnAndCalledEvent.OutputObject
+    >;
+
+    "WithdrawnAndCalledV2(address,uint256,bytes,address,uint256,uint256,uint256,bytes,uint256,tuple,tuple)": TypedContractEvent<
+      WithdrawnAndCalledV2Event.InputTuple,
+      WithdrawnAndCalledV2Event.OutputTuple,
+      WithdrawnAndCalledV2Event.OutputObject
+    >;
+    WithdrawnAndCalledV2: TypedContractEvent<
+      WithdrawnAndCalledV2Event.InputTuple,
+      WithdrawnAndCalledV2Event.OutputTuple,
+      WithdrawnAndCalledV2Event.OutputObject
     >;
   };
 }

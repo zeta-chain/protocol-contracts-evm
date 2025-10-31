@@ -70,6 +70,32 @@ interface IGatewayZEVMEvents {
         CallOptions callOptions,
         RevertOptions revertOptions
     );
+
+    /// @notice Emitted when a withdraw and call is made.
+    /// @param sender The address from which the tokens are withdrawn.
+    /// @param chainId Chain id of external chain.
+    /// @param receiver The receiver address on the external chain.
+    /// @param zrc20 The address of the ZRC20 token.
+    /// @param value The amount of tokens withdrawn.
+    /// @param gasfee The gas fee for the withdrawal.
+    /// @param protocolFlatFee The protocol flat fee for the withdrawal.
+    /// @param message The calldata passed to the contract call.
+    /// @param version The number representing message context version.
+    /// @param callOptions Call options including gas limit, arbirtrary call flag and message context version.
+    /// @param revertOptions Revert options.
+    event WithdrawnAndCalledV2(
+        address indexed sender,
+        uint256 indexed chainId,
+        bytes receiver,
+        address zrc20,
+        uint256 value,
+        uint256 gasfee,
+        uint256 protocolFlatFee,
+        bytes message,
+        uint256 version,
+        CallOptions callOptions,
+        RevertOptions revertOptions
+    );
 }
 
 /// @title IGatewayZEVMErrors
@@ -156,6 +182,25 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
         uint256 amount,
         address zrc20,
         bytes calldata message,
+        CallOptions calldata callOptions,
+        RevertOptions calldata revertOptions
+    )
+        external;
+
+    /// @notice Withdraw ZRC20 tokens and call a smart contract on an external chain.
+    /// @param receiver The receiver address on the external chain.
+    /// @param amount The amount of tokens to withdraw.
+    /// @param zrc20 The address of the ZRC20 token.
+    /// @param message The calldata to pass to the contract call.
+    /// @param version The number representing message context version.
+    /// @param callOptions Call options including gas limit, arbirtrary call flag and message context version.
+    /// @param revertOptions Revert options.
+    function withdrawAndCall(
+        bytes memory receiver,
+        uint256 amount,
+        address zrc20,
+        bytes calldata message,
+        uint256 version,
         CallOptions calldata callOptions,
         RevertOptions calldata revertOptions
     )

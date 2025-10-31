@@ -282,12 +282,33 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
 
 /// @notice Message context passed to execute function.
 /// @param sender Sender from omnichain contract.
-struct MessageContext {
+struct LegacyMessageContext {
     address sender;
 }
 
 /// @notice Interface implemented by contracts receiving authenticated calls.
 interface Callable {
+    function onCall(
+        LegacyMessageContext calldata context,
+        bytes calldata message
+    )
+        external
+        payable
+        returns (bytes memory);
+}
+
+/// @notice Message context passed to execute function.
+/// @param sender Sender from omnichain contract.
+/// @param asset The address of the asset.
+/// @param amount The amount of the asset.
+struct MessageContext {
+    address sender;
+    address asset;
+    uint256 amount;
+}
+
+/// @notice Interface implemented by contracts receiving authenticated calls with new MessageContext.
+interface CallableV2 {
     function onCall(
         MessageContext calldata context,
         bytes calldata message

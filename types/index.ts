@@ -188,6 +188,8 @@ export type { IERC721TokenReceiver } from "./IERC721.sol/IERC721TokenReceiver";
 export { IERC721TokenReceiver__factory } from "./factories/IERC721.sol/IERC721TokenReceiver__factory";
 export type { Callable } from "./IGatewayEVM.sol/Callable";
 export { Callable__factory } from "./factories/IGatewayEVM.sol/Callable__factory";
+export type { CallableV2 } from "./IGatewayEVM.sol/CallableV2";
+export { CallableV2__factory } from "./factories/IGatewayEVM.sol/CallableV2__factory";
 export type { IGatewayEVM } from "./IGatewayEVM.sol/IGatewayEVM";
 export { IGatewayEVM__factory } from "./factories/IGatewayEVM.sol/IGatewayEVM__factory";
 export type { IGatewayEVMErrors } from "./IGatewayEVM.sol/IGatewayEVMErrors";

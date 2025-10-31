@@ -4,9 +4,9 @@
 
 import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
-  Callable,
-  CallableInterface,
-} from "../../IGatewayEVM.sol/Callable";
+  CallableV2,
+  CallableV2Interface,
+} from "../../IGatewayEVM.sol/CallableV2";
 
 const _abi = [
   {
@@ -16,12 +16,22 @@ const _abi = [
       {
         name: "context",
         type: "tuple",
-        internalType: "struct LegacyMessageContext",
+        internalType: "struct MessageContext",
         components: [
           {
             name: "sender",
             type: "address",
             internalType: "address",
+          },
+          {
+            name: "asset",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "amount",
+            type: "uint256",
+            internalType: "uint256",
           },
         ],
       },
@@ -42,12 +52,12 @@ const _abi = [
   },
 ] as const;
 
-export class Callable__factory {
+export class CallableV2__factory {
   static readonly abi = _abi;
-  static createInterface(): CallableInterface {
-    return new Interface(_abi) as CallableInterface;
+  static createInterface(): CallableV2Interface {
+    return new Interface(_abi) as CallableV2Interface;
   }
-  static connect(address: string, runner?: ContractRunner | null): Callable {
-    return new Contract(address, _abi, runner) as unknown as Callable;
+  static connect(address: string, runner?: ContractRunner | null): CallableV2 {
+    return new Contract(address, _abi, runner) as unknown as CallableV2;
   }
 }
