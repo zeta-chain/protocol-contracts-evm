@@ -34,6 +34,7 @@ export * as introspection from "./introspection";
 export * as utils from "./utils";
 export { AccessControlUpgradeable__factory } from "./AccessControlUpgradeable__factory";
 export { Address__factory } from "./Address__factory";
+export { BaseForkTest__factory } from "./BaseForkTest__factory";
 export { BaseRegistry__factory } from "./BaseRegistry__factory";
 export { BeaconProxy__factory } from "./BeaconProxy__factory";
 export { ConnectorErrors__factory } from "./ConnectorErrors__factory";
