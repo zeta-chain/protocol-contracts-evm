@@ -27,15 +27,7 @@ contract SenderZEVM {
     /// @param num A numeric parameter to pass to the receiver's function.
     /// @param flag A boolean parameter to pass to the receiver's function.
     /// @dev Encodes the function call and passes it to the gateway.
-    function callReceiver(
-        bytes memory receiver,
-        address zrc20,
-        string memory str,
-        uint256 num,
-        bool flag
-    )
-        external
-    {
+    function callReceiver(bytes memory receiver, address zrc20, string memory str, uint256 num, bool flag) external {
         // Encode the function call to the receiver's receivePayable method
         bytes memory message = abi.encodeWithSignature("receivePayable(string,uint256,bool)", str, num, flag);
 

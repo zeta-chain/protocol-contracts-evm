@@ -174,14 +174,7 @@ contract CoreRegistry is BaseRegistry {
     }
 
     /// @notice Updates ZRC20 token active status.
-    function setZRC20TokenActive(
-        address address_,
-        bool active
-    )
-        external
-        onlyRole(REGISTRY_MANAGER_ROLE)
-        whenNotPaused
-    {
+    function setZRC20TokenActive(address address_, bool active) external onlyRole(REGISTRY_MANAGER_ROLE) whenNotPaused {
         // Change state on ZetaChain
         _setZRC20TokenActive(address_, active);
         // Broadcast update to satellite registries
@@ -259,13 +252,7 @@ contract CoreRegistry is BaseRegistry {
     /// @param chainId The ID of the chain where the contract is deployed
     /// @notice contractType The type of the contract
     /// @notice active Whether the contract should be active
-    function _broadcastContractStatusUpdate(
-        uint256 chainId,
-        string calldata contractType,
-        bool active
-    )
-        private
-    {
+    function _broadcastContractStatusUpdate(uint256 chainId, string calldata contractType, bool active) private {
         // Encode the function call for the Registry contract on the target chain
         bytes memory message =
             abi.encodeWithSignature("setContractActive(uint256,string,bool)", chainId, contractType, active);

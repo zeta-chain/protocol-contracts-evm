@@ -904,13 +904,7 @@ Private function to withdraw ZRC20 tokens with gas limit.
 
 
 ```solidity
-function _withdrawZRC20WithGasLimit(
-    uint256 amount,
-    address zrc20,
-    uint256 gasLimit
-)
-    private
-    returns (uint256);
+function _withdrawZRC20WithGasLimit(uint256 amount, address zrc20, uint256 gasLimit) private returns (uint256);
 ```
 **Parameters**
 
@@ -1898,13 +1892,7 @@ Interface implemented by contracts receiving authenticated calls with new Messag
 
 
 ```solidity
-function onCall(
-    MessageContext calldata context,
-    bytes calldata message
-)
-    external
-    payable
-    returns (bytes memory);
+function onCall(MessageContext calldata context, bytes calldata message) external payable returns (bytes memory);
 ```
 
 
@@ -2164,13 +2152,7 @@ Calls an omnichain smart contract without asset transfer.
 
 
 ```solidity
-function call(
-    address receiver,
-    bytes calldata payload,
-    RevertOptions calldata revertOptions
-)
-    external
-    payable;
+function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions) external payable;
 ```
 **Parameters**
 
@@ -3806,13 +3788,7 @@ Only callable through onCall from CoreRegistry
 
 
 ```solidity
-function setContractActive(
-    uint256 chainId,
-    string calldata contractType,
-    bool active
-)
-    external
-    onlyRegistry;
+function setContractActive(uint256 chainId, string calldata contractType, bool active) external onlyRegistry;
 ```
 **Parameters**
 
@@ -4698,13 +4674,7 @@ Changes status of the chain to activated/deactivated.
 
 
 ```solidity
-function _changeChainStatus(
-    uint256 chainId,
-    address gasZRC20,
-    bytes calldata registry,
-    bool activation
-)
-    internal;
+function _changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation) internal;
 ```
 **Parameters**
 
@@ -4739,12 +4709,7 @@ Registers a new contract address for a specific chain.
 
 
 ```solidity
-function _registerContract(
-    uint256 chainId,
-    string calldata contractType,
-    bytes calldata addressBytes
-)
-    internal;
+function _registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes) internal;
 ```
 **Parameters**
 
@@ -5090,13 +5055,7 @@ Changes status of the chain to activated/deactivated.
 
 
 ```solidity
-function changeChainStatus(
-    uint256 chainId,
-    address gasZRC20,
-    bytes calldata registry,
-    bool activation
-)
-    external;
+function changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation) external;
 ```
 **Parameters**
 
@@ -5131,12 +5090,7 @@ Registers a new contract address for a specific chain.
 
 
 ```solidity
-function registerContract(
-    uint256 chainId,
-    string calldata contractType,
-    bytes calldata addressBytes
-)
-    external;
+function registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes) external;
 ```
 **Parameters**
 
@@ -6202,13 +6156,7 @@ Updates ZRC20 token active status.
 
 
 ```solidity
-function setZRC20TokenActive(
-    address address_,
-    bool active
-)
-    external
-    onlyRole(REGISTRY_MANAGER_ROLE)
-    whenNotPaused;
+function setZRC20TokenActive(address address_, bool active) external onlyRole(REGISTRY_MANAGER_ROLE) whenNotPaused;
 ```
 
 #### _broadcastChainActivation
@@ -6318,12 +6266,7 @@ active Whether the contract should be active
 
 
 ```solidity
-function _broadcastContractStatusUpdate(
-    uint256 chainId,
-    string calldata contractType,
-    bool active
-)
-    private;
+function _broadcastContractStatusUpdate(uint256 chainId, string calldata contractType, bool active) private;
 ```
 **Parameters**
 
