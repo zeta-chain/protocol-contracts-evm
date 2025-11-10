@@ -45,3 +45,7 @@ dependencies/
 # Ignoring remappings because we are adding them in foundry.toml
 # currently forge soldeer always re-generates them, should be fixed in next version
 remappings.txt
+
+# Other
+contract-diffs/
+typechain-types/
