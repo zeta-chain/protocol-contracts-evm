@@ -7,7 +7,7 @@ import "contracts/evm/GatewayEVM.sol";
 contract DeployGatewayEVM is Script {
     function run() external {
         address expectedImplAddress;
-        bytes32 implSalt = keccak256("GatewayEVM_V15");
+        bytes32 implSalt = keccak256("GatewayEVM");
 
         vm.startBroadcast();
 
