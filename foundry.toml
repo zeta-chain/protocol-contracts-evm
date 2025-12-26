@@ -2,6 +2,7 @@
 src = "contracts"
 out = "out"
 libs = ["lib", "dependencies"]
+test = "test"
 
 remappings = [
   "ds-test/=node_modules/ds-test/src",
@@ -13,7 +14,7 @@ remappings = [
   "@openzeppelin/contracts-upgradeable/=node_modules/@openzeppelin/contracts-upgradeable/"
 ]
 
-no-match-contract = '.*EchidnaTest$'
+no-match-contract = '.*EchidnaTest$|.*ForkTest$'
 optimizer = true
 optimizer_runs = 10_000
 
