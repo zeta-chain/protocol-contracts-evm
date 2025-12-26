@@ -105,6 +105,37 @@ const _abi = [
   },
   {
     type: "event",
+    name: "ReceivedOnCallV2",
+    inputs: [
+      {
+        name: "sender",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "asset",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "message",
+        type: "bytes",
+        indexed: false,
+        internalType: "bytes",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "ReceivedPayable",
     inputs: [
       {

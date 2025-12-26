@@ -1,30 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-import "../contracts/evm/ERC20Custody.sol";
-import "../contracts/evm/GatewayEVM.sol";
+import "forge-std/Test.sol";
+import "forge-std/Vm.sol";
 
-import "../contracts/evm/ZetaConnectorNonNative.sol";
-
-import "../contracts/evm/interfaces/IERC20Custody.sol";
-import "../contracts/evm/interfaces/IGatewayEVM.sol";
+import "./utils/ReceiverEVM.sol";
 
 import "./mocks/NonReturnApprovalToken.sol";
 import "./mocks/RevertOnZeroApprovalToken.sol";
-import "./utils/IReceiverEVM.sol";
-import "./utils/ReceiverEVM.sol";
 import "./utils/TestERC20.sol";
-
-import "./utils/Zeta.non-eth.sol";
 import "./utils/upgrades/GatewayEVMUpgradeTest.sol";
 
 import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "forge-std/Test.sol";
-
-import "forge-std/Vm.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
+
+import "../contracts/evm/ERC20Custody.sol";
+import "../contracts/evm/GatewayEVM.sol";
+import "../contracts/evm/ZetaConnectorNonNative.sol";
+import "../contracts/evm/interfaces/IERC20Custody.sol";
+import "../contracts/evm/interfaces/IGatewayEVM.sol";
+import "./utils/IReceiverEVM.sol";
+import "./utils/Zeta.non-eth.sol";
 
 contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiverEVMEvents, IERC20CustodyEvents {
     using SafeERC20 for IERC20;
@@ -41,7 +39,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
     address foo;
     RevertOptions revertOptions;
     RevertContext revertContext;
-    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0) });
+    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0), asset: address(0), amount: 0 });
 
     error EnforcedPause();
     error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);
@@ -188,6 +186,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.execute(arbitraryCallMessageContext, address(receiver), data);
     }
 
+    // Test with legacy MessageContext
     function testForwardCallToReceiveOnCallUsingAuthCall() public {
         vm.expectEmit(true, true, true, true, address(receiver));
         address sender = address(0x123);
@@ -195,7 +194,21 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         vm.expectEmit(true, true, true, true, address(gateway));
         emit Executed(address(receiver), 0, bytes("1"));
         vm.prank(tssAddress);
-        gateway.execute(MessageContext({ sender: sender }), address(receiver), bytes("1"));
+        gateway.execute(MessageContext({ sender: sender, asset: address(0), amount: 0 }), address(receiver), bytes("1"));
+    }
+
+    // Test with new MessageContext
+    function testForwardCallToReceiveOnCallUsingAuthCallV2() public {
+        vm.expectEmit(true, true, true, true, address(receiver));
+        address sender = address(0x123);
+        address asset = address(token);
+        uint256 amount = 100;
+        bytes memory data = bytes("1");
+        emit ReceivedOnCallV2(sender, asset, amount, data);
+        vm.expectEmit(true, true, true, true, address(gateway));
+        emit Executed(address(receiver), 0, data);
+        vm.prank(tssAddress);
+        gateway.execute(MessageContext({ sender: sender, asset: asset, amount: amount }), address(receiver), bytes("1"));
     }
 
     function testForwardCallToReceiveNonPayableFailsIfSenderIsNotTSS() public {
@@ -221,7 +234,9 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
 
         vm.prank(owner);
         vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, owner, TSS_ROLE));
-        gateway.execute(MessageContext({ sender: address(0x123) }), address(receiver), data);
+        gateway.execute(
+            MessageContext({ sender: address(0x123), asset: address(0), amount: 0 }), address(receiver), data
+        );
     }
 
     function testForwardCallToReceivePayable() public {
@@ -264,6 +279,16 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.execute(arbitraryCallMessageContext, address(receiver), data);
     }
 
+    function testForwardCallToReceiveOnCallV2Fails() public {
+        bytes memory data = abi.encodeWithSignature(
+            "onCall((address,address,uint256),bytes)", address(123), address(456), 100, bytes("")
+        );
+
+        vm.prank(tssAddress);
+        vm.expectRevert(NotAllowedToCallOnCall.selector);
+        gateway.execute(arbitraryCallMessageContext, address(receiver), data);
+    }
+
     function testForwardCallToReceiveOnRevertFails() public {
         bytes memory data = abi.encodeWithSignature("onRevert((address,address,uint256,bytes))");
 
@@ -285,7 +310,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
 
         vm.prank(tssAddress);
         vm.expectRevert(ZeroAddress.selector);
-        gateway.execute(MessageContext({ sender: address(0x123) }), address(0), data);
+        gateway.execute(MessageContext({ sender: address(0x123), asset: address(0), amount: 0 }), address(0), data);
     }
 
     function testForwardCallToReceiveNoParamsTogglePause() public {
@@ -297,7 +322,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, foo, PAUSER_ROLE));
         gateway.unpause();
 
-        vm.prank(owner);
+        vm.prank(tssAddress);
         gateway.pause();
 
         bytes memory data = abi.encodeWithSignature("receiveNoParams()");
@@ -316,47 +341,6 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         emit Executed(address(receiver), 0, data);
         vm.prank(tssAddress);
         gateway.execute(arbitraryCallMessageContext, address(receiver), data);
-    }
-
-    function testExecuteWithERC20FailsIfNotCustodyOrConnector() public {
-        uint256 amount = 100_000;
-        bytes memory data =
-            abi.encodeWithSignature("receiveERC20(uint256,address,address)", amount, address(token), destination);
-
-        vm.prank(owner);
-        vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, owner, ASSET_HANDLER_ROLE));
-        gateway.executeWithERC20(arbitraryCallMessageContext, address(token), destination, amount, data);
-    }
-
-    function testExecuteWithERC20Token() public {
-        uint256 amount = 100_000;
-
-        bytes memory data =
-            abi.encodeWithSignature("receiveERC20(uint256,address,address)", amount, address(token), destination);
-
-        vm.startPrank(owner);
-        token.transfer(address(gateway), amount);
-        vm.stopPrank();
-
-        uint256 gatewayBalanceBefore = token.balanceOf(address(gateway));
-        uint256 destinationBalanceBefore = token.balanceOf(destination);
-        assertEq(gatewayBalanceBefore, amount);
-        assertEq(destinationBalanceBefore, 0);
-
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedERC20(address(gateway), amount, address(token), destination);
-
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit ExecutedWithERC20(address(token), address(receiver), amount, data);
-
-        vm.prank(address(custody));
-        gateway.executeWithERC20(arbitraryCallMessageContext, address(token), address(receiver), amount, data);
-
-        uint256 gatewayBalanceAfter = token.balanceOf(address(gateway));
-        uint256 destinationBalanceAfter = token.balanceOf(destination);
-
-        assertEq(gatewayBalanceAfter, 0);
-        assertEq(destinationBalanceAfter, amount);
     }
 
     function testExecuteWithTokenRevertingOnZeroApproval() public {
@@ -397,6 +381,16 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
 
         vm.prank(address(custody));
         gateway.executeWithERC20(arbitraryCallMessageContext, address(nonReturnToken), address(receiver), amount, data);
+    }
+
+    function testExecuteWithERC20FailsIfNotCustodyOrConnector() public {
+        uint256 amount = 100_000;
+        bytes memory data =
+            abi.encodeWithSignature("receiveERC20(uint256,address,address)", amount, address(token), destination);
+
+        vm.prank(owner);
+        vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, owner, ASSET_HANDLER_ROLE));
+        gateway.executeWithERC20(arbitraryCallMessageContext, address(token), destination, amount, data);
     }
 
     function testRevertWithERC20FailsIfNotCustodyOrConnector() public {
@@ -565,29 +559,8 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         vm.prank(owner);
         custody.unwhitelist(address(token));
 
-        vm.expectRevert(abi.encodeWithSelector(NotWhitelistedInCustody.selector, address(token)));
-
+        vm.expectRevert(NotWhitelistedInCustody.selector);
         gateway.deposit(destination, amount, address(token), revertOptions);
-    }
-
-    function testDepositERC20ToCustodyFailsIfRevertGasLimitExceeded() public {
-        uint256 amount = 100_000;
-        token.approve(address(gateway), amount);
-
-        RevertOptions memory revertOptionsExcessiveGas = RevertOptions({
-            revertAddress: address(0x321),
-            callOnRevert: false,
-            abortAddress: address(0x321),
-            revertMessage: "",
-            onRevertGasLimit: MAX_REVERT_GAS_LIMIT + 1
-        });
-
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                RevertGasLimitExceeded.selector, revertOptionsExcessiveGas.onRevertGasLimit, MAX_REVERT_GAS_LIMIT
-            )
-        );
-        gateway.deposit(destination, amount, address(token), revertOptionsExcessiveGas);
     }
 
     function testDepositERC20ToCustodyFailsIfPayloadSizeExceeded() public {
@@ -595,11 +568,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         token.approve(address(gateway), amount);
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() + 1);
 
-        uint256 payloadSize = revertOptions.revertMessage.length;
-        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
-
-        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
-
+        vm.expectRevert(PayloadSizeExceeded.selector);
         gateway.deposit(destination, amount, address(token), revertOptions);
     }
 
@@ -607,25 +576,28 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         uint256 amount = 100_000;
         zeta.approve(address(gateway), amount);
 
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit Deposited(owner, destination, amount, address(zeta), "", revertOptions);
+        // TODO: replace error to check once ZETA supported back
+        // https://github.com/zeta-chain/protocol-contracts-evm/issues/394
+        // vm.expectEmit(true, true, true, true, address(gateway));
+        vm.expectRevert(ZETANotSupported.selector);
 
+        emit Deposited(owner, destination, amount, address(zeta), "", revertOptions);
         gateway.deposit(destination, amount, address(zeta), revertOptions);
 
-        uint256 ownerAmountAfter = zeta.balanceOf(owner);
-        assertEq(ownerAmount - amount, ownerAmountAfter);
+        // uint256 ownerAmountAfter = zeta.balanceOf(owner);
+        // assertEq(ownerAmount - amount, ownerAmountAfter);
     }
 
-    function testDepositERC20ToCustodyFailsIfAmountIs0() public {
+    function testRevertDepositERC20ToCustodyIfAmountIs0() public {
         uint256 amount = 0;
 
         token.approve(address(gateway), amount);
 
-        vm.expectRevert(InsufficientEVMAmount.selector);
+        vm.expectRevert(InsufficientERC20Amount.selector);
         gateway.deposit(destination, amount, address(token), revertOptions);
     }
 
-    function testDepositERC20ToCustodyFailsIfReceiverIsZeroAddress() public {
+    function testRevertDepositERC20ToCustodyIfReceiverIsZeroAddress() public {
         uint256 amount = 1;
         vm.expectRevert(ZeroAddress.selector);
         gateway.deposit(address(0), amount, address(token), revertOptions);
@@ -643,25 +615,20 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertEq(tssBalanceBefore + amount, tssBalanceAfter);
     }
 
-    function testDepositEthToTssFailsIfAmountIs0() public {
+    function testRevertDepositEthToTssIfAmountIs0() public {
         uint256 amount = 0;
 
-        vm.expectRevert(InsufficientEVMAmount.selector);
+        vm.expectRevert(InsufficientETHAmount.selector);
         gateway.deposit{ value: amount }(destination, revertOptions);
     }
 
     function testRevertDepositEthToTssIfPayloadSizeExceeded() public {
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() + 1);
-
-        uint256 payloadSize = revertOptions.revertMessage.length;
-        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
-
-        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
-
+        vm.expectRevert(PayloadSizeExceeded.selector);
         gateway.deposit{ value: 1 }(destination, revertOptions);
     }
 
-    function testDepositEthToTssFailsIfReceiverIsZeroAddress() public {
+    function testRevertDepositEthToTssIfReceiverIsZeroAddress() public {
         uint256 amount = 1;
 
         vm.expectRevert(ZeroAddress.selector);
@@ -697,7 +664,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
     function testDepositEthWithAmountToTssFailsIfAmountIs0() public {
         uint256 amount = 0;
 
-        vm.expectRevert(InsufficientEVMAmount.selector);
+        vm.expectRevert(InsufficientETHAmount.selector);
         gateway.deposit{ value: amount }(destination, amount, revertOptions);
     }
 
@@ -728,8 +695,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         vm.prank(owner);
         custody.unwhitelist(address(token));
 
-        vm.expectRevert(abi.encodeWithSelector(NotWhitelistedInCustody.selector, address(token)));
-
+        vm.expectRevert(NotWhitelistedInCustody.selector);
         gateway.depositAndCall(destination, amount, address(token), payload, revertOptions);
     }
 
@@ -740,33 +706,8 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
 
         token.approve(address(gateway), amount);
 
-        uint256 payloadSize = payload.length + revertOptions.revertMessage.length;
-        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
-
-        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
-
+        vm.expectRevert(PayloadSizeExceeded.selector);
         gateway.depositAndCall(destination, amount, address(token), payload, revertOptions);
-    }
-
-    function testDepositAndCallERC20ToCustodyFailsIfRevertGasLimitExceeded() public {
-        uint256 amount = 100_000;
-        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
-        token.approve(address(gateway), amount);
-
-        RevertOptions memory revertOptionsExcessiveGas = RevertOptions({
-            revertAddress: address(0x321),
-            callOnRevert: false,
-            abortAddress: address(0x321),
-            revertMessage: "",
-            onRevertGasLimit: MAX_REVERT_GAS_LIMIT + 1
-        });
-
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                RevertGasLimitExceeded.selector, revertOptionsExcessiveGas.onRevertGasLimit, MAX_REVERT_GAS_LIMIT
-            )
-        );
-        gateway.depositAndCall(destination, amount, address(token), payload, revertOptionsExcessiveGas);
     }
 
     function testDepositERC20ToCustodyWithPayload() public {
@@ -789,16 +730,16 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertEq(ownerAmount - amount, ownerAmountAfter);
     }
 
-    function testDepositERC20ToCustodyWithPayloadFailsIfAmountIs0() public {
+    function testRevertDepositERC20ToCustodyWithPayloadIfAmountIs0() public {
         uint256 amount = 0;
 
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
 
-        vm.expectRevert(InsufficientEVMAmount.selector);
+        vm.expectRevert(InsufficientERC20Amount.selector);
         gateway.depositAndCall(destination, amount, address(token), payload, revertOptions);
     }
 
-    function testDepositERC20ToCustodyWithPayloadFailsIfReceiverIsZeroAddress() public {
+    function testRevertDepositERC20ToCustodyWithPayloadIfReceiverIsZeroAddress() public {
         uint256 amount = 1;
 
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
@@ -820,66 +761,24 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertEq(tssBalanceBefore + amount, tssBalanceAfter);
     }
 
-    function testDepositEthToTssFailsIfRevertGasLimitExceeded() public {
-        uint256 amount = 100_000;
-        RevertOptions memory revertOptionsExcessiveGas = RevertOptions({
-            revertAddress: address(0x321),
-            callOnRevert: false,
-            abortAddress: address(0x321),
-            revertMessage: "",
-            onRevertGasLimit: MAX_REVERT_GAS_LIMIT + 1
-        });
-
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                RevertGasLimitExceeded.selector, revertOptionsExcessiveGas.onRevertGasLimit, MAX_REVERT_GAS_LIMIT
-            )
-        );
-        gateway.deposit{ value: amount }(destination, revertOptionsExcessiveGas);
-    }
-
     function testDepositEthToTssWithPayloadFailsIfPayloadSizeExceeded() public {
         uint256 amount = 100_000;
         bytes memory payload = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2);
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2 + 1);
 
-        uint256 payloadSize = payload.length + revertOptions.revertMessage.length;
-        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
-
-        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
-
+        vm.expectRevert(PayloadSizeExceeded.selector);
         gateway.depositAndCall{ value: amount }(destination, payload, revertOptions);
     }
 
-    function testDepositAndCallEthFailsIfRevertGasLimitExceeded() public {
-        uint256 amount = 100_000;
-        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
-
-        RevertOptions memory revertOptionsExcessiveGas = RevertOptions({
-            revertAddress: address(0x321),
-            callOnRevert: false,
-            abortAddress: address(0x321),
-            revertMessage: "",
-            onRevertGasLimit: MAX_REVERT_GAS_LIMIT + 1
-        });
-
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                RevertGasLimitExceeded.selector, revertOptionsExcessiveGas.onRevertGasLimit, MAX_REVERT_GAS_LIMIT
-            )
-        );
-        gateway.depositAndCall{ value: amount }(destination, payload, revertOptionsExcessiveGas);
-    }
-
-    function testDepositEthToTssWithPayloadFailsIfAmountIs0() public {
+    function testRevertDepositEthToTssWithPayloadIfAmountIs0() public {
         uint256 amount = 0;
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
 
-        vm.expectRevert(InsufficientEVMAmount.selector);
+        vm.expectRevert(InsufficientETHAmount.selector);
         gateway.depositAndCall{ value: amount }(destination, payload, revertOptions);
     }
 
-    function testDepositEthToTssWithPayloadFailsIfReceiverIsZeroAddress() public {
+    function testRevertDepositEthToTssWithPayloadIfReceiverIsZeroAddress() public {
         uint256 amount = 1;
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
 
@@ -900,24 +799,6 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertEq(tssBalanceBefore + amount, tssBalanceAfter);
     }
 
-    function testDepositEthWithAmountToTssFailsIfRevertGasLimitExceeded() public {
-        uint256 amount = 100_000;
-        RevertOptions memory revertOptionsExcessiveGas = RevertOptions({
-            revertAddress: address(0x321),
-            callOnRevert: false,
-            abortAddress: address(0x321),
-            revertMessage: "",
-            onRevertGasLimit: MAX_REVERT_GAS_LIMIT + 1
-        });
-
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                RevertGasLimitExceeded.selector, revertOptionsExcessiveGas.onRevertGasLimit, MAX_REVERT_GAS_LIMIT
-            )
-        );
-        gateway.deposit{ value: amount }(destination, amount, revertOptionsExcessiveGas);
-    }
-
     function testDepositEthWithAmountToTssWithPayloadFailsIfPayloadSizeExceeded() public {
         uint256 amount = 100_000;
         bytes memory payload = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2);
@@ -931,31 +812,11 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         gateway.depositAndCall{ value: amount }(destination, amount, payload, revertOptions);
     }
 
-    function testDepositAndCallEthWithAmountFailsIfRevertGasLimitExceeded() public {
-        uint256 amount = 100_000;
-        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
-
-        RevertOptions memory revertOptionsExcessiveGas = RevertOptions({
-            revertAddress: address(0x321),
-            callOnRevert: false,
-            abortAddress: address(0x321),
-            revertMessage: "",
-            onRevertGasLimit: MAX_REVERT_GAS_LIMIT + 1
-        });
-
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                RevertGasLimitExceeded.selector, revertOptionsExcessiveGas.onRevertGasLimit, MAX_REVERT_GAS_LIMIT
-            )
-        );
-        gateway.depositAndCall{ value: amount }(destination, amount, payload, revertOptionsExcessiveGas);
-    }
-
     function testDepositEthWithAmountToTssWithPayloadFailsIfAmountIs0() public {
         uint256 amount = 0;
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
 
-        vm.expectRevert(InsufficientEVMAmount.selector);
+        vm.expectRevert(InsufficientETHAmount.selector);
         gateway.depositAndCall{ value: amount }(destination, amount, payload, revertOptions);
     }
 
@@ -995,11 +856,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         bytes memory payload = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2);
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2 + 1);
 
-        uint256 payloadSize = payload.length + revertOptions.revertMessage.length;
-        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
-
-        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
-
+        vm.expectRevert(PayloadSizeExceeded.selector);
         gateway.call(destination, payload, revertOptions);
     }
 
@@ -1016,25 +873,6 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
 
         vm.expectRevert(ZeroAddress.selector);
         gateway.call(address(0), payload, revertOptions);
-    }
-
-    function testCallFailsIfRevertGasLimitExceeded() public {
-        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
-
-        RevertOptions memory revertOptionsExcessiveGas = RevertOptions({
-            revertAddress: address(0x321),
-            callOnRevert: false,
-            abortAddress: address(0x321),
-            revertMessage: "",
-            onRevertGasLimit: MAX_REVERT_GAS_LIMIT + 1
-        });
-
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                RevertGasLimitExceeded.selector, revertOptionsExcessiveGas.onRevertGasLimit, MAX_REVERT_GAS_LIMIT
-            )
-        );
-        gateway.call(destination, payload, revertOptionsExcessiveGas);
     }
 
     function testDepositEthWithAmountSecondActionRequiresFee() public {
@@ -1229,7 +1067,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         gateway.deposit{ value: amount }(destination, revertOptions);
 
         // Second deposit with only fee amount should fail because depositAmount = 0
-        vm.expectRevert(InsufficientEVMAmount.selector);
+        vm.expectRevert(InsufficientETHAmount.selector);
         gateway.deposit{ value: ADDITIONAL_ACTION_FEE_WEI }(destination, 0, revertOptions);
     }
 

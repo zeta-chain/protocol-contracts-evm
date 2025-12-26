@@ -31,7 +31,7 @@ var (
 
 // INotSupportedMethodsMetaData contains all meta data concerning the INotSupportedMethods contract.
 var INotSupportedMethodsMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"error\",\"name\":\"CallOnRevertNotSupported\",\"inputs\":[]}]",
+	ABI: "[{\"type\":\"error\",\"name\":\"CallOnRevertNotSupported\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"ZETANotSupported\",\"inputs\":[]}]",
 }
 
 // INotSupportedMethodsABI is the input ABI used to generate the binding from.

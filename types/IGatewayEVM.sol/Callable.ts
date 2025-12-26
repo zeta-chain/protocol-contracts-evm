@@ -20,16 +20,18 @@ import type {
   TypedContractMethod,
 } from "../common";
 
-export type MessageContextStruct = { sender: AddressLike };
+export type LegacyMessageContextStruct = { sender: AddressLike };
 
-export type MessageContextStructOutput = [sender: string] & { sender: string };
+export type LegacyMessageContextStructOutput = [sender: string] & {
+  sender: string;
+};
 
 export interface CallableInterface extends Interface {
   getFunction(nameOrSignature: "onCall"): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "onCall",
-    values: [MessageContextStruct, BytesLike]
+    values: [LegacyMessageContextStruct, BytesLike]
   ): string;
 
   decodeFunctionResult(functionFragment: "onCall", data: BytesLike): Result;
@@ -79,7 +81,7 @@ export interface Callable extends BaseContract {
   ): Promise<this>;
 
   onCall: TypedContractMethod<
-    [context: MessageContextStruct, message: BytesLike],
+    [context: LegacyMessageContextStruct, message: BytesLike],
     [string],
     "payable"
   >;
@@ -91,7 +93,7 @@ export interface Callable extends BaseContract {
   getFunction(
     nameOrSignature: "onCall"
   ): TypedContractMethod<
-    [context: MessageContextStruct, message: BytesLike],
+    [context: LegacyMessageContextStruct, message: BytesLike],
     [string],
     "payable"
   >;

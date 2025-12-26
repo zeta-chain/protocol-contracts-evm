@@ -14,6 +14,11 @@ const _abi = [
     name: "CallOnRevertNotSupported",
     inputs: [],
   },
+  {
+    type: "error",
+    name: "ZETANotSupported",
+    inputs: [],
+  },
 ] as const;
 
 export class INotSupportedMethods__factory {

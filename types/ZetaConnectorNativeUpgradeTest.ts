@@ -23,9 +23,17 @@ import type {
   TypedContractMethod,
 } from "./common";
 
-export type MessageContextStruct = { sender: AddressLike };
+export type MessageContextStruct = {
+  sender: AddressLike;
+  asset: AddressLike;
+  amount: BigNumberish;
+};
 
-export type MessageContextStructOutput = [sender: string] & { sender: string };
+export type MessageContextStructOutput = [
+  sender: string,
+  asset: string,
+  amount: bigint
+] & { sender: string; asset: string; amount: bigint };
 
 export type RevertContextStruct = {
   sender: AddressLike;
@@ -49,7 +57,6 @@ export interface ZetaConnectorNativeUpgradeTestInterface extends Interface {
       | "TSS_ROLE"
       | "UPGRADE_INTERFACE_VERSION"
       | "WITHDRAWER_ROLE"
-      | "deposit"
       | "gateway"
       | "getRoleAdmin"
       | "grantRole"
@@ -58,6 +65,7 @@ export interface ZetaConnectorNativeUpgradeTestInterface extends Interface {
       | "pause"
       | "paused"
       | "proxiableUUID"
+      | "receiveTokens"
       | "renounceRole"
       | "revokeRole"
       | "supportsInterface"
@@ -104,10 +112,6 @@ export interface ZetaConnectorNativeUpgradeTestInterface extends Interface {
     functionFragment: "WITHDRAWER_ROLE",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "deposit",
-    values: [BigNumberish]
-  ): string;
   encodeFunctionData(functionFragment: "gateway", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
@@ -130,6 +134,10 @@ export interface ZetaConnectorNativeUpgradeTestInterface extends Interface {
   encodeFunctionData(
     functionFragment: "proxiableUUID",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "receiveTokens",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
@@ -158,15 +166,27 @@ export interface ZetaConnectorNativeUpgradeTestInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "withdraw",
-    values: [AddressLike, BigNumberish]
+    values: [AddressLike, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "withdrawAndCall",
-    values: [MessageContextStruct, AddressLike, BigNumberish, BytesLike]
+    values: [
+      MessageContextStruct,
+      AddressLike,
+      BigNumberish,
+      BytesLike,
+      BytesLike
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "withdrawAndRevert",
-    values: [AddressLike, BigNumberish, BytesLike, RevertContextStruct]
+    values: [
+      AddressLike,
+      BigNumberish,
+      BytesLike,
+      BytesLike,
+      RevertContextStruct
+    ]
   ): string;
   encodeFunctionData(functionFragment: "zetaToken", values?: undefined): string;
 
@@ -187,7 +207,6 @@ export interface ZetaConnectorNativeUpgradeTestInterface extends Interface {
     functionFragment: "WITHDRAWER_ROLE",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "gateway", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
@@ -200,6 +219,10 @@ export interface ZetaConnectorNativeUpgradeTestInterface extends Interface {
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "receiveTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -477,8 +500,6 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
 
   WITHDRAWER_ROLE: TypedContractMethod<[], [string], "view">;
 
-  deposit: TypedContractMethod<[amount: BigNumberish], [void], "nonpayable">;
-
   gateway: TypedContractMethod<[], [string], "view">;
 
   getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
@@ -511,6 +532,12 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
   paused: TypedContractMethod<[], [boolean], "view">;
 
   proxiableUUID: TypedContractMethod<[], [string], "view">;
+
+  receiveTokens: TypedContractMethod<
+    [amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
   renounceRole: TypedContractMethod<
     [role: BytesLike, callerConfirmation: AddressLike],
@@ -547,7 +574,7 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
   >;
 
   withdraw: TypedContractMethod<
-    [to: AddressLike, amount: BigNumberish],
+    [to: AddressLike, amount: BigNumberish, arg2: BytesLike],
     [void],
     "nonpayable"
   >;
@@ -557,7 +584,8 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
       messageContext: MessageContextStruct,
       to: AddressLike,
       amount: BigNumberish,
-      data: BytesLike
+      data: BytesLike,
+      arg4: BytesLike
     ],
     [void],
     "nonpayable"
@@ -568,6 +596,7 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
       to: AddressLike,
       amount: BigNumberish,
       data: BytesLike,
+      arg3: BytesLike,
       revertContext: RevertContextStruct
     ],
     [void],
@@ -595,9 +624,6 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
   getFunction(
     nameOrSignature: "WITHDRAWER_ROLE"
   ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "deposit"
-  ): TypedContractMethod<[amount: BigNumberish], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "gateway"
   ): TypedContractMethod<[], [string], "view">;
@@ -640,6 +666,9 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
     nameOrSignature: "proxiableUUID"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
+    nameOrSignature: "receiveTokens"
+  ): TypedContractMethod<[amount: BigNumberish], [void], "nonpayable">;
+  getFunction(
     nameOrSignature: "renounceRole"
   ): TypedContractMethod<
     [role: BytesLike, callerConfirmation: AddressLike],
@@ -675,7 +704,7 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
   getFunction(
     nameOrSignature: "withdraw"
   ): TypedContractMethod<
-    [to: AddressLike, amount: BigNumberish],
+    [to: AddressLike, amount: BigNumberish, arg2: BytesLike],
     [void],
     "nonpayable"
   >;
@@ -686,7 +715,8 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
       messageContext: MessageContextStruct,
       to: AddressLike,
       amount: BigNumberish,
-      data: BytesLike
+      data: BytesLike,
+      arg4: BytesLike
     ],
     [void],
     "nonpayable"
@@ -698,6 +728,7 @@ export interface ZetaConnectorNativeUpgradeTest extends BaseContract {
       to: AddressLike,
       amount: BigNumberish,
       data: BytesLike,
+      arg3: BytesLike,
       revertContext: RevertContextStruct
     ],
     [void],

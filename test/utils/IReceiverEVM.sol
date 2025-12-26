@@ -41,4 +41,9 @@ interface IReceiverEVMEvents {
     /// @param sender Message context sender.
     /// @param message Message received.
     event ReceivedOnCall(address sender, bytes message);
+
+    /// @notice Emitted when onCall function is called with new MessageContext call.
+    /// @param sender Message context sender.
+    /// @param message Message received.
+    event ReceivedOnCallV2(address sender, address asset, uint256 amount, bytes message);
 }

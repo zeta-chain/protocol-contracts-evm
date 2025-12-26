@@ -92,7 +92,7 @@ export interface Revertable extends BaseContract {
   onRevert: TypedContractMethod<
     [revertContext: RevertContextStruct],
     [void],
-    "payable"
+    "nonpayable"
   >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
@@ -104,7 +104,7 @@ export interface Revertable extends BaseContract {
   ): TypedContractMethod<
     [revertContext: RevertContextStruct],
     [void],
-    "payable"
+    "nonpayable"
   >;
 
   filters: {};

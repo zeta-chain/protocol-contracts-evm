@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-import { RevertContext } from "../../../contracts/Revert.sol";
+import { AbortContext, RevertContext, RevertOptions } from "../../../contracts/Revert.sol";
 import "../interfaces/IGatewayZEVM.sol";
+import "../interfaces/IWZETA.sol";
+import "../interfaces/IZRC20.sol";
 import "./ICoreRegistry.sol";
 
 /// @custom:deprecated should be removed once v2 SystemContract is not used anymore.
@@ -68,9 +70,6 @@ abstract contract UniversalContract {
     constructor() {
         gateway = IGatewayZEVM(registry.gatewayZEVM());
     }
-
-    /// @notice Function to handle cross-chain calls with native ZETA transfers
-    function onCall(MessageContext calldata context, bytes calldata message) external payable virtual;
 
     /// @notice Function to handle cross-chain calls with ZRC20 token transfers
     function onCall(

@@ -24,9 +24,9 @@ import type {
 export interface IZRC20MetadataInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "CHAIN_ID"
       | "GAS_LIMIT"
       | "PROTOCOL_FLAT_FEE"
-      | "SYSTEM_CONTRACT_ADDRESS"
       | "allowance"
       | "approve"
       | "balanceOf"
@@ -45,13 +45,10 @@ export interface IZRC20MetadataInterface extends Interface {
       | "withdrawGasFeeWithGasLimit"
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: "CHAIN_ID", values?: undefined): string;
   encodeFunctionData(functionFragment: "GAS_LIMIT", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "PROTOCOL_FLAT_FEE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "SYSTEM_CONTRACT_ADDRESS",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -101,13 +98,10 @@ export interface IZRC20MetadataInterface extends Interface {
     values: [BigNumberish]
   ): string;
 
+  decodeFunctionResult(functionFragment: "CHAIN_ID", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "GAS_LIMIT", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "PROTOCOL_FLAT_FEE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "SYSTEM_CONTRACT_ADDRESS",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
@@ -183,11 +177,11 @@ export interface IZRC20Metadata extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  CHAIN_ID: TypedContractMethod<[], [bigint], "view">;
+
   GAS_LIMIT: TypedContractMethod<[], [bigint], "view">;
 
   PROTOCOL_FLAT_FEE: TypedContractMethod<[], [bigint], "view">;
-
-  SYSTEM_CONTRACT_ADDRESS: TypedContractMethod<[], [string], "view">;
 
   allowance: TypedContractMethod<
     [owner: AddressLike, spender: AddressLike],
@@ -254,14 +248,14 @@ export interface IZRC20Metadata extends BaseContract {
   ): T;
 
   getFunction(
+    nameOrSignature: "CHAIN_ID"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "GAS_LIMIT"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "PROTOCOL_FLAT_FEE"
   ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "SYSTEM_CONTRACT_ADDRESS"
-  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "allowance"
   ): TypedContractMethod<

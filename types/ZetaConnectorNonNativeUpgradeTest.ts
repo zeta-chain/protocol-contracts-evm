@@ -23,9 +23,17 @@ import type {
   TypedContractMethod,
 } from "./common";
 
-export type MessageContextStruct = { sender: AddressLike };
+export type MessageContextStruct = {
+  sender: AddressLike;
+  asset: AddressLike;
+  amount: BigNumberish;
+};
 
-export type MessageContextStructOutput = [sender: string] & { sender: string };
+export type MessageContextStructOutput = [
+  sender: string,
+  asset: string,
+  amount: bigint
+] & { sender: string; asset: string; amount: bigint };
 
 export type RevertContextStruct = {
   sender: AddressLike;
@@ -49,7 +57,6 @@ export interface ZetaConnectorNonNativeUpgradeTestInterface extends Interface {
       | "TSS_ROLE"
       | "UPGRADE_INTERFACE_VERSION"
       | "WITHDRAWER_ROLE"
-      | "deposit"
       | "gateway"
       | "getRoleAdmin"
       | "grantRole"
@@ -59,6 +66,7 @@ export interface ZetaConnectorNonNativeUpgradeTestInterface extends Interface {
       | "pause"
       | "paused"
       | "proxiableUUID"
+      | "receiveTokens"
       | "renounceRole"
       | "revokeRole"
       | "setMaxSupply"
@@ -107,10 +115,6 @@ export interface ZetaConnectorNonNativeUpgradeTestInterface extends Interface {
     functionFragment: "WITHDRAWER_ROLE",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "deposit",
-    values: [BigNumberish]
-  ): string;
   encodeFunctionData(functionFragment: "gateway", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
@@ -134,6 +138,10 @@ export interface ZetaConnectorNonNativeUpgradeTestInterface extends Interface {
   encodeFunctionData(
     functionFragment: "proxiableUUID",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "receiveTokens",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
@@ -207,7 +215,6 @@ export interface ZetaConnectorNonNativeUpgradeTestInterface extends Interface {
     functionFragment: "WITHDRAWER_ROLE",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "gateway", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
@@ -221,6 +228,10 @@ export interface ZetaConnectorNonNativeUpgradeTestInterface extends Interface {
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "receiveTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -514,8 +525,6 @@ export interface ZetaConnectorNonNativeUpgradeTest extends BaseContract {
 
   WITHDRAWER_ROLE: TypedContractMethod<[], [string], "view">;
 
-  deposit: TypedContractMethod<[amount: BigNumberish], [void], "nonpayable">;
-
   gateway: TypedContractMethod<[], [string], "view">;
 
   getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
@@ -550,6 +559,12 @@ export interface ZetaConnectorNonNativeUpgradeTest extends BaseContract {
   paused: TypedContractMethod<[], [boolean], "view">;
 
   proxiableUUID: TypedContractMethod<[], [string], "view">;
+
+  receiveTokens: TypedContractMethod<
+    [amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
   renounceRole: TypedContractMethod<
     [role: BytesLike, callerConfirmation: AddressLike],
@@ -643,9 +658,6 @@ export interface ZetaConnectorNonNativeUpgradeTest extends BaseContract {
     nameOrSignature: "WITHDRAWER_ROLE"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "deposit"
-  ): TypedContractMethod<[amount: BigNumberish], [void], "nonpayable">;
-  getFunction(
     nameOrSignature: "gateway"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
@@ -689,6 +701,9 @@ export interface ZetaConnectorNonNativeUpgradeTest extends BaseContract {
   getFunction(
     nameOrSignature: "proxiableUUID"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "receiveTokens"
+  ): TypedContractMethod<[amount: BigNumberish], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "renounceRole"
   ): TypedContractMethod<

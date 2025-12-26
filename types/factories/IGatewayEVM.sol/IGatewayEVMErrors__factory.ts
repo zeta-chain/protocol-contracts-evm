@@ -17,18 +17,7 @@ const _abi = [
   {
     type: "error",
     name: "ApprovalFailed",
-    inputs: [
-      {
-        name: "token",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "spender",
-        type: "address",
-        internalType: "address",
-      },
-    ],
+    inputs: [],
   },
   {
     type: "error",
@@ -89,7 +78,12 @@ const _abi = [
   },
   {
     type: "error",
-    name: "InsufficientEVMAmount",
+    name: "InsufficientERC20Amount",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InsufficientETHAmount",
     inputs: [],
   },
   {
@@ -121,29 +115,12 @@ const _abi = [
   {
     type: "error",
     name: "NotWhitelistedInCustody",
-    inputs: [
-      {
-        name: "token",
-        type: "address",
-        internalType: "address",
-      },
-    ],
+    inputs: [],
   },
   {
     type: "error",
     name: "PayloadSizeExceeded",
-    inputs: [
-      {
-        name: "provided",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "maximum",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
+    inputs: [],
   },
   {
     type: "error",

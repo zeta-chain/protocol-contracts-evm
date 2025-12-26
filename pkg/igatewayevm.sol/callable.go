@@ -29,14 +29,14 @@ var (
 	_ = abi.ConvertType
 )
 
-// MessageContext is an auto generated low-level Go binding around an user-defined struct.
-type MessageContext struct {
+// LegacyMessageContext is an auto generated low-level Go binding around an user-defined struct.
+type LegacyMessageContext struct {
 	Sender common.Address
 }
 
 // CallableMetaData contains all meta data concerning the Callable contract.
 var CallableMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"onCall\",\"inputs\":[{\"name\":\"context\",\"type\":\"tuple\",\"internalType\":\"structMessageContext\",\"components\":[{\"name\":\"sender\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"name\":\"message\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"stateMutability\":\"payable\"}]",
+	ABI: "[{\"type\":\"function\",\"name\":\"onCall\",\"inputs\":[{\"name\":\"context\",\"type\":\"tuple\",\"internalType\":\"structLegacyMessageContext\",\"components\":[{\"name\":\"sender\",\"type\":\"address\",\"internalType\":\"address\"}]},{\"name\":\"message\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"stateMutability\":\"payable\"}]",
 }
 
 // CallableABI is the input ABI used to generate the binding from.
@@ -188,20 +188,20 @@ func (_Callable *CallableTransactorRaw) Transact(opts *bind.TransactOpts, method
 // OnCall is a paid mutator transaction binding the contract method 0x676cc054.
 //
 // Solidity: function onCall((address) context, bytes message) payable returns(bytes)
-func (_Callable *CallableTransactor) OnCall(opts *bind.TransactOpts, context MessageContext, message []byte) (*types.Transaction, error) {
+func (_Callable *CallableTransactor) OnCall(opts *bind.TransactOpts, context LegacyMessageContext, message []byte) (*types.Transaction, error) {
 	return _Callable.contract.Transact(opts, "onCall", context, message)
 }
 
 // OnCall is a paid mutator transaction binding the contract method 0x676cc054.
 //
 // Solidity: function onCall((address) context, bytes message) payable returns(bytes)
-func (_Callable *CallableSession) OnCall(context MessageContext, message []byte) (*types.Transaction, error) {
+func (_Callable *CallableSession) OnCall(context LegacyMessageContext, message []byte) (*types.Transaction, error) {
 	return _Callable.Contract.OnCall(&_Callable.TransactOpts, context, message)
 }
 
 // OnCall is a paid mutator transaction binding the contract method 0x676cc054.
 //
 // Solidity: function onCall((address) context, bytes message) payable returns(bytes)
-func (_Callable *CallableTransactorSession) OnCall(context MessageContext, message []byte) (*types.Transaction, error) {
+func (_Callable *CallableTransactorSession) OnCall(context LegacyMessageContext, message []byte) (*types.Transaction, error) {
 	return _Callable.Contract.OnCall(&_Callable.TransactOpts, context, message)
 }

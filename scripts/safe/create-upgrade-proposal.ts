@@ -59,7 +59,7 @@ function loadAddresses() {
     const rawData = fs.readFileSync(addressesPath, 'utf8');
     return JSON.parse(rawData);
   } catch (error) {
-    console.error('❌ Error loading addresses from data/checksum/testnet.json:', error);
+    console.error('❌ Error loading addresses from data/checkers/testnet.json:', error);
     process.exit(1);
   }
 }
