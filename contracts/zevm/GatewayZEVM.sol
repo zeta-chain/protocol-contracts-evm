@@ -202,8 +202,9 @@ contract GatewayZEVM is
     /// @return protocolFlatFee The protocol flat fee.
     function _getProtocolFlatFeeFromRegistry(uint256 chainId) private view returns (uint256 protocolFlatFee) {
         // fetch protocolFlatFee for the external chain
-        try ICoreRegistry(registry).getChainMetadata(chainId, "protocolFlatFee") returns (bytes memory _protocolFlatFee)
-        {
+        try ICoreRegistry(registry).getChainMetadata(chainId, "protocolFlatFee") returns (
+            bytes memory _protocolFlatFee
+        ) {
             if (_protocolFlatFee.length > 0) {
                 protocolFlatFee = abi.decode(_protocolFlatFee, (uint256));
             } else {

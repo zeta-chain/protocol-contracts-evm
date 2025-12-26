@@ -68,9 +68,12 @@ contract ZetaConnectorEth is ZetaConnectorBase {
         if (!success) revert ZetaTransferError();
 
         if (message.length > 0) {
-            ZetaReceiver(destinationAddress).onZetaMessage(
-                ZetaInterfaces.ZetaMessage(zetaTxSenderAddress, sourceChainId, destinationAddress, zetaValue, message)
-            );
+            ZetaReceiver(destinationAddress)
+                .onZetaMessage(
+                    ZetaInterfaces.ZetaMessage(
+                        zetaTxSenderAddress, sourceChainId, destinationAddress, zetaValue, message
+                    )
+                );
         }
 
         emit ZetaReceived(zetaTxSenderAddress, sourceChainId, destinationAddress, zetaValue, message, internalSendHash);
@@ -99,16 +102,17 @@ contract ZetaConnectorEth is ZetaConnectorBase {
         if (!success) revert ZetaTransferError();
 
         if (message.length > 0) {
-            ZetaReceiver(zetaTxSenderAddress).onZetaRevert(
-                ZetaInterfaces.ZetaRevert(
-                    zetaTxSenderAddress,
-                    sourceChainId,
-                    destinationAddress,
-                    destinationChainId,
-                    remainingZetaValue,
-                    message
-                )
-            );
+            ZetaReceiver(zetaTxSenderAddress)
+                .onZetaRevert(
+                    ZetaInterfaces.ZetaRevert(
+                        zetaTxSenderAddress,
+                        sourceChainId,
+                        destinationAddress,
+                        destinationChainId,
+                        remainingZetaValue,
+                        message
+                    )
+                );
         }
 
         emit ZetaReverted(

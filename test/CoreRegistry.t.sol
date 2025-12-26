@@ -53,12 +53,10 @@ contract CoreRegistryTest is Test, IBaseRegistryErrors, IBaseRegistryEvents {
 
         mockGateway = new MockGatewayZEVM();
 
-        proxy = payable(
-            Upgrades.deployUUPSProxy(
+        proxy = payable(Upgrades.deployUUPSProxy(
                 "CoreRegistry.sol",
                 abi.encodeCall(CoreRegistry.initialize, (admin, registryManager, address(mockGateway)))
-            )
-        );
+            ));
         registry = CoreRegistry(proxy);
 
         protocolAddress = mockGateway.PROTOCOL_ADDRESS();

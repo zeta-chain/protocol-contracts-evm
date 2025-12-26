@@ -56,11 +56,9 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
         zetaToken = new WETH9();
 
-        proxy = payable(
-            Upgrades.deployUUPSProxy(
+        proxy = payable(Upgrades.deployUUPSProxy(
                 "GatewayZEVM.sol", abi.encodeCall(GatewayZEVM.initialize, (address(zetaToken), owner))
-            )
-        );
+            ));
         gateway = GatewayZEVM(proxy);
 
         address expectedRegistryAddress = 0x7CCE3Eb018bf23e1FE2a32692f2C77592D110394;
@@ -1074,11 +1072,9 @@ contract GatewayZEVMOutboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors
 
         zetaToken = new WETH9();
 
-        proxy = payable(
-            Upgrades.deployUUPSProxy(
+        proxy = payable(Upgrades.deployUUPSProxy(
                 "GatewayZEVM.sol", abi.encodeCall(GatewayZEVM.initialize, (address(zetaToken), owner))
-            )
-        );
+            ));
         gateway = GatewayZEVM(proxy);
 
         address expectedRegistryAddress = 0x7CCE3Eb018bf23e1FE2a32692f2C77592D110394;

@@ -174,14 +174,7 @@ contract CoreRegistry is BaseRegistry {
     }
 
     /// @notice Updates ZRC20 token active status.
-    function setZRC20TokenActive(
-        address address_,
-        bool active
-    )
-        external
-        onlyRole(REGISTRY_MANAGER_ROLE)
-        whenNotPaused
-    {
+    function setZRC20TokenActive(address address_, bool active) external onlyRole(REGISTRY_MANAGER_ROLE) whenNotPaused {
         // Change state on ZetaChain
         _setZRC20TokenActive(address_, active);
         // Broadcast update to satellite registries
