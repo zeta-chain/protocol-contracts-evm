@@ -193,13 +193,7 @@ interface IBaseRegistry is IBaseRegistryErrors, IBaseRegistryEvents {
     /// @param chainId The ID of the chain to activate.
     /// @param gasZRC20 The address of the ZRC20 token that represents gas token for the chain.
     /// @param activation Whether activate or deactivate a chain
-    function changeChainStatus(
-        uint256 chainId,
-        address gasZRC20,
-        bytes calldata registry,
-        bool activation
-    )
-        external;
+    function changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation) external;
 
     /// @notice Updates chain metadata.
     /// @param chainId The ID of the chain.
@@ -215,12 +209,7 @@ interface IBaseRegistry is IBaseRegistryErrors, IBaseRegistryEvents {
     /// @param chainId The ID of the chain where the contract is deployed.
     /// @param contractType The type of the contract (e.g., "connector", "gateway").
     /// @param addressBytes The bytes representation of the non-EVM address.
-    function registerContract(
-        uint256 chainId,
-        string calldata contractType,
-        bytes calldata addressBytes
-    )
-        external;
+    function registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes) external;
 
     /// @notice Updates contract configuration.
     /// @param chainId The ID of the chain where the contract is deployed.
