@@ -3,6 +3,9 @@
 ## GatewayEVM
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/GatewayEVM.sol)
 
+**Title:**
+GatewayEVM
+
 The GatewayEVM contract is the endpoint to call smart contracts on external chains.
 
 The contract doesn't hold any funds and should never have active allowances.
@@ -730,6 +733,9 @@ function _getNextActionIndex() internal returns (uint256 currentIndex);
 ## GatewayZEVM
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/GatewayZEVM.sol)
 
+**Title:**
+GatewayZEVM
+
 The GatewayZEVM contract is the endpoint to call smart contracts on omnichain.
 
 The contract doesn't hold any funds and should never have active allowances.
@@ -904,13 +910,7 @@ Private function to withdraw ZRC20 tokens with gas limit.
 
 
 ```solidity
-function _withdrawZRC20WithGasLimit(
-    uint256 amount,
-    address zrc20,
-    uint256 gasLimit
-)
-    private
-    returns (uint256);
+function _withdrawZRC20WithGasLimit(uint256 amount, address zrc20, uint256 gasLimit) private returns (uint256);
 ```
 **Parameters**
 
@@ -1326,6 +1326,9 @@ error ZeroAddress();
 ## INotSupportedMethods
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/Errors.sol)
 
+**Title:**
+INotSupportedMethods
+
 Interface for contracts that with non supported methods.
 
 
@@ -1346,6 +1349,9 @@ error CallOnRevertNotSupported();
 
 ## ERC20Custody
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/ERC20Custody.sol)
+
+**Title:**
+ERC20Custody
 
 Holds the ERC20 tokens deposited on ZetaChain and includes functionality to call a contract.
 
@@ -1722,6 +1728,9 @@ function withdrawAndRevert(
 ## IERC20CustodyErrors
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IERC20Custody.sol)
 
+**Title:**
+IERC20CustodyErrors
+
 Interface for the errors used in the ERC20 custody contract.
 
 
@@ -1754,6 +1763,9 @@ error LegacyMethodsNotSupported();
 
 ## IERC20CustodyEvents
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IERC20Custody.sol)
+
+**Title:**
+IERC20CustodyEvents
 
 Interface for the events emitted by the ERC20 custody contract.
 
@@ -1898,19 +1910,16 @@ Interface implemented by contracts receiving authenticated calls with new Messag
 
 
 ```solidity
-function onCall(
-    MessageContext calldata context,
-    bytes calldata message
-)
-    external
-    payable
-    returns (bytes memory);
+function onCall(MessageContext calldata context, bytes calldata message) external payable returns (bytes memory);
 ```
 
 
 
 ## IGatewayEVM
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+
+**Title:**
+IGatewayEVM
 
 Interface for the GatewayEVM contract.
 
@@ -2164,13 +2173,7 @@ Calls an omnichain smart contract without asset transfer.
 
 
 ```solidity
-function call(
-    address receiver,
-    bytes calldata payload,
-    RevertOptions calldata revertOptions
-)
-    external
-    payable;
+function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions) external payable;
 ```
 **Parameters**
 
@@ -2185,6 +2188,9 @@ function call(
 
 ## IGatewayEVMErrors
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+
+**Title:**
+IGatewayEVMErrors
 
 Interface for the errors used in the GatewayEVM contract.
 
@@ -2353,6 +2359,9 @@ error IncorrectValueProvided(uint256 expected, uint256 provided);
 
 ## IGatewayEVMEvents
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
+
+**Title:**
+IGatewayEVMEvents
 
 Interface for the events emitted by the GatewayEVM contract.
 
@@ -2557,6 +2566,9 @@ uint256 amount;
 ## IRegistry
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IRegistry.sol)
 
+**Title:**
+IRegistry
+
 
 ### Structs
 #### ChainMetadataEntry
@@ -2595,6 +2607,9 @@ struct ContractConfigEntry {
 
 ## IZetaConnectorEvents
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IZetaConnector.sol)
+
+**Title:**
+IZetaConnectorEvents
 
 Interface for the events emitted by the ZetaConnector contracts.
 
@@ -2667,6 +2682,9 @@ event UpdatedZetaConnectorTSSAddress(address oldTSSAddress, address newTSSAddres
 
 ## IZetaNonEthNew
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IZetaNonEthNew.sol)
+
+**Title:**
+IZetaNonEthNew
 
 IZetaNonEthNew is a mintable / burnable version of IERC20.
 
@@ -3594,6 +3612,9 @@ event ConnectorAddressUpdated(address callerAddress, address newConnectorAddress
 ## Registry
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/Registry.sol)
 
+**Title:**
+Registry
+
 Satellite registry contract for connected chains, receiving updates from CoreRegistry.
 
 This contract is deployed on every connected chain and maintains a synchronized view of the registry.
@@ -3806,13 +3827,7 @@ Only callable through onCall from CoreRegistry
 
 
 ```solidity
-function setContractActive(
-    uint256 chainId,
-    string calldata contractType,
-    bool active
-)
-    external
-    onlyRegistry;
+function setContractActive(uint256 chainId, string calldata contractType, bool active) external onlyRegistry;
 ```
 **Parameters**
 
@@ -3942,6 +3957,9 @@ function bootstrapZRC20Tokens(ZRC20Info[] calldata tokens) external onlyRole(REG
 
 ## ZetaConnectorBase
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/ZetaConnectorBase.sol)
+
+**Title:**
+ZetaConnectorBase
 
 Abstract base contract for ZetaConnector.
 
@@ -4171,6 +4189,9 @@ error ZeroAddress();
 ## ZetaConnectorNative
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/ZetaConnectorNative.sol)
 
+**Title:**
+ZetaConnectorNative
+
 Implementation of ZetaConnectorBase for native token handling.
 
 This contract directly transfers Zeta tokens and interacts with the Gateway contract.
@@ -4303,6 +4324,9 @@ function receiveTokens(uint256 amount) external override whenNotPaused;
 
 ## ZetaConnectorNonNative
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/ZetaConnectorNonNative.sol)
+
+**Title:**
+ZetaConnectorNonNative
 
 Implementation of ZetaConnectorBase for non-native token handling.
 
@@ -4698,13 +4722,7 @@ Changes status of the chain to activated/deactivated.
 
 
 ```solidity
-function _changeChainStatus(
-    uint256 chainId,
-    address gasZRC20,
-    bytes calldata registry,
-    bool activation
-)
-    internal;
+function _changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation) internal;
 ```
 **Parameters**
 
@@ -4739,12 +4757,7 @@ Registers a new contract address for a specific chain.
 
 
 ```solidity
-function _registerContract(
-    uint256 chainId,
-    string calldata contractType,
-    bytes calldata addressBytes
-)
-    internal;
+function _registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes) internal;
 ```
 **Parameters**
 
@@ -5080,6 +5093,9 @@ function _removeFromActiveChains(uint256 chainId) private;
 ## IBaseRegistry
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
 
+**Title:**
+ICoreRegistry
+
 Interface for the BaseRegistry contract.
 
 
@@ -5090,13 +5106,7 @@ Changes status of the chain to activated/deactivated.
 
 
 ```solidity
-function changeChainStatus(
-    uint256 chainId,
-    address gasZRC20,
-    bytes calldata registry,
-    bool activation
-)
-    external;
+function changeChainStatus(uint256 chainId, address gasZRC20, bytes calldata registry, bool activation) external;
 ```
 **Parameters**
 
@@ -5131,12 +5141,7 @@ Registers a new contract address for a specific chain.
 
 
 ```solidity
-function registerContract(
-    uint256 chainId,
-    string calldata contractType,
-    bytes calldata addressBytes
-)
-    external;
+function registerContract(uint256 chainId, string calldata contractType, bytes calldata addressBytes) external;
 ```
 **Parameters**
 
@@ -5454,6 +5459,9 @@ function getAllZRC20Tokens() external view returns (ZRC20Info[] memory);
 ## IBaseRegistryErrors
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
 
+**Title:**
+IBaseRegistryErrors
+
 Interface for the errors used by the BaseRegistry contract.
 
 
@@ -5587,6 +5595,9 @@ error ZRC20SymbolAlreadyInUse(string symbol);
 
 ## IBaseRegistryEvents
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+
+**Title:**
+IBaseRegistryEvents
 
 Interface for the events emitted by the BaseRegistry contract.
 
@@ -5740,6 +5751,9 @@ event RegistryManagerChanged(address oldRegistryManager, address newRegistryMana
 ## ChainInfo
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
 
+**Title:**
+ChainInfo
+
 Structure that contains information about a chain.
 
 
@@ -5763,6 +5777,9 @@ mapping(string => bytes) metadata;
 ## ChainInfoDTO
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
 
+**Title:**
+ChainInfoDTO
+
 Structure that contains information about a chain, used for data retrieving.
 
 
@@ -5784,6 +5801,9 @@ bytes registry;
 ## ContractIdentifier
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
 
+**Title:**
+ContractIdentifier
+
 Each entry consists of: chainId (uint256) and contractType (string)
 
 
@@ -5798,6 +5818,9 @@ string contractType;
 
 ## ContractInfo
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+
+**Title:**
+ContractInfo
 
 Structure that contains information about a contract registered in the system.
 
@@ -5820,6 +5843,9 @@ mapping(string => bytes) configuration;
 ## ContractInfoDTO
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
 
+**Title:**
+ContractInfoDTO
+
 Structure that contains information about a contract registered in the system, used for data retrieving.
 
 
@@ -5840,6 +5866,9 @@ uint256 chainId;
 
 ## ZRC20Info
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/helpers/interfaces/IBaseRegistry.sol)
+
+**Title:**
+ZRC20Info
 
 Structure that contains information about a ZRC20 token.
 
@@ -5868,6 +5897,9 @@ uint8 decimals;
 ## Abortable
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/Revert.sol)
 
+**Title:**
+Abortable
+
 Interface for contracts that support abortable calls.
 
 
@@ -5891,6 +5923,9 @@ function onAbort(AbortContext calldata abortContext) external;
 
 ## Revertable
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/Revert.sol)
+
+**Title:**
+Revertable
 
 Interface for contracts that support revertable calls.
 
@@ -5999,6 +6034,9 @@ uint256 onRevertGasLimit;
 
 ## CoreRegistry
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/CoreRegistry.sol)
+
+**Title:**
+CoreRegistry
 
 Central registry for ZetaChain, managing chain info, ZRC20 data, and contract addresses across all chains.
 
@@ -6202,13 +6240,7 @@ Updates ZRC20 token active status.
 
 
 ```solidity
-function setZRC20TokenActive(
-    address address_,
-    bool active
-)
-    external
-    onlyRole(REGISTRY_MANAGER_ROLE)
-    whenNotPaused;
+function setZRC20TokenActive(address address_, bool active) external onlyRole(REGISTRY_MANAGER_ROLE) whenNotPaused;
 ```
 
 #### _broadcastChainActivation
@@ -6318,12 +6350,7 @@ active Whether the contract should be active
 
 
 ```solidity
-function _broadcastContractStatusUpdate(
-    uint256 chainId,
-    string calldata contractType,
-    bool active
-)
-    private;
+function _broadcastContractStatusUpdate(uint256 chainId, string calldata contractType, bool active) private;
 ```
 **Parameters**
 
@@ -6427,6 +6454,9 @@ function gatewayZEVM() external returns (address);
 
 ## IGatewayZEVM
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/interfaces/IGatewayZEVM.sol)
+
+**Title:**
+IGatewayZEVM
 
 Interface for the GatewayZEVM contract.
 
@@ -6732,6 +6762,9 @@ function depositAndRevert(
 ## IGatewayZEVMErrors
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/interfaces/IGatewayZEVM.sol)
 
+**Title:**
+IGatewayZEVMErrors
+
 Interface for the errors used in the GatewayZEVM contract.
 
 
@@ -6844,6 +6877,9 @@ error MessageSizeExceeded();
 
 ## IGatewayZEVMEvents
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/interfaces/IGatewayZEVM.sol)
+
+**Title:**
+IGatewayZEVMEvents
 
 Interface for the events emitted by the GatewayZEVM contract.
 
@@ -7006,6 +7042,9 @@ bool isArbitraryCall;
 ## ISystem
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/interfaces/ISystem.sol)
 
+**Title:**
+ISystem
+
 Interface for the System contract.
 
 Defines functions for system contract callable by fungible module.
@@ -7058,6 +7097,9 @@ function gasZetaPoolByChainId(uint256 chainID) external view returns (address);
 
 ## IWETH9
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/interfaces/IWZETA.sol)
+
+**Title:**
+IWETH9
 
 Interface for the Weth9 contract.
 
@@ -7164,6 +7206,9 @@ ERC20
 
 ## IZRC20
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/interfaces/IZRC20.sol)
+
+**Title:**
+IZRC20
 
 Interface for the ZRC20 token contract.
 
@@ -7292,6 +7337,9 @@ function CHAIN_ID() external view returns (uint256);
 ## IZRC20Metadata
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/interfaces/IZRC20.sol)
 
+**Title:**
+IZRC20Metadata
+
 Interface for the ZRC20 metadata.
 
 
@@ -7321,6 +7369,9 @@ function decimals() external view returns (uint8);
 
 ## ZRC20Events
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/interfaces/IZRC20.sol)
+
+**Title:**
+ZRC20Events
 
 Interface for the ZRC20 events.
 
@@ -7378,6 +7429,9 @@ event UpdatedProtocolFlatFee(uint256 protocolFlatFee);
 
 ## UniversalContract
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/interfaces/UniversalContract.sol)
+
+**Title:**
+UniversalContract
 
 Abstract contract for contracts that can receive cross-chain calls on ZetaChain.
 
