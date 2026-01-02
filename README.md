@@ -70,4 +70,4 @@ This guide covers all steps required to deploy the contracts, including environm
 
 ## Community
 
-[X](https://x.com/zetablockchain) | [Discord](https://discord.com/invite/zetachain) | [Telegram](https://t.me/zetachainofficial) | [Website](https://zetachain.com)
+[X](https://x.com/zetachain) | [Discord](https://discord.com/invite/zetachain) | [Telegram](https://t.me/zetachainofficial) | [Website](https://zetachain.com)
