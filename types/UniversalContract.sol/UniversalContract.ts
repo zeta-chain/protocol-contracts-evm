@@ -35,18 +35,33 @@ export type MessageContextStructOutput = [
 
 export interface UniversalContractInterface extends Interface {
   getFunction(
-    nameOrSignature: "gateway" | "onCall" | "registry"
+    nameOrSignature:
+      | "gateway"
+      | "onCall((bytes,address,uint256),address,uint256,bytes)"
+      | "onCall((bytes,address,uint256),bytes)"
+      | "registry"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "gateway", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "onCall",
+    functionFragment: "onCall((bytes,address,uint256),address,uint256,bytes)",
     values: [MessageContextStruct, AddressLike, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "onCall((bytes,address,uint256),bytes)",
+    values: [MessageContextStruct, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "registry", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "gateway", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "onCall", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "onCall((bytes,address,uint256),address,uint256,bytes)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "onCall((bytes,address,uint256),bytes)",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "registry", data: BytesLike): Result;
 }
 
@@ -95,7 +110,7 @@ export interface UniversalContract extends BaseContract {
 
   gateway: TypedContractMethod<[], [string], "view">;
 
-  onCall: TypedContractMethod<
+  "onCall((bytes,address,uint256),address,uint256,bytes)": TypedContractMethod<
     [
       context: MessageContextStruct,
       zrc20: AddressLike,
@@ -104,6 +119,12 @@ export interface UniversalContract extends BaseContract {
     ],
     [void],
     "nonpayable"
+  >;
+
+  "onCall((bytes,address,uint256),bytes)": TypedContractMethod<
+    [context: MessageContextStruct, message: BytesLike],
+    [void],
+    "payable"
   >;
 
   registry: TypedContractMethod<[], [string], "view">;
@@ -116,7 +137,7 @@ export interface UniversalContract extends BaseContract {
     nameOrSignature: "gateway"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "onCall"
+    nameOrSignature: "onCall((bytes,address,uint256),address,uint256,bytes)"
   ): TypedContractMethod<
     [
       context: MessageContextStruct,
@@ -126,6 +147,13 @@ export interface UniversalContract extends BaseContract {
     ],
     [void],
     "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "onCall((bytes,address,uint256),bytes)"
+  ): TypedContractMethod<
+    [context: MessageContextStruct, message: BytesLike],
+    [void],
+    "payable"
   >;
   getFunction(
     nameOrSignature: "registry"

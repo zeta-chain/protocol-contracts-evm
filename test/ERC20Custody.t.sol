@@ -35,7 +35,7 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
     address tssAddress;
     address foo;
     RevertContext revertContext;
-    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0), asset: address(0), amount: 0 });
+    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0) });
 
     error EnforcedPause();
     error NotWhitelisted();
@@ -232,7 +232,7 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, foo, PAUSER_ROLE));
         gateway.unpause();
 
-        vm.prank(tssAddress);
+        vm.prank(owner);
         custody.pause();
 
         uint256 amount = 100_000;
@@ -292,7 +292,7 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
             abi.encodeWithSignature("receiveERC20(uint256,address,address)", amount, address(token), destination);
 
         vm.prank(tssAddress);
-        vm.expectRevert(InsufficientERC20Amount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         custody.withdrawAndCall(arbitraryCallMessageContext, address(receiver), address(token), amount, data);
     }
 
@@ -350,17 +350,11 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         uint256 balanceBeforeCustody = token.balanceOf(address(custody));
 
         vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedOnCallV2(sender, address(token), amount, message);
+        emit ReceivedOnCall(sender, message);
         vm.expectEmit(true, true, true, true, address(custody));
         emit WithdrawnAndCalled(address(receiver), address(token), amount, message);
         vm.prank(tssAddress);
-        custody.withdrawAndCall(
-            MessageContext({ sender: sender, asset: address(token), amount: amount }),
-            address(receiver),
-            address(token),
-            amount,
-            message
-        );
+        custody.withdrawAndCall(MessageContext({ sender: sender }), address(receiver), address(token), amount, message);
 
         // Verify that the tokens were not transferred to the destination address
         uint256 balanceAfter = token.balanceOf(destination);
@@ -417,7 +411,7 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         );
 
         vm.prank(tssAddress);
-        vm.expectRevert(InsufficientERC20Amount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         custody.withdrawAndCall(arbitraryCallMessageContext, address(receiver), address(token), amount, data);
     }
 
@@ -566,7 +560,7 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         bytes memory data = abi.encodePacked("hello");
 
         vm.prank(tssAddress);
-        vm.expectRevert(InsufficientERC20Amount.selector);
+        vm.expectRevert(InsufficientEVMAmount.selector);
         custody.withdrawAndRevert(address(receiver), address(token), amount, data, revertContext);
     }
 

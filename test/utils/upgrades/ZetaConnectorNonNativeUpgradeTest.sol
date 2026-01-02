@@ -55,7 +55,6 @@ contract ZetaConnectorNonNativeUpgradeTest is ZetaConnectorBase {
         bytes32 internalSendHash
     )
         external
-        override
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
         whenNotPaused
@@ -79,7 +78,6 @@ contract ZetaConnectorNonNativeUpgradeTest is ZetaConnectorBase {
         bytes32 internalSendHash
     )
         external
-        override
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
         whenNotPaused
@@ -108,7 +106,6 @@ contract ZetaConnectorNonNativeUpgradeTest is ZetaConnectorBase {
         RevertContext calldata revertContext
     )
         external
-        override
         nonReentrant
         onlyRole(WITHDRAWER_ROLE)
         whenNotPaused
@@ -124,7 +121,7 @@ contract ZetaConnectorNonNativeUpgradeTest is ZetaConnectorBase {
 
     /// @notice Handle received tokens and burn them.
     /// @param amount The amount of tokens received.
-    function receiveTokens(uint256 amount) external override whenNotPaused {
+    function deposit(uint256 amount) external override whenNotPaused {
         IZetaNonEthNew(zetaToken).burnFrom(msg.sender, amount);
     }
 

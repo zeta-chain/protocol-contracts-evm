@@ -76,7 +76,13 @@ export type RevertContextStructOutput = [
 
 export interface TestUniversalContractInterface extends Interface {
   getFunction(
-    nameOrSignature: "gateway" | "onAbort" | "onCall" | "onRevert" | "registry"
+    nameOrSignature:
+      | "gateway"
+      | "onAbort"
+      | "onCall((bytes,address,uint256),address,uint256,bytes)"
+      | "onCall((bytes,address,uint256),bytes)"
+      | "onRevert"
+      | "registry"
   ): FunctionFragment;
 
   getEvent(
@@ -92,8 +98,12 @@ export interface TestUniversalContractInterface extends Interface {
     values: [AbortContextStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "onCall",
+    functionFragment: "onCall((bytes,address,uint256),address,uint256,bytes)",
     values: [MessageContextStruct, AddressLike, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "onCall((bytes,address,uint256),bytes)",
+    values: [MessageContextStruct, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "onRevert",
@@ -103,7 +113,14 @@ export interface TestUniversalContractInterface extends Interface {
 
   decodeFunctionResult(functionFragment: "gateway", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "onAbort", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "onCall", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "onCall((bytes,address,uint256),address,uint256,bytes)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "onCall((bytes,address,uint256),bytes)",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "onRevert", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "registry", data: BytesLike): Result;
 }
@@ -211,7 +228,7 @@ export interface TestUniversalContract extends BaseContract {
     "nonpayable"
   >;
 
-  onCall: TypedContractMethod<
+  "onCall((bytes,address,uint256),address,uint256,bytes)": TypedContractMethod<
     [
       context: MessageContextStruct,
       arg1: AddressLike,
@@ -222,10 +239,16 @@ export interface TestUniversalContract extends BaseContract {
     "nonpayable"
   >;
 
+  "onCall((bytes,address,uint256),bytes)": TypedContractMethod<
+    [context: MessageContextStruct, message: BytesLike],
+    [void],
+    "payable"
+  >;
+
   onRevert: TypedContractMethod<
     [revertContext: RevertContextStruct],
     [void],
-    "nonpayable"
+    "payable"
   >;
 
   registry: TypedContractMethod<[], [string], "view">;
@@ -245,7 +268,7 @@ export interface TestUniversalContract extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "onCall"
+    nameOrSignature: "onCall((bytes,address,uint256),address,uint256,bytes)"
   ): TypedContractMethod<
     [
       context: MessageContextStruct,
@@ -257,11 +280,18 @@ export interface TestUniversalContract extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "onCall((bytes,address,uint256),bytes)"
+  ): TypedContractMethod<
+    [context: MessageContextStruct, message: BytesLike],
+    [void],
+    "payable"
+  >;
+  getFunction(
     nameOrSignature: "onRevert"
   ): TypedContractMethod<
     [revertContext: RevertContextStruct],
     [void],
-    "nonpayable"
+    "payable"
   >;
   getFunction(
     nameOrSignature: "registry"

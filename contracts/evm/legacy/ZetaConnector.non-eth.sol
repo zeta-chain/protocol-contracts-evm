@@ -73,9 +73,7 @@ contract ZetaConnectorNonEth is ZetaConnectorBase {
         override
         onlyTssAddress
     {
-        if (zetaValue + IZetaNonEthInterface(zetaToken).totalSupply() > maxSupply) {
-            revert ExceedsMaxSupply(maxSupply);
-        }
+        if (zetaValue + IZetaNonEthInterface(zetaToken).totalSupply() > maxSupply) revert ExceedsMaxSupply(maxSupply);
         IZetaNonEthInterface(zetaToken).mint(destinationAddress, zetaValue, internalSendHash);
 
         if (message.length > 0) {

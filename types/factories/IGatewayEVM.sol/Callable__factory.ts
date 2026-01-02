@@ -16,7 +16,7 @@ const _abi = [
       {
         name: "context",
         type: "tuple",
-        internalType: "struct LegacyMessageContext",
+        internalType: "struct MessageContext",
         components: [
           {
             name: "sender",

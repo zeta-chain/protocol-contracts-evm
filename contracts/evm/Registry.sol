@@ -68,7 +68,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @param context Information about the cross-chain message
     /// @param data The encoded function call to execute
     function onCall(
-        LegacyMessageContext calldata context,
+        MessageContext calldata context,
         bytes calldata data
     )
         external
@@ -176,14 +176,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @param chainId The ID of the chain where the contract is deployed
     /// @param contractType The type of the contract
     /// @param active Whether the contract should be active
-    function setContractActive(
-        uint256 chainId,
-        string calldata contractType,
-        bool active
-    )
-        external
-        onlyRegistry
-    {
+    function setContractActive(uint256 chainId, string calldata contractType, bool active) external onlyRegistry {
         _setContractActive(chainId, contractType, active);
         emit ContractStatusChanged(_contracts[chainId][contractType].addressBytes);
     }

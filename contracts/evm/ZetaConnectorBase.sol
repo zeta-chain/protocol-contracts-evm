@@ -10,7 +10,12 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 import { RevertContext } from "../../contracts/Revert.sol";
-import { IGatewayEVM, MessageContext } from "../../contracts/evm/interfaces/IGatewayEVM.sol";
+import {
+    IGatewayEVM,
+    IGatewayEVMErrors,
+    IGatewayEVMEvents,
+    MessageContext
+} from "../../contracts/evm/interfaces/IGatewayEVM.sol";
 import "../../contracts/evm/interfaces/IZetaConnector.sol";
 
 /// @title ZetaConnectorBase
@@ -43,6 +48,11 @@ abstract contract ZetaConnectorBase is
     /// @notice New role identifier for tss role.
     bytes32 public constant TSS_ROLE = keccak256("TSS_ROLE");
 
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
     /// @notice Initializer for ZetaConnectors.
     /// @dev Set admin as default admin and pauser, and tssAddress as tss role.
     function initialize(
@@ -53,7 +63,7 @@ abstract contract ZetaConnectorBase is
     )
         public
         virtual
-        initializer
+        onlyInitializing
     {
         if (gateway_ == address(0) || zetaToken_ == address(0) || tssAddress_ == address(0) || admin_ == address(0)) {
             revert ZeroAddress();
@@ -72,7 +82,6 @@ abstract contract ZetaConnectorBase is
         _grantRole(WITHDRAWER_ROLE, tssAddress_);
         _grantRole(TSS_ROLE, tssAddress_);
         _grantRole(PAUSER_ROLE, admin_);
-        _grantRole(PAUSER_ROLE, tssAddress_);
     }
 
     /// @dev Authorizes the upgrade of the contract, sender must be owner.
@@ -105,45 +114,7 @@ abstract contract ZetaConnectorBase is
         _unpause();
     }
 
-    /// @notice Withdraw tokens to a specified address.
-    /// @param to The address to withdraw tokens to.
-    /// @param amount The amount of tokens to withdraw.
-    /// @param internalSendHash A hash used for internal tracking of the transaction.
-    function withdraw(address to, uint256 amount, bytes32 internalSendHash) external virtual;
-
-    /// @notice Withdraw tokens and call a contract through Gateway.
-    /// @param messageContext Message context containing sender.
-    /// @param to The address to withdraw tokens to.
-    /// @param amount The amount of tokens to withdraw.
-    /// @param data The calldata to pass to the contract call.
-    /// @param internalSendHash A hash used for internal tracking of the transaction.
-    function withdrawAndCall(
-        MessageContext calldata messageContext,
-        address to,
-        uint256 amount,
-        bytes calldata data,
-        bytes32 internalSendHash
-    )
-        external
-        virtual;
-
-    /// @notice Withdraw tokens and call a contract with a revert callback through Gateway.
-    /// @param to The address to withdraw tokens to.
-    /// @param amount The amount of tokens to withdraw.
-    /// @param data The calldata to pass to the contract call.
-    /// @param internalSendHash A hash used for internal tracking of the transaction.
-    /// @param revertContext Revert context to pass to onRevert.
-    function withdrawAndRevert(
-        address to,
-        uint256 amount,
-        bytes calldata data,
-        bytes32 internalSendHash,
-        RevertContext calldata revertContext
-    )
-        external
-        virtual;
-
     /// @notice Handle received tokens.
     /// @param amount The amount of tokens received.
-    function receiveTokens(uint256 amount) external virtual;
+    function deposit(uint256 amount) external virtual;
 }

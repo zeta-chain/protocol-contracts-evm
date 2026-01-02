@@ -66,14 +66,14 @@ interface IGatewayEVMEvents {
     /// @param revertOptions Revert options.
     event Called(address indexed sender, address indexed receiver, bytes payload, RevertOptions revertOptions);
 
-    /// @notice Emitted when tss address is updated.
-    /// @param oldTSSAddress old tss address.
-    /// @param newTSSAddress new tss address.
+    /// @notice Emitted when tss address is updated
+    /// @param oldTSSAddress old tss address
+    /// @param newTSSAddress new tss address
     event UpdatedGatewayTSSAddress(address oldTSSAddress, address newTSSAddress);
 
-    /// @notice Emitted when additional action fee is updated.
-    /// @param oldFeeWei old fee value.
-    /// @param newFeeWei new fee value.
+    /// @notice Emitted when additional action fee for multi-deposits is updated
+    /// @param oldFeeWei old fee in wei
+    /// @param newFeeWei new fee in wei
     event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 }
 
@@ -86,17 +86,16 @@ interface IGatewayEVMErrors {
     /// @notice Error for failed deposit.
     error DepositFailed();
 
-    /// @notice Error for insufficient ETH amount.
-    error InsufficientETHAmount();
-
-    /// @notice Error for insufficient ERC20 token amount.
-    error InsufficientERC20Amount();
+    /// @notice Error for insufficient token amount.
+    error InsufficientEVMAmount();
 
     /// @notice Error for zero address input.
     error ZeroAddress();
 
     /// @notice Error for failed token approval.
-    error ApprovalFailed();
+    /// @param token The address of the token for which approval failed.
+    /// @param spender The address that was supposed to be approved to spend the tokens.
+    error ApprovalFailed(address token, address spender);
 
     /// @notice Error for already initialized custody.
     error CustodyInitialized();
@@ -105,7 +104,8 @@ interface IGatewayEVMErrors {
     error ConnectorInitialized();
 
     /// @notice Error when trying to transfer not whitelisted token to custody.
-    error NotWhitelistedInCustody();
+    /// @param token The address of the token that is not whitelisted in custody.
+    error NotWhitelistedInCustody(address token);
 
     /// @notice Error when trying to call onCall method using arbitrary call.
     error NotAllowedToCallOnCall();
@@ -114,7 +114,9 @@ interface IGatewayEVMErrors {
     error NotAllowedToCallOnRevert();
 
     /// @notice Error indicating payload size exceeded in external functions.
-    error PayloadSizeExceeded();
+    /// @param provided The size of the payload that was provided.
+    /// @param maximum The maximum allowed payload size.
+    error PayloadSizeExceeded(uint256 provided, uint256 maximum);
 
     /// @notice Error thrown when fee transfer to TSS address fails.
     /// @dev This error occurs when the low-level call to transfer fees fails.
@@ -271,49 +273,16 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @param receiver Address of the receiver.
     /// @param payload Calldata to pass to the call.
     /// @param revertOptions Revert options.
-    function call(
-        address receiver,
-        bytes calldata payload,
-        RevertOptions calldata revertOptions
-    )
-        external
-        payable;
+    function call(address receiver, bytes calldata payload, RevertOptions calldata revertOptions) external payable;
 }
 
 /// @notice Message context passed to execute function.
 /// @param sender Sender from omnichain contract.
-struct LegacyMessageContext {
+struct MessageContext {
     address sender;
 }
 
 /// @notice Interface implemented by contracts receiving authenticated calls.
 interface Callable {
-    function onCall(
-        LegacyMessageContext calldata context,
-        bytes calldata message
-    )
-        external
-        payable
-        returns (bytes memory);
-}
-
-/// @notice Message context passed to execute function.
-/// @param sender Sender from omnichain contract.
-/// @param asset The address of the asset.
-/// @param amount The amount of the asset.
-struct MessageContext {
-    address sender;
-    address asset;
-    uint256 amount;
-}
-
-/// @notice Interface implemented by contracts receiving authenticated calls with new MessageContext.
-interface CallableV2 {
-    function onCall(
-        MessageContext calldata context,
-        bytes calldata message
-    )
-        external
-        payable
-        returns (bytes memory);
+    function onCall(MessageContext calldata context, bytes calldata message) external payable returns (bytes memory);
 }

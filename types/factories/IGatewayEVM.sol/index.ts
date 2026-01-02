@@ -2,7 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export { Callable__factory } from "./Callable__factory";
-export { CallableV2__factory } from "./CallableV2__factory";
 export { IGatewayEVM__factory } from "./IGatewayEVM__factory";
 export { IGatewayEVMErrors__factory } from "./IGatewayEVMErrors__factory";
 export { IGatewayEVMEvents__factory } from "./IGatewayEVMEvents__factory";

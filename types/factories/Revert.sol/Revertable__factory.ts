@@ -42,7 +42,7 @@ const _abi = [
       },
     ],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
   },
 ] as const;
 

@@ -388,16 +388,6 @@ const _abi = [
             type: "address",
             internalType: "address",
           },
-          {
-            name: "asset",
-            type: "address",
-            internalType: "address",
-          },
-          {
-            name: "amount",
-            type: "uint256",
-            internalType: "uint256",
-          },
         ],
       },
       {
@@ -478,16 +468,6 @@ const _abi = [
             name: "sender",
             type: "address",
             internalType: "address",
-          },
-          {
-            name: "asset",
-            type: "address",
-            internalType: "address",
-          },
-          {
-            name: "amount",
-            type: "uint256",
-            internalType: "uint256",
           },
         ],
       },
@@ -929,7 +909,18 @@ const _abi = [
   {
     type: "error",
     name: "ApprovalFailed",
-    inputs: [],
+    inputs: [
+      {
+        name: "token",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "spender",
+        type: "address",
+        internalType: "address",
+      },
+    ],
   },
   {
     type: "error",
@@ -990,12 +981,7 @@ const _abi = [
   },
   {
     type: "error",
-    name: "InsufficientERC20Amount",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "InsufficientETHAmount",
+    name: "InsufficientEVMAmount",
     inputs: [],
   },
   {
@@ -1027,12 +1013,29 @@ const _abi = [
   {
     type: "error",
     name: "NotWhitelistedInCustody",
-    inputs: [],
+    inputs: [
+      {
+        name: "token",
+        type: "address",
+        internalType: "address",
+      },
+    ],
   },
   {
     type: "error",
     name: "PayloadSizeExceeded",
-    inputs: [],
+    inputs: [
+      {
+        name: "provided",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "maximum",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
   },
   {
     type: "error",
