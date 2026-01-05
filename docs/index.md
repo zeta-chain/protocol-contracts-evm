@@ -760,6 +760,13 @@ bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE")
 ```
 
 
+#### ZETA_DEFAULT_GAS_LIMIT
+
+```solidity
+uint256 constant ZETA_DEFAULT_GAS_LIMIT = 100_000
+```
+
+
 #### zetaToken
 The address of the Zeta token.
 
@@ -1032,7 +1039,7 @@ function _computeAndPayFeesForZETAWithdrawals(
 
 #### _transferZETA
 
-Private function to transfer ZETA tokens.
+Private function to transfer native ZETA tokens.
 
 
 ```solidity

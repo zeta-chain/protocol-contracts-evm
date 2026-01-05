@@ -38,6 +38,9 @@ contract GatewayZEVM is
     /// @notice New role identifier for pauser role.
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
+    // default gas limit for ZETA transfer
+    uint256 constant ZETA_DEFAULT_GAS_LIMIT = 100_000;
+
     /// @notice The address of the Zeta token.
     address public zetaToken;
 
@@ -183,17 +186,15 @@ contract GatewayZEVM is
     /// @param chainId Chain id of the external chain.
     /// @return gasLimit The gas limit.
     function _getGasLimitForZETATransfer(uint256 chainId) private view returns (uint256 gasLimit) {
-        // default gas limit for ZETA transfer
-        uint256 DEFAULT_GAS_LIMIT = 100_000;
         // fetch gasLimit for the external chain
         try ICoreRegistry(registry).getChainMetadata(chainId, "gasLimit") returns (bytes memory _gasLimit) {
             if (_gasLimit.length > 0) {
                 gasLimit = abi.decode(_gasLimit, (uint256));
             } else {
-                gasLimit = DEFAULT_GAS_LIMIT;
+                gasLimit = ZETA_DEFAULT_GAS_LIMIT;
             }
         } catch {
-            gasLimit = DEFAULT_GAS_LIMIT;
+            gasLimit = ZETA_DEFAULT_GAS_LIMIT;
         }
     }
 
@@ -248,7 +249,7 @@ contract GatewayZEVM is
         return (gasFee, protocolFlatFee, gasLimit);
     }
 
-    /// @dev Private function to transfer ZETA tokens.
+    /// @dev Private function to transfer native ZETA tokens.
     /// @param amount The amount of tokens to transfer.
     /// @param to The address to transfer the tokens to.
     function _transferZETA(uint256 amount, address to) private {
