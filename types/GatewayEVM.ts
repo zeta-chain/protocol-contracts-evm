@@ -45,17 +45,9 @@ export type RevertOptionsStructOutput = [
   onRevertGasLimit: bigint;
 };
 
-export type MessageContextStruct = {
-  sender: AddressLike;
-  asset: AddressLike;
-  amount: BigNumberish;
-};
+export type MessageContextStruct = { sender: AddressLike };
 
-export type MessageContextStructOutput = [
-  sender: string,
-  asset: string,
-  amount: bigint
-] & { sender: string; asset: string; amount: bigint };
+export type MessageContextStructOutput = [sender: string] & { sender: string };
 
 export type RevertContextStruct = {
   sender: AddressLike;

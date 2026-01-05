@@ -2,7 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { Callable } from "./Callable";
-export type { CallableV2 } from "./CallableV2";
 export type { IGatewayEVM } from "./IGatewayEVM";
 export type { IGatewayEVMErrors } from "./IGatewayEVMErrors";
 export type { IGatewayEVMEvents } from "./IGatewayEVMEvents";

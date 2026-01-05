@@ -68,7 +68,7 @@ contract Registry is BaseRegistry, IRegistry {
     /// @param context Information about the cross-chain message
     /// @param data The encoded function call to execute
     function onCall(
-        LegacyMessageContext calldata context,
+        MessageContext calldata context,
         bytes calldata data
     )
         external

@@ -751,15 +751,6 @@ address public constant PROTOCOL_ADDRESS = 0x735b14BB79463307AAcBED86DAf3322B1e6
 ```
 
 
-#### zetaToken
-The address of the Zeta token.
-
-
-```solidity
-address public zetaToken
-```
-
-
 #### PAUSER_ROLE
 New role identifier for pauser role.
 
@@ -769,21 +760,28 @@ bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE")
 ```
 
 
-#### MAX_MESSAGE_SIZE
-Max size of message + revertOptions revert message.
-
+#### ZETA_DEFAULT_GAS_LIMIT
 
 ```solidity
-uint256 public constant MAX_MESSAGE_SIZE = 2880
+uint256 constant ZETA_DEFAULT_GAS_LIMIT = 100_000
 ```
 
 
-#### MIN_GAS_LIMIT
-Minimum gas limit for a call.
+#### zetaToken
+The address of the Zeta token.
 
 
 ```solidity
-uint256 public constant MIN_GAS_LIMIT = 100_000
+address public zetaToken
+```
+
+
+#### registry
+The address of the registry contract on ZetaChain
+
+
+```solidity
+address public registry
 ```
 
 
@@ -860,27 +858,58 @@ Unpause contract.
 function unpause() external onlyRole(PAUSER_ROLE);
 ```
 
-#### _withdrawZRC20
+#### setRegistryAddress
 
-Private function to withdraw ZRC20 tokens.
+Set registry address, callable only by DEFAULT_ADMIN_ROLE.
 
 
 ```solidity
-function _withdrawZRC20(uint256 amount, address zrc20) private returns (uint256);
+function setRegistryAddress(address _registry) external onlyRole(DEFAULT_ADMIN_ROLE);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`amount`|`uint256`|The amount of tokens to withdraw.|
-|`zrc20`|`address`|The address of the ZRC20 token.|
+|`_registry`|`address`|The address of the registry contract.|
+
+
+#### _safeTransferFrom
+
+Helper function to safely execute transferFrom
+
+
+```solidity
+function _safeTransferFrom(address zrc20, address from, address to, uint256 amount) private returns (bool);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`zrc20`|`address`|The ZRC20 token address|
+|`from`|`address`|The sender address|
+|`to`|`address`|The recipient address|
+|`amount`|`uint256`|The amount to transfer|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`uint256`|The gas fee for the withdrawal.|
+|`<none>`|`bool`|True if the transfer was successful, false otherwise.|
 
+
+#### _safeBurn
+
+
+```solidity
+function _safeBurn(address zrc20, uint256 amount) private returns (bool);
+```
+
+#### _safeDeposit
+
+
+```solidity
+function _safeDeposit(address zrc20, address target, uint256 amount) private returns (bool);
+```
 
 #### _burnProtocolFees
 
@@ -888,7 +917,23 @@ Helper function to burn gas fees.
 
 
 ```solidity
-function _burnProtocolFees(address zrc20, uint256 gasLimit) private returns (uint256);
+function _burnProtocolFees(address gasZRC20, uint256 gasFee) private;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`gasZRC20`|`address`|The address of the gas ZRC20 token.|
+|`gasFee`|`uint256`|The amount of gasZRC20 that should be burned.|
+
+
+#### _burnZRC20ProtocolFees
+
+Helper function to burn gas fees for ZRC20s withdrawals.
+
+
+```solidity
+function _burnZRC20ProtocolFees(address zrc20, uint256 gasLimit) private returns (uint256);
 ```
 **Parameters**
 
@@ -896,12 +941,6 @@ function _burnProtocolFees(address zrc20, uint256 gasLimit) private returns (uin
 |----|----|-----------|
 |`zrc20`|`address`|The address of the ZRC20 token.|
 |`gasLimit`|`uint256`|Gas limit.|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|gasFee Gas fee amount.|
 
 
 #### _withdrawZRC20WithGasLimit
@@ -927,9 +966,80 @@ function _withdrawZRC20WithGasLimit(uint256 amount, address zrc20, uint256 gasLi
 |`<none>`|`uint256`|The gas fee for the withdrawal.|
 
 
+#### _getGasLimitForZETATransfer
+
+Helper function to get gas limit for the ZETA transfer to the external chain.
+
+
+```solidity
+function _getGasLimitForZETATransfer(uint256 chainId) private view returns (uint256 gasLimit);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`chainId`|`uint256`|Chain id of the external chain.|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`gasLimit`|`uint256`|The gas limit.|
+
+
+#### _getProtocolFlatFeeFromRegistry
+
+Helper function to get protocol flat fee for the external chain.
+
+
+```solidity
+function _getProtocolFlatFeeFromRegistry(uint256 chainId) private view returns (uint256 protocolFlatFee);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`chainId`|`uint256`|Chain id of the external chain.|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`protocolFlatFee`|`uint256`|The protocol flat fee.|
+
+
+#### _computeAndPayFeesForZETAWithdrawals
+
+Helper function to burn gas fees for ZETA withdrawals.
+
+
+```solidity
+function _computeAndPayFeesForZETAWithdrawals(
+    uint256 chainId,
+    uint256 gasLimit
+)
+    private
+    returns (uint256 gasFee, uint256 protocolFlatFee, uint256 gasLimit_);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`chainId`|`uint256`|Chain id of the external chain.|
+|`gasLimit`|`uint256`|The gas limit.|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`gasFee`|`uint256`|The gas fee for the withdrawal.|
+|`protocolFlatFee`|`uint256`|The protocol flat fee.|
+|`gasLimit_`|`uint256`|The gas limit used for the withdrawal.|
+
+
 #### _transferZETA
 
-Private function to transfer ZETA tokens.
+Private function to transfer native ZETA tokens.
 
 
 ```solidity
@@ -1027,37 +1137,6 @@ function withdrawAndCall(
 |`revertOptions`|`RevertOptions`|Revert options.|
 
 
-#### withdrawAndCall
-
-Withdraw ZRC20 tokens and call a smart contract on an external chain.
-
-
-```solidity
-function withdrawAndCall(
-    bytes memory receiver,
-    uint256 amount,
-    address zrc20,
-    bytes calldata message,
-    uint256 version,
-    CallOptions calldata callOptions,
-    RevertOptions calldata revertOptions
-)
-    external
-    whenNotPaused;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`receiver`|`bytes`|The receiver address on the external chain.|
-|`amount`|`uint256`|The amount of tokens to withdraw.|
-|`zrc20`|`address`|The address of the ZRC20 token.|
-|`message`|`bytes`|The calldata to pass to the contract call.|
-|`version`|`uint256`|The number representing message context version.|
-|`callOptions`|`CallOptions`|Call options including gas limit, arbirtrary call flag and message context version.|
-|`revertOptions`|`RevertOptions`|Revert options.|
-
-
 #### withdraw
 
 Withdraw ZETA tokens to an external chain.
@@ -1065,14 +1144,14 @@ Withdraw ZETA tokens to an external chain.
 
 ```solidity
 function withdraw(
-    bytes memory, /*receiver*/
-    uint256, /*amount*/
-    uint256, /*chainId*/
-    RevertOptions calldata /*revertOptions*/
+    bytes memory receiver,
+    uint256 chainId,
+    RevertOptions calldata revertOptions
 )
     external
-    view
-    whenNotPaused;
+    payable
+    whenNotPaused
+    nonReentrant;
 ```
 
 #### withdrawAndCall
@@ -1082,16 +1161,16 @@ Withdraw ZETA tokens and call a smart contract on an external chain.
 
 ```solidity
 function withdrawAndCall(
-    bytes memory, /*receiver*/
-    uint256, /*amount*/
-    uint256, /*chainId*/
-    bytes calldata, /*message*/
-    CallOptions calldata, /*callOptions*/
-    RevertOptions calldata /*revertOptions*/
+    bytes memory receiver,
+    uint256 chainId,
+    bytes calldata message,
+    CallOptions calldata callOptions,
+    RevertOptions calldata revertOptions
 )
     external
-    view
-    whenNotPaused;
+    payable
+    whenNotPaused
+    nonReentrant;
 ```
 
 #### call
@@ -1150,6 +1229,21 @@ function deposit(address zrc20, uint256 amount, address target) external onlyPro
 |`zrc20`|`address`|The address of the ZRC20 token.|
 |`amount`|`uint256`|The amount of tokens to deposit.|
 |`target`|`address`|The target address to receive the deposited tokens.|
+
+
+#### deposit
+
+Deposit native ZETA.
+
+
+```solidity
+function deposit(address target) external payable nonReentrant onlyProtocol whenNotPaused;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`target`|`address`|The target address to receive the ZETA.|
 
 
 #### execute
@@ -1212,17 +1306,17 @@ function depositAndCall(
 
 #### depositAndCall
 
-Deposit ZETA and call a user-specified contract on ZEVM.
+Deposit native ZETA and call a user-specified contract on ZEVM.
 
 
 ```solidity
 function depositAndCall(
     MessageContext calldata context,
-    uint256 amount,
     address target,
     bytes calldata message
 )
     external
+    payable
     nonReentrant
     onlyProtocol
     whenNotPaused;
@@ -1232,7 +1326,6 @@ function depositAndCall(
 |Name|Type|Description|
 |----|----|-----------|
 |`context`|`MessageContext`|The context of the cross-chain call.|
-|`amount`|`uint256`|The amount of tokens to transfer.|
 |`target`|`address`|The target contract to call.|
 |`message`|`bytes`|The calldata to pass to the contract call.|
 
@@ -1287,6 +1380,30 @@ function depositAndRevert(
 |`revertContext`|`RevertContext`|Revert context to pass to onRevert.|
 
 
+#### depositAndRevert
+
+Deposit native ZETA and revert a user-specified contract on ZEVM.
+
+
+```solidity
+function depositAndRevert(
+    address target,
+    RevertContext calldata revertContext
+)
+    external
+    payable
+    nonReentrant
+    onlyProtocol
+    whenNotPaused;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`target`|`address`|The target contract to call.|
+|`revertContext`|`RevertContext`|Revert context to pass to onRevert.|
+
+
 #### executeAbort
 
 Call onAbort on a user-specified contract on ZEVM.
@@ -1312,14 +1429,65 @@ function executeAbort(
 |`abortContext`|`AbortContext`|Abort context to pass to onAbort.|
 
 
-### Errors
-#### ZeroAddress
-Error indicating a zero address was provided.
+#### getMaxMessageSize
+
+Returns the maximum message size.
 
 
 ```solidity
-error ZeroAddress();
+function getMaxMessageSize() external pure returns (uint256);
 ```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum message size.|
+
+
+#### getMinGasLimit
+
+Returns the minimum gas limit allowed.
+
+
+```solidity
+function getMinGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The minimum gas limit.|
+
+
+#### getMaxGasLimit
+
+Returns the maximum gas limit allowed.
+
+
+```solidity
+function getMaxGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum gas limit.|
+
+
+#### getMaxRevertGasLimit
+
+Returns the maximum revert gas limit allowed.
+
+
+```solidity
+function getMaxRevertGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum revert gas limit.|
+
 
 
 
@@ -1333,12 +1501,6 @@ Interface for contracts that with non supported methods.
 
 
 ### Errors
-#### ZETANotSupported
-
-```solidity
-error ZETANotSupported();
-```
-
 #### CallOnRevertNotSupported
 
 ```solidity
@@ -1888,28 +2050,6 @@ Interface implemented by contracts receiving authenticated calls.
 
 
 ```solidity
-function onCall(
-    LegacyMessageContext calldata context,
-    bytes calldata message
-)
-    external
-    payable
-    returns (bytes memory);
-```
-
-
-
-## CallableV2
-[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
-
-Interface implemented by contracts receiving authenticated calls with new MessageContext.
-
-
-### Functions
-#### onCall
-
-
-```solidity
 function onCall(MessageContext calldata context, bytes calldata message) external payable returns (bytes memory);
 ```
 
@@ -2212,20 +2352,12 @@ Error for failed deposit.
 error DepositFailed();
 ```
 
-#### InsufficientETHAmount
-Error for insufficient ETH amount.
+#### InsufficientEVMAmount
+Error for insufficient token amount.
 
 
 ```solidity
-error InsufficientETHAmount();
-```
-
-#### InsufficientERC20Amount
-Error for insufficient ERC20 token amount.
-
-
-```solidity
-error InsufficientERC20Amount();
+error InsufficientEVMAmount();
 ```
 
 #### ZeroAddress
@@ -2241,8 +2373,15 @@ Error for failed token approval.
 
 
 ```solidity
-error ApprovalFailed();
+error ApprovalFailed(address token, address spender);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`token`|`address`|The address of the token for which approval failed.|
+|`spender`|`address`|The address that was supposed to be approved to spend the tokens.|
 
 #### CustodyInitialized
 Error for already initialized custody.
@@ -2265,8 +2404,14 @@ Error when trying to transfer not whitelisted token to custody.
 
 
 ```solidity
-error NotWhitelistedInCustody();
+error NotWhitelistedInCustody(address token);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`token`|`address`|The address of the token that is not whitelisted in custody.|
 
 #### NotAllowedToCallOnCall
 Error when trying to call onCall method using arbitrary call.
@@ -2289,8 +2434,15 @@ Error indicating payload size exceeded in external functions.
 
 
 ```solidity
-error PayloadSizeExceeded();
+error PayloadSizeExceeded(uint256 provided, uint256 maximum);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`provided`|`uint256`|The size of the payload that was provided.|
+|`maximum`|`uint256`|The maximum allowed payload size.|
 
 #### FeeTransferFailed
 Error thrown when fee transfer to TSS address fails.
@@ -2488,7 +2640,7 @@ event Called(address indexed sender, address indexed receiver, bytes payload, Re
 |`revertOptions`|`RevertOptions`|Revert options.|
 
 #### UpdatedGatewayTSSAddress
-Emitted when tss address is updated.
+Emitted when tss address is updated
 
 
 ```solidity
@@ -2499,11 +2651,11 @@ event UpdatedGatewayTSSAddress(address oldTSSAddress, address newTSSAddress);
 
 |Name|Type|Description|
 |----|----|-----------|
-|`oldTSSAddress`|`address`|old tss address.|
-|`newTSSAddress`|`address`|new tss address.|
+|`oldTSSAddress`|`address`|old tss address|
+|`newTSSAddress`|`address`|new tss address|
 
 #### UpdatedAdditionalActionFee
-Emitted when additional action fee is updated.
+Emitted when additional action fee for multi-deposits is updated
 
 
 ```solidity
@@ -2514,28 +2666,8 @@ event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 
 |Name|Type|Description|
 |----|----|-----------|
-|`oldFeeWei`|`uint256`|old fee value.|
-|`newFeeWei`|`uint256`|new fee value.|
-
-
-
-## LegacyMessageContext
-[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/interfaces/IGatewayEVM.sol)
-
-Message context passed to execute function.
-
-
-```solidity
-struct LegacyMessageContext {
-address sender;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`sender`|`address`|Sender from omnichain contract.|
+|`oldFeeWei`|`uint256`|old fee in wei|
+|`newFeeWei`|`uint256`|new fee in wei|
 
 
 
@@ -2548,8 +2680,6 @@ Message context passed to execute function.
 ```solidity
 struct MessageContext {
 address sender;
-address asset;
-uint256 amount;
 }
 ```
 
@@ -2558,8 +2688,6 @@ uint256 amount;
 |Name|Type|Description|
 |----|----|-----------|
 |`sender`|`address`|Sender from omnichain contract.|
-|`asset`|`address`|The address of the asset.|
-|`amount`|`uint256`|The amount of the asset.|
 
 
 
@@ -3609,6 +3737,192 @@ event ConnectorAddressUpdated(address callerAddress, address newConnectorAddress
 
 
 
+## GatewayEVMValidations
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/libraries/GatewayEVMValidations.sol)
+
+**Title:**
+GatewayEVMValidations
+
+Library containing validation functions for GatewayEVM contract.
+
+This library provides common validation logic used across GatewayEVM contract.
+
+
+### State Variables
+#### MAX_PAYLOAD_SIZE
+Maximum payload size constant.
+
+
+```solidity
+uint256 internal constant MAX_PAYLOAD_SIZE = 2880
+```
+
+
+### Functions
+#### validateNonZeroAddress
+
+Validates that an address is not zero.
+
+
+```solidity
+function validateNonZeroAddress(address addr) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`addr`|`address`|The address to validate.|
+
+
+#### validateAmount
+
+Validates that amount is not zero.
+
+
+```solidity
+function validateAmount(uint256 amount) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`amount`|`uint256`|The amount to validate.|
+
+
+#### validatePayloadSize
+
+Validates payload size constraints.
+
+
+```solidity
+function validatePayloadSize(uint256 payloadLength, uint256 revertMessageLength) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`payloadLength`|`uint256`|The length of the main payload.|
+|`revertMessageLength`|`uint256`|The length of the revert message.|
+
+
+#### validateGasLimitRevertOptions
+
+Validates on revert gas limit.
+
+
+```solidity
+function validateGasLimitRevertOptions(RevertOptions calldata revertOptions) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`revertOptions`|`RevertOptions`|The revert options to validate.|
+
+
+#### validateRevertMessageLength
+
+Validates on revert message length.
+
+
+```solidity
+function validateRevertMessageLength(RevertOptions calldata revertOptions) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`revertOptions`|`RevertOptions`|The revert options to validate.|
+
+
+#### validateCallRevertOptions
+
+Validates revert options for call operations (includes callOnRevert check).
+
+
+```solidity
+function validateCallRevertOptions(RevertOptions calldata revertOptions) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`revertOptions`|`RevertOptions`|The revert options to validate.|
+
+
+#### validateDepositParams
+
+Validates standard deposit parameters.
+
+
+```solidity
+function validateDepositParams(
+    address receiver,
+    uint256 amount,
+    RevertOptions calldata revertOptions
+)
+    internal
+    pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|The receiver address.|
+|`amount`|`uint256`|The amount to deposit.|
+|`revertOptions`|`RevertOptions`|The revert options.|
+
+
+#### validateDepositAndCallParams
+
+Validates deposit and call parameters.
+
+
+```solidity
+function validateDepositAndCallParams(
+    address receiver,
+    uint256 amount,
+    bytes calldata payload,
+    RevertOptions calldata revertOptions
+)
+    internal
+    pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|The receiver address.|
+|`amount`|`uint256`|The amount to deposit.|
+|`payload`|`bytes`|The payload to send.|
+|`revertOptions`|`RevertOptions`|The revert options.|
+
+
+#### validateCallParams
+
+Validates call parameters.
+
+
+```solidity
+function validateCallParams(
+    address receiver,
+    bytes calldata payload,
+    RevertOptions calldata revertOptions
+)
+    internal
+    pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|The receiver address.|
+|`payload`|`bytes`|The payload to send.|
+|`revertOptions`|`RevertOptions`|The revert options.|
+
+
+
+
 ## Registry
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/evm/Registry.sol)
 
@@ -3695,7 +4009,7 @@ onCall is called by the GatewayEVM when a cross-chain message is received
 
 ```solidity
 function onCall(
-    LegacyMessageContext calldata context,
+    MessageContext calldata context,
     bytes calldata data
 )
     external
@@ -3707,7 +4021,7 @@ function onCall(
 
 |Name|Type|Description|
 |----|----|-----------|
-|`context`|`LegacyMessageContext`|Information about the cross-chain message|
+|`context`|`MessageContext`|Information about the cross-chain message|
 |`data`|`bytes`|The encoded function call to execute|
 
 
@@ -4022,6 +4336,16 @@ bytes32 public constant TSS_ROLE = keccak256("TSS_ROLE")
 
 
 ### Functions
+#### constructor
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
+
+
+```solidity
+constructor() ;
+```
+
 #### initialize
 
 Initializer for ZetaConnectors.
@@ -4038,7 +4362,7 @@ function initialize(
 )
     public
     virtual
-    initializer;
+    onlyInitializing;
 ```
 
 #### _authorizeUpgrade
@@ -4089,84 +4413,13 @@ Unpause contract.
 function unpause() external onlyRole(PAUSER_ROLE);
 ```
 
-#### withdraw
-
-Withdraw tokens to a specified address.
-
-
-```solidity
-function withdraw(address to, uint256 amount, bytes32 internalSendHash) external virtual;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`to`|`address`|The address to withdraw tokens to.|
-|`amount`|`uint256`|The amount of tokens to withdraw.|
-|`internalSendHash`|`bytes32`|A hash used for internal tracking of the transaction.|
-
-
-#### withdrawAndCall
-
-Withdraw tokens and call a contract through Gateway.
-
-
-```solidity
-function withdrawAndCall(
-    MessageContext calldata messageContext,
-    address to,
-    uint256 amount,
-    bytes calldata data,
-    bytes32 internalSendHash
-)
-    external
-    virtual;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`messageContext`|`MessageContext`|Message context containing sender.|
-|`to`|`address`|The address to withdraw tokens to.|
-|`amount`|`uint256`|The amount of tokens to withdraw.|
-|`data`|`bytes`|The calldata to pass to the contract call.|
-|`internalSendHash`|`bytes32`|A hash used for internal tracking of the transaction.|
-
-
-#### withdrawAndRevert
-
-Withdraw tokens and call a contract with a revert callback through Gateway.
-
-
-```solidity
-function withdrawAndRevert(
-    address to,
-    uint256 amount,
-    bytes calldata data,
-    bytes32 internalSendHash,
-    RevertContext calldata revertContext
-)
-    external
-    virtual;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`to`|`address`|The address to withdraw tokens to.|
-|`amount`|`uint256`|The amount of tokens to withdraw.|
-|`data`|`bytes`|The calldata to pass to the contract call.|
-|`internalSendHash`|`bytes32`|A hash used for internal tracking of the transaction.|
-|`revertContext`|`RevertContext`|Revert context to pass to onRevert.|
-
-
-#### receiveTokens
+#### deposit
 
 Handle received tokens.
 
 
 ```solidity
-function receiveTokens(uint256 amount) external virtual;
+function deposit(uint256 amount) external virtual;
 ```
 **Parameters**
 
@@ -4200,6 +4453,8 @@ This contract directly transfers Zeta tokens and interacts with the Gateway cont
 ### Functions
 #### initialize
 
+Initializer for ZetaConnectorNative.
+
 
 ```solidity
 function initialize(
@@ -4221,16 +4476,7 @@ This function can only be called by the TSS address.
 
 
 ```solidity
-function withdraw(
-    address to,
-    uint256 amount,
-    bytes32 /*internalSendHash*/
-)
-    external
-    override
-    nonReentrant
-    onlyRole(WITHDRAWER_ROLE)
-    whenNotPaused;
+function withdraw(address to, uint256 amount) external nonReentrant onlyRole(WITHDRAWER_ROLE) whenNotPaused;
 ```
 **Parameters**
 
@@ -4238,7 +4484,6 @@ function withdraw(
 |----|----|-----------|
 |`to`|`address`|The address to withdraw tokens to.|
 |`amount`|`uint256`|The amount of tokens to withdraw.|
-|`<none>`|`bytes32`||
 
 
 #### withdrawAndCall
@@ -4253,11 +4498,9 @@ function withdrawAndCall(
     MessageContext calldata messageContext,
     address to,
     uint256 amount,
-    bytes calldata data,
-    bytes32 /*internalSendHash*/
+    bytes calldata data
 )
     external
-    override
     nonReentrant
     onlyRole(WITHDRAWER_ROLE)
     whenNotPaused;
@@ -4270,7 +4513,6 @@ function withdrawAndCall(
 |`to`|`address`|The address to withdraw tokens to.|
 |`amount`|`uint256`|The amount of tokens to withdraw.|
 |`data`|`bytes`|The calldata to pass to the contract call.|
-|`<none>`|`bytes32`||
 
 
 #### withdrawAndRevert
@@ -4285,11 +4527,9 @@ function withdrawAndRevert(
     address to,
     uint256 amount,
     bytes calldata data,
-    bytes32, /*internalSendHash*/
     RevertContext calldata revertContext
 )
     external
-    override
     nonReentrant
     onlyRole(WITHDRAWER_ROLE)
     whenNotPaused;
@@ -4301,17 +4541,16 @@ function withdrawAndRevert(
 |`to`|`address`|The address to withdraw tokens to.|
 |`amount`|`uint256`|The amount of tokens to withdraw.|
 |`data`|`bytes`|The calldata to pass to the contract call.|
-|`<none>`|`bytes32`||
 |`revertContext`|`RevertContext`|Revert context to pass to onRevert.|
 
 
-#### receiveTokens
+#### deposit
 
 Handle received tokens.
 
 
 ```solidity
-function receiveTokens(uint256 amount) external override whenNotPaused;
+function deposit(uint256 amount) external override whenNotPaused;
 ```
 **Parameters**
 
@@ -4345,6 +4584,8 @@ uint256 public maxSupply
 
 ### Functions
 #### initialize
+
+Initializer for ZetaConnectorNonNative.
 
 
 ```solidity
@@ -4390,7 +4631,6 @@ function withdraw(
     bytes32 internalSendHash
 )
     external
-    override
     nonReentrant
     onlyRole(WITHDRAWER_ROLE)
     whenNotPaused;
@@ -4420,7 +4660,6 @@ function withdrawAndCall(
     bytes32 internalSendHash
 )
     external
-    override
     nonReentrant
     onlyRole(WITHDRAWER_ROLE)
     whenNotPaused;
@@ -4452,7 +4691,6 @@ function withdrawAndRevert(
     RevertContext calldata revertContext
 )
     external
-    override
     nonReentrant
     onlyRole(WITHDRAWER_ROLE)
     whenNotPaused;
@@ -4468,13 +4706,13 @@ function withdrawAndRevert(
 |`revertContext`|`RevertContext`|Revert context to pass to onRevert.|
 
 
-#### receiveTokens
+#### deposit
 
 Handle received tokens and burn them.
 
 
 ```solidity
-function receiveTokens(uint256 amount) external override whenNotPaused;
+function deposit(uint256 amount) external override whenNotPaused;
 ```
 **Parameters**
 
@@ -5894,6 +6132,36 @@ uint8 decimals;
 
 
 
+## Constants
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/Revert.sol)
+
+#### MAX_REVERT_GAS_LIMIT
+
+```solidity
+uint256 constant MAX_REVERT_GAS_LIMIT = 2_000_000
+```
+
+
+
+## RevertGasLimitExceeded
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/Revert.sol)
+
+Error indicating revert gas limit exceeds maximum allowed
+
+
+```solidity
+error RevertGasLimitExceeded(uint256 provided, uint256 maximum);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`provided`|`uint256`|The gas limit provided for revert operation.|
+|`maximum`|`uint256`|The maximum allowed gas limit for revert operation.|
+
+
+
 ## Abortable
 [Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/Revert.sol)
 
@@ -5937,7 +6205,7 @@ Called when a revertable call is made.
 
 
 ```solidity
-function onRevert(RevertContext calldata revertContext) external;
+function onRevert(RevertContext calldata revertContext) external payable;
 ```
 **Parameters**
 
@@ -6494,20 +6762,13 @@ Withdraw ZETA tokens to an external chain.
 
 
 ```solidity
-function withdraw(
-    bytes memory receiver,
-    uint256 amount,
-    uint256 chainId,
-    RevertOptions calldata revertOptions
-)
-    external;
+function withdraw(bytes memory receiver, uint256 chainId, RevertOptions calldata revertOptions) external payable;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`receiver`|`bytes`|The receiver address on the external chain.|
-|`amount`|`uint256`|The amount of tokens to withdraw.|
 |`chainId`|`uint256`||
 |`revertOptions`|`RevertOptions`|Revert options.|
 
@@ -6542,56 +6803,25 @@ function withdrawAndCall(
 
 #### withdrawAndCall
 
-Withdraw ZRC20 tokens and call a smart contract on an external chain.
-
-
-```solidity
-function withdrawAndCall(
-    bytes memory receiver,
-    uint256 amount,
-    address zrc20,
-    bytes calldata message,
-    uint256 version,
-    CallOptions calldata callOptions,
-    RevertOptions calldata revertOptions
-)
-    external;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`receiver`|`bytes`|The receiver address on the external chain.|
-|`amount`|`uint256`|The amount of tokens to withdraw.|
-|`zrc20`|`address`|The address of the ZRC20 token.|
-|`message`|`bytes`|The calldata to pass to the contract call.|
-|`version`|`uint256`|The number representing message context version.|
-|`callOptions`|`CallOptions`|Call options including gas limit, arbirtrary call flag and message context version.|
-|`revertOptions`|`RevertOptions`|Revert options.|
-
-
-#### withdrawAndCall
-
 Withdraw ZETA tokens and call a smart contract on an external chain.
 
 
 ```solidity
 function withdrawAndCall(
     bytes memory receiver,
-    uint256 amount,
     uint256 chainId,
     bytes calldata message,
     CallOptions calldata callOptions,
     RevertOptions calldata revertOptions
 )
-    external;
+    external
+    payable;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`receiver`|`bytes`|The receiver address on the external chain.|
-|`amount`|`uint256`|The amount of tokens to withdraw.|
 |`chainId`|`uint256`|Chain id of the external chain.|
 |`message`|`bytes`|The calldata to pass to the contract call.|
 |`callOptions`|`CallOptions`|Call options including gas limit and arbirtrary call flag.|
@@ -6639,6 +6869,21 @@ function deposit(address zrc20, uint256 amount, address target) external;
 |`zrc20`|`address`|The address of the ZRC20 token.|
 |`amount`|`uint256`|The amount of tokens to deposit.|
 |`target`|`address`|The target address to receive the deposited tokens.|
+
+
+#### deposit
+
+Deposit native ZETA.
+
+
+```solidity
+function deposit(address target) external payable;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`target`|`address`|The target address to receive the ZETA.|
 
 
 #### execute
@@ -6695,24 +6940,17 @@ function depositAndCall(
 
 #### depositAndCall
 
-Deposit ZETA and call a user-specified contract on ZEVM.
+Deposit native ZETA and call a user-specified contract on ZEVM.
 
 
 ```solidity
-function depositAndCall(
-    MessageContext calldata context,
-    uint256 amount,
-    address target,
-    bytes calldata message
-)
-    external;
+function depositAndCall(MessageContext calldata context, address target, bytes calldata message) external payable;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`context`|`MessageContext`|The context of the cross-chain call.|
-|`amount`|`uint256`|The amount of tokens to transfer.|
 |`target`|`address`|The target contract to call.|
 |`message`|`bytes`|The calldata to pass to the contract call.|
 
@@ -6757,6 +6995,66 @@ function depositAndRevert(
 |`revertContext`|`RevertContext`|Revert context to pass to onRevert.|
 
 
+#### getMaxMessageSize
+
+Returns the maximum message size.
+
+
+```solidity
+function getMaxMessageSize() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum message size.|
+
+
+#### getMinGasLimit
+
+Returns the minimum gas limit allowed.
+
+
+```solidity
+function getMinGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The minimum gas limit.|
+
+
+#### getMaxGasLimit
+
+Returns the maximum gas limit allowed.
+
+
+```solidity
+function getMaxGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum gas limit.|
+
+
+#### getMaxRevertGasLimit
+
+Returns the maximum revert gas limit allowed.
+
+
+```solidity
+function getMaxRevertGasLimit() external pure returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum revert gas limit.|
+
+
 
 
 ## IGatewayZEVMErrors
@@ -6769,28 +7067,36 @@ Interface for the errors used in the GatewayZEVM contract.
 
 
 ### Errors
+#### EmptyAddress
+Error indicating a empty address was provided.
+
+
+```solidity
+error EmptyAddress();
+```
+
 #### WithdrawalFailed
 Error indicating a withdrawal failure.
 
 
 ```solidity
-error WithdrawalFailed();
+error WithdrawalFailed(address token, address recipient, uint256 amount);
 ```
 
-#### InsufficientZRC20Amount
-Error indicating an insufficient ZRC20 token amount.
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`token`|`address`|The address of the token that failed to withdraw.|
+|`recipient`|`address`|The address that was supposed to receive the tokens.|
+|`amount`|`uint256`|The amount of tokens that failed to withdraw.|
+
+#### InsufficientAmount
+Error indicating an insufficient token amount.
 
 
 ```solidity
-error InsufficientZRC20Amount();
-```
-
-#### InsufficientZetaAmount
-Error indicating an insufficient zeta amount.
-
-
-```solidity
-error InsufficientZetaAmount();
+error InsufficientAmount();
 ```
 
 #### ZRC20BurnFailed
@@ -6798,32 +7104,64 @@ Error indicating a failure to burn ZRC20 tokens.
 
 
 ```solidity
-error ZRC20BurnFailed();
+error ZRC20BurnFailed(address zrc20, uint256 amount);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`zrc20`|`address`|The address of the ZRC20 token that failed to burn.|
+|`amount`|`uint256`|The amount of tokens that failed to burn.|
 
 #### ZRC20TransferFailed
 Error indicating a failure to transfer ZRC20 tokens.
 
 
 ```solidity
-error ZRC20TransferFailed();
+error ZRC20TransferFailed(address zrc20, address from, address to, uint256 amount);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`zrc20`|`address`|The address of the ZRC20 token that failed to transfer.|
+|`from`|`address`|The address sending the tokens.|
+|`to`|`address`|The address receiving the tokens.|
+|`amount`|`uint256`|The amount of tokens that failed to transfer.|
 
 #### ZRC20DepositFailed
 Error indicating a failure to deposit ZRC20 tokens.
 
 
 ```solidity
-error ZRC20DepositFailed();
+error ZRC20DepositFailed(address zrc20, address to, uint256 amount);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`zrc20`|`address`|The address of the ZRC20 token that failed to deposit.|
+|`to`|`address`|The address that was supposed to receive the deposit.|
+|`amount`|`uint256`|The amount of tokens that failed to deposit.|
 
 #### GasFeeTransferFailed
 Error indicating a failure to transfer gas fee.
 
 
 ```solidity
-error GasFeeTransferFailed();
+error GasFeeTransferFailed(address token, address to, uint256 amount);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`token`|`address`|The address of the token used for gas fee.|
+|`to`|`address`|The address that was supposed to receive the gas fee.|
+|`amount`|`uint256`|The amount of gas fee that failed to transfer.|
 
 #### CallerIsNotProtocol
 Error indicating that the caller is not the protocol account.
@@ -6846,8 +7184,15 @@ Error indicating a failure to send ZETA tokens.
 
 
 ```solidity
-error FailedZetaSent();
+error FailedZetaSent(address recipient, uint256 amount);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`recipient`|`address`|The address that was supposed to receive the ZETA tokens.|
+|`amount`|`uint256`|The amount of ZETA tokens that failed to send.|
 
 #### OnlyWZETAOrProtocol
 Error indicating that only WZETA or the protocol address can call the function.
@@ -6857,12 +7202,12 @@ Error indicating that only WZETA or the protocol address can call the function.
 error OnlyWZETAOrProtocol();
 ```
 
-#### InsufficientGasLimit
-Error indicating an insufficient gas limit.
+#### InvalidGasLimit
+Error indicating an invalid gas limit.
 
 
 ```solidity
-error InsufficientGasLimit();
+error InvalidGasLimit();
 ```
 
 #### MessageSizeExceeded
@@ -6870,7 +7215,22 @@ Error indicating message size exceeded in external functions.
 
 
 ```solidity
-error MessageSizeExceeded();
+error MessageSizeExceeded(uint256 provided, uint256 maximum);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`provided`|`uint256`|The size of the message that was provided.|
+|`maximum`|`uint256`|The maximum allowed message size.|
+
+#### ZeroGasPrice
+Error indicating an invalid gas price.
+
+
+```solidity
+error ZeroGasPrice();
 ```
 
 
@@ -6977,42 +7337,6 @@ event WithdrawnAndCalled(
 |`protocolFlatFee`|`uint256`|The protocol flat fee for the withdrawal.|
 |`message`|`bytes`|The calldata passed to the contract call.|
 |`callOptions`|`CallOptions`|Call options including gas limit and arbirtrary call flag.|
-|`revertOptions`|`RevertOptions`|Revert options.|
-
-#### WithdrawnAndCalledV2
-Emitted when a withdraw and call is made.
-
-
-```solidity
-event WithdrawnAndCalledV2(
-    address indexed sender,
-    uint256 indexed chainId,
-    bytes receiver,
-    address zrc20,
-    uint256 value,
-    uint256 gasfee,
-    uint256 protocolFlatFee,
-    bytes message,
-    uint256 version,
-    CallOptions callOptions,
-    RevertOptions revertOptions
-);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`sender`|`address`|The address from which the tokens are withdrawn.|
-|`chainId`|`uint256`|Chain id of external chain.|
-|`receiver`|`bytes`|The receiver address on the external chain.|
-|`zrc20`|`address`|The address of the ZRC20 token.|
-|`value`|`uint256`|The amount of tokens withdrawn.|
-|`gasfee`|`uint256`|The gas fee for the withdrawal.|
-|`protocolFlatFee`|`uint256`|The protocol flat fee for the withdrawal.|
-|`message`|`bytes`|The calldata passed to the contract call.|
-|`version`|`uint256`|The number representing message context version.|
-|`callOptions`|`CallOptions`|Call options including gas limit, arbirtrary call flag and message context version.|
 |`revertOptions`|`RevertOptions`|Revert options.|
 
 
@@ -7309,6 +7633,15 @@ Name is in upper case to maintain compatibility with ZRC20.sol v1
 function GAS_LIMIT() external view returns (uint256);
 ```
 
+#### SYSTEM_CONTRACT_ADDRESS
+
+Name is in upper case to maintain compatibility with ZRC20.sol v1
+
+
+```solidity
+function SYSTEM_CONTRACT_ADDRESS() external view returns (address);
+```
+
 #### setName
 
 
@@ -7321,15 +7654,6 @@ function setName(string memory newName) external;
 
 ```solidity
 function setSymbol(string memory newSymbol) external;
-```
-
-#### CHAIN_ID
-
-Name is in upper case to maintain compatibility with ZRC20.sol v1
-
-
-```solidity
-function CHAIN_ID() external view returns (uint256);
 ```
 
 
@@ -7483,6 +7807,15 @@ If the gateway is not active or not found, the gateway will remain uninitialized
 
 ```solidity
 constructor() ;
+```
+
+#### onCall
+
+Function to handle cross-chain calls with native ZETA transfers
+
+
+```solidity
+function onCall(MessageContext calldata context, bytes calldata message) external payable virtual;
 ```
 
 #### onCall
@@ -7861,6 +8194,297 @@ It's useful to rollback to the original state
 ```solidity
 function onZetaRevert(ZetaInterfaces.ZetaRevert calldata zetaRevert) external;
 ```
+
+
+
+## GatewayZEVMValidations
+[Git Source](https://github.com/zeta-chain/protocol-contracts-evm/blob/main/contracts/zevm/libraries/GatewayZEVMValidations.sol)
+
+**Title:**
+GatewayZEVMValidations
+
+Library containing validation functions for GatewayZEVM contract
+
+This library provides common validation logic used across GatewayZEVM contract
+
+
+### State Variables
+#### MAX_MESSAGE_SIZE
+Maximum message size constant
+
+
+```solidity
+uint256 internal constant MAX_MESSAGE_SIZE = 2880
+```
+
+
+#### MIN_GAS_LIMIT
+Minimum gas limit constant
+
+
+```solidity
+uint256 internal constant MIN_GAS_LIMIT = 100_000
+```
+
+
+#### MAX_GAS_LIMIT
+Maximum gas limit constant
+
+
+```solidity
+uint256 internal constant MAX_GAS_LIMIT = 2_500_000
+```
+
+
+### Functions
+#### validateNonZeroAddress
+
+Validates that an address is not zero
+
+
+```solidity
+function validateNonZeroAddress(address addr) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`addr`|`address`|The address to validate|
+
+
+#### validateReceiver
+
+Validates that receiver bytes are not empty
+
+
+```solidity
+function validateReceiver(bytes memory receiver) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`bytes`|The receiver bytes to validate|
+
+
+#### validateAmount
+
+Validates that amount is not zero
+
+
+```solidity
+function validateAmount(uint256 amount) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`amount`|`uint256`|The amount to validate|
+
+
+#### validateGasLimit
+
+Validates that gas limit meets minimum requirement
+
+
+```solidity
+function validateGasLimit(uint256 gasLimit) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`gasLimit`|`uint256`|The gas limit to validate|
+
+
+#### validateTarget
+
+Validates that target address is not restricted
+
+
+```solidity
+function validateTarget(address target, address protocolAddress, address contractAddress) private pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`target`|`address`|The target address to validate|
+|`protocolAddress`|`address`|The protocol address to check against|
+|`contractAddress`|`address`|The contract address to check against|
+
+
+#### validateMessageSize
+
+Validates message size constraints
+
+
+```solidity
+function validateMessageSize(uint256 messageLength, uint256 revertMessageLength) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`messageLength`|`uint256`|The length of the main message|
+|`revertMessageLength`|`uint256`|The length of the revert message|
+
+
+#### validateRevertOptions
+
+Validates revert options
+
+
+```solidity
+function validateRevertOptions(RevertOptions calldata revertOptions) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`revertOptions`|`RevertOptions`|The revert options to validate|
+
+
+#### validateCallAndRevertOptions
+
+Validates call options and revert options together
+
+
+```solidity
+function validateCallAndRevertOptions(
+    CallOptions calldata callOptions,
+    RevertOptions calldata revertOptions,
+    uint256 messageLength
+)
+    internal
+    pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`callOptions`|`CallOptions`|The call options to validate|
+|`revertOptions`|`RevertOptions`|The revert options to validate|
+|`messageLength`|`uint256`|The length of the message|
+
+
+#### validateWithdrawalParams
+
+Validates standard withdrawal parameters
+
+
+```solidity
+function validateWithdrawalParams(
+    bytes memory receiver,
+    uint256 amount,
+    RevertOptions calldata revertOptions
+)
+    internal
+    pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`bytes`|The receiver address|
+|`amount`|`uint256`|The amount to withdraw|
+|`revertOptions`|`RevertOptions`|The revert options|
+
+
+#### validateWithdrawalAndCallParams
+
+Validates withdrawal and call parameters
+
+
+```solidity
+function validateWithdrawalAndCallParams(
+    bytes memory receiver,
+    uint256 amount,
+    bytes calldata message,
+    CallOptions calldata callOptions,
+    RevertOptions calldata revertOptions
+)
+    internal
+    pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`bytes`|The receiver address|
+|`amount`|`uint256`|The amount to withdraw|
+|`message`|`bytes`|The message to send|
+|`callOptions`|`CallOptions`|The call options|
+|`revertOptions`|`RevertOptions`|The revert options|
+
+
+#### validateDepositParams
+
+Validates deposit parameters
+
+
+```solidity
+function validateDepositParams(
+    address zrc20,
+    uint256 amount,
+    address target,
+    address protocolAddress,
+    address contractAddress
+)
+    internal
+    pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`zrc20`|`address`|The ZRC20 token address|
+|`amount`|`uint256`|The amount to deposit|
+|`target`|`address`|The target address|
+|`protocolAddress`|`address`|The protocol address|
+|`contractAddress`|`address`|The contract address|
+
+
+#### validateExecuteParams
+
+Validates execute parameters
+
+
+```solidity
+function validateExecuteParams(address zrc20, address target) internal pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`zrc20`|`address`|The ZRC20 token address|
+|`target`|`address`|The target address|
+
+
+#### validateZetaDepositParams
+
+Validates ZETA deposit and call parameters
+
+
+```solidity
+function validateZetaDepositParams(
+    uint256 amount,
+    address target,
+    address protocolAddress,
+    address contractAddress
+)
+    internal
+    pure;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`amount`|`uint256`|The amount to deposit|
+|`target`|`address`|The target address|
+|`protocolAddress`|`address`|The protocol address|
+|`contractAddress`|`address`|The contract address|
+
 
 
 

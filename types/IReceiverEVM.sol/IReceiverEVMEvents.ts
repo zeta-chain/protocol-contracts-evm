@@ -42,7 +42,6 @@ export interface IReceiverEVMEventsInterface extends Interface {
       | "ReceivedNoParams"
       | "ReceivedNonPayable"
       | "ReceivedOnCall"
-      | "ReceivedOnCallV2"
       | "ReceivedPayable"
       | "ReceivedRevert"
   ): EventFragment;
@@ -115,31 +114,6 @@ export namespace ReceivedOnCallEvent {
   export type OutputTuple = [sender: string, message: string];
   export interface OutputObject {
     sender: string;
-    message: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace ReceivedOnCallV2Event {
-  export type InputTuple = [
-    sender: AddressLike,
-    asset: AddressLike,
-    amount: BigNumberish,
-    message: BytesLike
-  ];
-  export type OutputTuple = [
-    sender: string,
-    asset: string,
-    amount: bigint,
-    message: string
-  ];
-  export interface OutputObject {
-    sender: string;
-    asset: string;
-    amount: bigint;
     message: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -271,13 +245,6 @@ export interface IReceiverEVMEvents extends BaseContract {
     ReceivedOnCallEvent.OutputObject
   >;
   getEvent(
-    key: "ReceivedOnCallV2"
-  ): TypedContractEvent<
-    ReceivedOnCallV2Event.InputTuple,
-    ReceivedOnCallV2Event.OutputTuple,
-    ReceivedOnCallV2Event.OutputObject
-  >;
-  getEvent(
     key: "ReceivedPayable"
   ): TypedContractEvent<
     ReceivedPayableEvent.InputTuple,
@@ -335,17 +302,6 @@ export interface IReceiverEVMEvents extends BaseContract {
       ReceivedOnCallEvent.InputTuple,
       ReceivedOnCallEvent.OutputTuple,
       ReceivedOnCallEvent.OutputObject
-    >;
-
-    "ReceivedOnCallV2(address,address,uint256,bytes)": TypedContractEvent<
-      ReceivedOnCallV2Event.InputTuple,
-      ReceivedOnCallV2Event.OutputTuple,
-      ReceivedOnCallV2Event.OutputObject
-    >;
-    ReceivedOnCallV2: TypedContractEvent<
-      ReceivedOnCallV2Event.InputTuple,
-      ReceivedOnCallV2Event.OutputTuple,
-      ReceivedOnCallV2Event.OutputObject
     >;
 
     "ReceivedPayable(address,uint256,string,uint256,bool)": TypedContractEvent<
