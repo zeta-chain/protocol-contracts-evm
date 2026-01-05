@@ -506,6 +506,66 @@ const _abi = [
   },
   {
     type: "function",
+    name: "withdraw",
+    inputs: [
+      {
+        name: "receiver",
+        type: "bytes",
+        internalType: "bytes",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "zrc20",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "gasLimit",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "revertOptions",
+        type: "tuple",
+        internalType: "struct RevertOptions",
+        components: [
+          {
+            name: "revertAddress",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "callOnRevert",
+            type: "bool",
+            internalType: "bool",
+          },
+          {
+            name: "abortAddress",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "revertMessage",
+            type: "bytes",
+            internalType: "bytes",
+          },
+          {
+            name: "onRevertGasLimit",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "withdrawAndCall",
     inputs: [
       {
