@@ -141,6 +141,23 @@ interface IGatewayZEVMErrors {
 /// @notice Interface for the GatewayZEVM contract.
 /// @dev Defines functions for cross-chain interactions and token handling.
 interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
+    /// @notice Withdraw ZRC20 tokens to an external chain with custom gas limit.
+    /// @dev Use this function for simple gas ZRC20 withdrawals to the receivers that are
+    ///      either smart contract accounts or smart contracts with custom receive/fallback implementations.
+    /// @param receiver The receiver address on the external chain.
+    /// @param amount The amount of tokens to withdraw.
+    /// @param zrc20 The address of the ZRC20 token.
+    /// @param gasLimit The custom gas limit for the withdrawal (must be >= MIN_GAS_LIMIT).
+    /// @param revertOptions Revert options.
+    function withdraw(
+        bytes memory receiver,
+        uint256 amount,
+        address zrc20,
+        uint256 gasLimit,
+        RevertOptions calldata revertOptions
+    )
+        external;
+
     /// @notice Withdraw ZRC20 tokens to an external chain.
     /// @param receiver The receiver address on the external chain.
     /// @param amount The amount of tokens to withdraw.
