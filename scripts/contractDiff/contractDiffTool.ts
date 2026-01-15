@@ -86,7 +86,12 @@ const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
         apiUrl: "https://api.etherscan.io/v2/api?chainid=43113",
         apiKeyEnv: process.env.ETHERSCAN_API_KEY!,
         explorerType: "etherscan",
-    }
+    },
+    zeta_testnet: {
+        name: "ZetaChain Testnet",
+        apiUrl: "https://testnet.zetascan.com/api/",
+        explorerType: "blockscout",
+    },
 }
 
 interface ContractSource {
