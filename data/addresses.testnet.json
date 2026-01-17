@@ -521,7 +521,7 @@
     "type": "zrc20"
   },
   {
-    "address": "tb1qy9pqmk2pd9sv63g27jt8r657wy0d9ueeh0nqur",
+    "address": "tb1qyk5ecmrdhfm75kjyc7ce7wx73ttvhg0cva9map",
     "category": "omnichain",
     "chain_id": "18332",
     "chain_name": "btc_testnet",
