@@ -38,6 +38,9 @@ contract GatewayZEVMUpgradeTest is
     /// @notice New role identifier for pauser role.
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
+    // default gas limit for ZETA transfer
+    uint256 constant ZETA_DEFAULT_GAS_LIMIT = 100_000;
+
     /// @notice The address of the Zeta token.
     address public zetaToken;
 
@@ -197,17 +200,15 @@ contract GatewayZEVMUpgradeTest is
     /// @param chainId Chain id of the external chain.
     /// @return gasLimit The gas limit.
     function _getGasLimitForZETATransfer(uint256 chainId) private view returns (uint256 gasLimit) {
-        // default gas limit for ZETA transfer
-        uint256 DEFAULT_GAS_LIMIT = 100_000;
         // fetch gasLimit for the external chain
         try ICoreRegistry(registry).getChainMetadata(chainId, "gasLimit") returns (bytes memory _gasLimit) {
             if (_gasLimit.length > 0) {
                 gasLimit = abi.decode(_gasLimit, (uint256));
             } else {
-                gasLimit = DEFAULT_GAS_LIMIT;
+                gasLimit = ZETA_DEFAULT_GAS_LIMIT;
             }
         } catch {
-            gasLimit = DEFAULT_GAS_LIMIT;
+            gasLimit = ZETA_DEFAULT_GAS_LIMIT;
         }
     }
 
@@ -262,7 +263,7 @@ contract GatewayZEVMUpgradeTest is
         return (gasFee, protocolFlatFee, gasLimit);
     }
 
-    /// @dev Private function to transfer ZETA tokens.
+    /// @dev Private function to transfer native ZETA tokens.
     /// @param amount The amount of tokens to transfer.
     /// @param to The address to transfer the tokens to.
     function _transferZETA(uint256 amount, address to) private {
@@ -320,7 +321,7 @@ contract GatewayZEVMUpgradeTest is
         whenNotPaused
     {
         GatewayZEVMValidations.validateWithdrawalParams(receiver, amount, revertOptions);
-        GatewayZEVMValidations.validateGasLimit(gasLimit);
+        GatewayZEVMValidations.validateGasLimit(gasLimit, zrc20);
 
         uint256 gasFee = _withdrawZRC20WithGasLimit(amount, zrc20, gasLimit);
         emit Withdrawn(
@@ -355,7 +356,9 @@ contract GatewayZEVMUpgradeTest is
         external
         whenNotPaused
     {
-        GatewayZEVMValidations.validateWithdrawalAndCallParams(receiver, amount, message, callOptions, revertOptions);
+        GatewayZEVMValidations.validateWithdrawalAndCallParams(
+            receiver, amount, message, zrc20, callOptions, revertOptions
+        );
 
         uint256 gasFee = _withdrawZRC20WithGasLimit(amount, zrc20, callOptions.gasLimit);
         emit WithdrawnAndCalled(
@@ -422,7 +425,9 @@ contract GatewayZEVMUpgradeTest is
         whenNotPaused
         nonReentrant
     {
-        GatewayZEVMValidations.validateWithdrawalAndCallParams(receiver, msg.value, message, callOptions, revertOptions);
+        GatewayZEVMValidations.validateWithdrawalAndCallParams(
+            receiver, msg.value, message, address(0), callOptions, revertOptions
+        );
         (uint256 gasFee, uint256 protocolFlatFee,) = _computeAndPayFeesForZETAWithdrawals(chainId, callOptions.gasLimit);
         _transferZETA(msg.value, PROTOCOL_ADDRESS);
 
@@ -456,7 +461,7 @@ contract GatewayZEVMUpgradeTest is
         external
         whenNotPaused
     {
-        GatewayZEVMValidations.validateCallAndRevertOptions(callOptions, revertOptions, message.length);
+        GatewayZEVMValidations.validateCallAndRevertOptions(callOptions, revertOptions, message.length, zrc20);
         _call(receiver, zrc20, message, callOptions, revertOptions);
     }
 

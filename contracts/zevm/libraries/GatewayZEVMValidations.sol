@@ -3,6 +3,7 @@ pragma solidity 0.8.26;
 
 import "../../../contracts/Revert.sol";
 import "../interfaces/IGatewayZEVM.sol";
+import { IZRC20 } from "../interfaces/IZRC20.sol";
 
 /// @title GatewayZEVMValidations
 /// @notice Library containing validation functions for GatewayZEVM contract
@@ -35,8 +36,15 @@ library GatewayZEVMValidations {
 
     /// @dev Validates that gas limit meets minimum requirement
     /// @param gasLimit The gas limit to validate
-    function validateGasLimit(uint256 gasLimit) internal pure {
-        if (gasLimit < MIN_GAS_LIMIT || gasLimit > MAX_GAS_LIMIT) revert IGatewayZEVMErrors.InvalidGasLimit();
+    function validateGasLimit(uint256 gasLimit, address zrc20) internal view {
+        uint256 minGasLimit = MIN_GAS_LIMIT;
+        if (zrc20 != address(0)) {
+            minGasLimit = IZRC20(zrc20).GAS_LIMIT();
+        }
+
+        if (gasLimit < minGasLimit || gasLimit > MAX_GAS_LIMIT) {
+            revert IGatewayZEVMErrors.InvalidGasLimit();
+        }
     }
 
     /// @dev Validates that target address is not restricted
@@ -76,12 +84,13 @@ library GatewayZEVMValidations {
     function validateCallAndRevertOptions(
         CallOptions calldata callOptions,
         RevertOptions calldata revertOptions,
-        uint256 messageLength
+        uint256 messageLength,
+        address zrc20
     )
         internal
-        pure
+        view
     {
-        validateGasLimit(callOptions.gasLimit);
+        validateGasLimit(callOptions.gasLimit, zrc20);
         validateMessageSize(messageLength, revertOptions.revertMessage.length);
         if (revertOptions.onRevertGasLimit > MAX_REVERT_GAS_LIMIT) {
             revert RevertGasLimitExceeded(revertOptions.onRevertGasLimit, MAX_REVERT_GAS_LIMIT);
@@ -115,15 +124,16 @@ library GatewayZEVMValidations {
         bytes memory receiver,
         uint256 amount,
         bytes calldata message,
+        address zrc20,
         CallOptions calldata callOptions,
         RevertOptions calldata revertOptions
     )
         internal
-        pure
+        view
     {
         validateReceiver(receiver);
         validateAmount(amount);
-        validateCallAndRevertOptions(callOptions, revertOptions, message.length);
+        validateCallAndRevertOptions(callOptions, revertOptions, message.length, zrc20);
     }
 
     /// @dev Validates deposit parameters
