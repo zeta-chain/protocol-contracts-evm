@@ -34,8 +34,12 @@ library GatewayZEVMValidations {
         if (amount == 0) revert IGatewayZEVMErrors.InsufficientAmount();
     }
 
-    /// @dev Validates that gas limit meets minimum requirement
-    /// @param gasLimit The gas limit to validate
+    /// @notice Validates that gas limit is within allowed bounds.
+    /// @dev Checks that gasLimit respects the per-chain minimum (ZRC20.GAS_LIMIT() for ZRC20 flows,
+    /// or MIN_GAS_LIMIT for ZETA-only flows) and does not exceed the global MAX_GAS_LIMIT cap.
+    /// This lets each gas token lower or raise its own required minimum
+    /// (e.g. chains like Sui can use a smaller value than MIN_GAS_LIMIT).
+    /// @param gasLimit The gas limit to validate.
     function validateGasLimit(uint256 gasLimit, address zrc20) internal view {
         uint256 minGasLimit = MIN_GAS_LIMIT;
         if (zrc20 != address(0)) {
