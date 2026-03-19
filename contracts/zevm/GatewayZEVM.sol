@@ -307,7 +307,7 @@ contract GatewayZEVM is
         whenNotPaused
     {
         GatewayZEVMValidations.validateWithdrawalParams(receiver, amount, revertOptions);
-        GatewayZEVMValidations.validateGasLimit(gasLimit);
+        GatewayZEVMValidations.validateGasLimit(gasLimit, zrc20);
 
         uint256 gasFee = _withdrawZRC20WithGasLimit(amount, zrc20, gasLimit);
         emit Withdrawn(
@@ -342,7 +342,9 @@ contract GatewayZEVM is
         external
         whenNotPaused
     {
-        GatewayZEVMValidations.validateWithdrawalAndCallParams(receiver, amount, message, callOptions, revertOptions);
+        GatewayZEVMValidations.validateWithdrawalAndCallParams(
+            receiver, amount, message, zrc20, callOptions, revertOptions
+        );
 
         uint256 gasFee = _withdrawZRC20WithGasLimit(amount, zrc20, callOptions.gasLimit);
         emit WithdrawnAndCalled(
@@ -409,7 +411,9 @@ contract GatewayZEVM is
         whenNotPaused
         nonReentrant
     {
-        GatewayZEVMValidations.validateWithdrawalAndCallParams(receiver, msg.value, message, callOptions, revertOptions);
+        GatewayZEVMValidations.validateWithdrawalAndCallParams(
+            receiver, msg.value, message, address(0), callOptions, revertOptions
+        );
         (uint256 gasFee, uint256 protocolFlatFee,) = _computeAndPayFeesForZETAWithdrawals(chainId, callOptions.gasLimit);
         _transferZETA(msg.value, PROTOCOL_ADDRESS);
 
@@ -443,7 +447,7 @@ contract GatewayZEVM is
         external
         whenNotPaused
     {
-        GatewayZEVMValidations.validateCallAndRevertOptions(callOptions, revertOptions, message.length);
+        GatewayZEVMValidations.validateCallAndRevertOptions(callOptions, revertOptions, message.length, zrc20);
         _call(receiver, zrc20, message, callOptions, revertOptions);
     }
 

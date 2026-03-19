@@ -8313,17 +8313,23 @@ function validateAmount(uint256 amount) internal pure;
 
 #### validateGasLimit
 
-Validates that gas limit meets minimum requirement
+Validates that gas limit is within allowed bounds.
+
+Checks that gasLimit respects the per-chain minimum (ZRC20.GAS_LIMIT() for ZRC20 flows,
+or MIN_GAS_LIMIT for ZETA-only flows) and does not exceed the global MAX_GAS_LIMIT cap.
+This lets each gas token lower or raise its own required minimum
+(e.g. chains like Sui can use a smaller value than MIN_GAS_LIMIT).
 
 
 ```solidity
-function validateGasLimit(uint256 gasLimit) internal pure;
+function validateGasLimit(uint256 gasLimit, address zrc20) internal view;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`gasLimit`|`uint256`|The gas limit to validate|
+|`gasLimit`|`uint256`|The gas limit to validate.|
+|`zrc20`|`address`||
 
 
 #### validateTarget
@@ -8383,10 +8389,11 @@ Validates call options and revert options together
 function validateCallAndRevertOptions(
     CallOptions calldata callOptions,
     RevertOptions calldata revertOptions,
-    uint256 messageLength
+    uint256 messageLength,
+    address zrc20
 )
     internal
-    pure;
+    view;
 ```
 **Parameters**
 
@@ -8395,6 +8402,7 @@ function validateCallAndRevertOptions(
 |`callOptions`|`CallOptions`|The call options to validate|
 |`revertOptions`|`RevertOptions`|The revert options to validate|
 |`messageLength`|`uint256`|The length of the message|
+|`zrc20`|`address`||
 
 
 #### validateWithdrawalParams
@@ -8430,11 +8438,12 @@ function validateWithdrawalAndCallParams(
     bytes memory receiver,
     uint256 amount,
     bytes calldata message,
+    address zrc20,
     CallOptions calldata callOptions,
     RevertOptions calldata revertOptions
 )
     internal
-    pure;
+    view;
 ```
 **Parameters**
 
@@ -8443,6 +8452,7 @@ function validateWithdrawalAndCallParams(
 |`receiver`|`bytes`|The receiver address|
 |`amount`|`uint256`|The amount to withdraw|
 |`message`|`bytes`|The message to send|
+|`zrc20`|`address`||
 |`callOptions`|`CallOptions`|The call options|
 |`revertOptions`|`RevertOptions`|The revert options|
 
