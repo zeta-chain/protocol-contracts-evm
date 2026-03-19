@@ -28,7 +28,7 @@
     "type": "zetaToken"
   },
   {
-    "address": "0x3acfd833241c4d8ff2423a5590b8059f86fcffac60a8da5977f03fa7a1293d67,0x28acc3a03af7658e52456617ac5ba6933ebf8dfb03469697b3673577a4262e24,0x6fc08f682551e52c2cc34362a20f744ba6a3d8d17f6583fa2f774887c4079700,0x01f724edef5461e280e533649b08c191a39af5f677025a226664a6626373b393,0x6b2fe12c605d64e14ca69f9aba51550593ba92ff43376d0a6cc26a5ca226f9bd,0x6b2fe12c605d64e14ca69f9aba51550593ba92ff43376d0a6cc26a5ca226f9bd",
+    "address": "0x28acc3a03af7658e52456617ac5ba6933ebf8dfb03469697b3673577a4262e24,0x6fc08f682551e52c2cc34362a20f744ba6a3d8d17f6583fa2f774887c4079700,0xbba474f7c62206287bfaa00039ba7090246d9d34c707de48497acd242f40d7b6,0x6b2fe12c605d64e14ca69f9aba51550593ba92ff43376d0a6cc26a5ca226f9bd,0x6b2fe12c605d64e14ca69f9aba51550593ba92ff43376d0a6cc26a5ca226f9bd",
     "category": "omnichain",
     "chain_id": 103,
     "chain_name": "sui_testnet",
@@ -39,20 +39,6 @@
     "category": "omnichain",
     "chain_id": 901,
     "chain_name": "solana_devnet",
-    "type": "gateway"
-  },
-  {
-    "address": "0x07fe085d0af54eceb1af1cf73bed92afefdb8364",
-    "category": "omnichain",
-    "chain_id": 1001,
-    "chain_name": "kaia_testnet",
-    "type": "erc20Custody"
-  },
-  {
-    "address": "0x17c57f0b20ff169f779aceb320c8d7297d8cb1de",
-    "category": "omnichain",
-    "chain_id": 1001,
-    "chain_name": "kaia_testnet",
     "type": "gateway"
   },
   {
@@ -521,7 +507,7 @@
     "type": "zrc20"
   },
   {
-    "address": "tb1qyk5ecmrdhfm75kjyc7ce7wx73ttvhg0cva9map",
+    "address": "tb1qynszhjhdh9vn2ht5sctvch28awrm2l7umlvld8",
     "category": "omnichain",
     "chain_id": "18332",
     "chain_name": "btc_testnet",
@@ -619,7 +605,7 @@
     "type": "gateway"
   },
   {
-    "address": "0x0234CeFE55adD7d976f18F77D31a2858DE7864E5",
+    "address": "0xdf75CFa73A434B9F69fdA4dB3Fe3D23426958Fb1",
     "category": "omnichain",
     "chain_id": "11155111",
     "chain_name": "sepolia_testnet",
