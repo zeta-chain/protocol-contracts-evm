@@ -98,7 +98,10 @@ contract GatewayZEVM is
     function _validateMinGasLimit(uint256 gasLimit, address zrc20) internal view {
         uint256 minGasLimit = MIN_GAS_LIMIT;
         if (zrc20 != address(0)) {
-            minGasLimit = IZRC20(zrc20).GAS_LIMIT();
+            uint256 tokenGasLimit = IZRC20(zrc20).GAS_LIMIT();
+            if (tokenGasLimit > minGasLimit) {
+                minGasLimit = tokenGasLimit;
+            }
         }
 
         if (gasLimit < minGasLimit) {
