@@ -2,7 +2,7 @@
   "7000" : {
     "FungibleModule": "0x735b14BB79463307AAcBED86DAf3322B1e6226aB",
     "GatewayZEVM": "0xfEDD7A6e3Ef1cC470fbfbF955a22D793dDC0F44E",
-    "GatewayZEVMImplementation": "0xEf195bf421658EA31dbA4Cbf598aF7f9D8791202",
+    "GatewayZEVMImplementation": "0x801e8a0cfEeF1C4198eEE291aEBF809411c792DD",
     "ZetaToken": "0x5F0b1a82749cb4E2278EC87F8BF6B618dC71a8bf",
     "Admin": "0x01d8207AfF7a7d029114Ee35afc72d0e133B7a0A"
   },
