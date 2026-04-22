@@ -75,6 +75,15 @@ interface IGatewayEVMEvents {
     /// @param oldFeeWei old fee in wei
     /// @param newFeeWei new fee in wei
     event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
+
+    /// @notice Emitted when deposit restriction mode is updated.
+    /// @param restricted Whether deposit restriction mode is enabled.
+    event UpdatedDepositsRestricted(bool restricted);
+
+    /// @notice Emitted when a deposit asset allowlist entry is updated.
+    /// @param asset The asset address (zero address for native token).
+    /// @param allowed Whether deposits for this asset are allowed while restricted mode is enabled.
+    event UpdatedDepositAllowedAsset(address indexed asset, bool allowed);
 }
 
 /// @title IGatewayEVMErrors
@@ -139,11 +148,24 @@ interface IGatewayEVMErrors {
     /// @param expected The expected value (amount + fee).
     /// @param provided The actual msg.value provided.
     error IncorrectValueProvided(uint256 expected, uint256 provided);
+
+    /// @notice Error thrown when restricted mode blocks deposits for the provided asset.
+    /// @param asset The asset address (zero address for native token).
+    error AssetDepositNotAllowed(address asset);
 }
 
 /// @title IGatewayEVM
 /// @notice Interface for the GatewayEVM contract.
 interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
+    /// @notice Enables or disables deposit restriction mode.
+    /// @param restricted Whether restriction mode should be enabled.
+    function setDepositsRestricted(bool restricted) external;
+
+    /// @notice Configures whether an asset is allowed for deposits in restricted mode.
+    /// @param asset Asset address (zero address for native token).
+    /// @param allowed Whether deposits of this asset are allowed in restricted mode.
+    function setDepositAllowedAsset(address asset, bool allowed) external;
+
     /// @notice Executes a call to a contract using ERC20 tokens.
     /// @param messageContext Message context containing sender and arbitrary call flag.
     /// @param token The address of the ERC20 token.
