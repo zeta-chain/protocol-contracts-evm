@@ -241,6 +241,8 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
     function testWithdrawZRC20WithCustomGasLimitFailsIfGasLimitTooLow() public {
         uint256 amount = 1;
         uint256 lowGasLimit = MIN_GAS_LIMIT - 1;
+        vm.prank(protocolAddress);
+        zrc20.updateGasLimit(MIN_GAS_LIMIT);
         vm.expectRevert(InsufficientGasLimit.selector);
         gateway.withdraw(abi.encodePacked(addr1), amount, address(zrc20), lowGasLimit, revertOptions);
     }
@@ -299,6 +301,8 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testWithdrawAndCallZRC20FailsIfGasLimitIsZero() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
+        vm.prank(protocolAddress);
+        zrc20.updateGasLimit(MIN_GAS_LIMIT);
         vm.expectRevert(InsufficientGasLimit.selector);
         gateway.withdrawAndCall(
             abi.encodePacked(addr1),
@@ -312,6 +316,8 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
 
     function testWithdrawAndCallZRC20FailsIfGasLimitIsBelowMin() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
+        vm.prank(protocolAddress);
+        zrc20.updateGasLimit(MIN_GAS_LIMIT);
         vm.expectRevert(InsufficientGasLimit.selector);
         gateway.withdrawAndCall(
             abi.encodePacked(addr1),
@@ -365,7 +371,9 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
         uint256 gasLimit = 1;
 
-        vm.expectRevert();
+        vm.prank(protocolAddress);
+        solanaZRC20.updateGasLimit(MIN_GAS_LIMIT);
+        vm.expectRevert(InsufficientGasLimit.selector);
         gateway.withdrawAndCall(
             abi.encodePacked(addr1),
             amount,
@@ -425,8 +433,22 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
     function testWithdrawAndCallZRC20WithCallOptsFailsIfGasLimitIsZero() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
         callOptions.gasLimit = 0;
+        vm.prank(protocolAddress);
+        zrc20.updateGasLimit(MIN_GAS_LIMIT);
         vm.expectRevert(InsufficientGasLimit.selector);
         gateway.withdrawAndCall(abi.encodePacked(addr1), 1, address(zrc20), message, callOptions, revertOptions);
+    }
+
+    function testWithdrawZRC20WithCustomGasLimitRespectsZRC20GasLimit() public {
+        uint256 amount = 1;
+        uint256 zrc20MinGasLimit = MIN_GAS_LIMIT + 50_000;
+        uint256 lowGasLimit = MIN_GAS_LIMIT + 25_000; // < zrc20MinGasLimit but >= MIN_GAS_LIMIT
+
+        vm.prank(protocolAddress);
+        zrc20.updateGasLimit(zrc20MinGasLimit);
+
+        vm.expectRevert(InsufficientGasLimit.selector);
+        gateway.withdraw(abi.encodePacked(addr1), amount, address(zrc20), lowGasLimit, revertOptions);
     }
 
     function testWithdrawAndCallZRC20WithCallOptsFailsIfAmountIsZero() public {
@@ -717,6 +739,8 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
     function testCallWithCallOptsFailsIfGasLimitIsZero() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
         callOptions.gasLimit = 0;
+        vm.prank(protocolAddress);
+        zrc20.updateGasLimit(MIN_GAS_LIMIT);
         vm.expectRevert(InsufficientGasLimit.selector);
         gateway.call(abi.encodePacked(addr1), address(zrc20), message, callOptions, revertOptions);
     }
@@ -724,6 +748,8 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
     function testCallWithCallOptsFailsIfGasLimitIsBelowMin() public {
         bytes memory message = abi.encodeWithSignature("hello(address)", addr1);
         callOptions.gasLimit = MIN_GAS_LIMIT - 1;
+        vm.prank(protocolAddress);
+        zrc20.updateGasLimit(MIN_GAS_LIMIT);
         vm.expectRevert(InsufficientGasLimit.selector);
         gateway.call(abi.encodePacked(addr1), address(zrc20), message, callOptions, revertOptions);
     }

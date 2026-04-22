@@ -860,6 +860,22 @@ Unpause contract.
 function unpause() external onlyRole(PAUSER_ROLE);
 ```
 
+#### _validateMinGasLimit
+
+Validates min gas limit.
+
+
+```solidity
+function _validateMinGasLimit(uint256 gasLimit, address zrc20) internal view;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`gasLimit`|`uint256`|The gas limit to validate.|
+|`zrc20`|`address`||
+
+
 #### _withdrawZRC20
 
 Private function to withdraw ZRC20 tokens.

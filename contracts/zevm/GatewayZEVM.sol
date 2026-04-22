@@ -93,6 +93,22 @@ contract GatewayZEVM is
         _unpause();
     }
 
+    /// @notice Validates min gas limit.
+    /// @param gasLimit The gas limit to validate.
+    function _validateMinGasLimit(uint256 gasLimit, address zrc20) internal view {
+        uint256 minGasLimit = MIN_GAS_LIMIT;
+        if (zrc20 != address(0)) {
+            uint256 zrc20GasLimit = IZRC20(zrc20).GAS_LIMIT();
+            if (zrc20GasLimit != 0) {
+                minGasLimit = zrc20GasLimit;
+            }
+        }
+
+        if (gasLimit < minGasLimit) {
+            revert InsufficientGasLimit();
+        }
+    }
+
     /// @dev Private function to withdraw ZRC20 tokens.
     /// @param amount The amount of tokens to withdraw.
     /// @param zrc20 The address of the ZRC20 token.
@@ -198,7 +214,7 @@ contract GatewayZEVM is
     {
         if (receiver.length == 0) revert ZeroAddress();
         if (amount == 0) revert InsufficientZRC20Amount();
-        if (gasLimit < MIN_GAS_LIMIT) revert InsufficientGasLimit();
+        _validateMinGasLimit(gasLimit, zrc20);
         if (revertOptions.revertMessage.length > MAX_MESSAGE_SIZE) revert MessageSizeExceeded();
 
         uint256 gasFee = _withdrawZRC20WithGasLimit(amount, zrc20, gasLimit);
@@ -236,7 +252,7 @@ contract GatewayZEVM is
     {
         if (receiver.length == 0) revert ZeroAddress();
         if (amount == 0) revert InsufficientZRC20Amount();
-        if (callOptions.gasLimit < MIN_GAS_LIMIT) revert InsufficientGasLimit();
+        _validateMinGasLimit(callOptions.gasLimit, zrc20);
         if (message.length + revertOptions.revertMessage.length > MAX_MESSAGE_SIZE) revert MessageSizeExceeded();
 
         // Sui mainnet not supported for now
@@ -346,7 +362,7 @@ contract GatewayZEVM is
         external
         whenNotPaused
     {
-        if (callOptions.gasLimit < MIN_GAS_LIMIT) revert InsufficientGasLimit();
+        _validateMinGasLimit(callOptions.gasLimit, zrc20);
         if (message.length + revertOptions.revertMessage.length > MAX_MESSAGE_SIZE) revert MessageSizeExceeded();
 
         _call(receiver, zrc20, message, callOptions, revertOptions);
