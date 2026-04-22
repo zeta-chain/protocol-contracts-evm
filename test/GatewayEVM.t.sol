@@ -170,6 +170,22 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.setConnector(address(0));
     }
 
+    function testSetDepositsRestrictedOnlyAdmin() public {
+        vm.prank(tssAddress);
+        vm.expectRevert(
+            abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, tssAddress, DEFAULT_ADMIN_ROLE)
+        );
+        gateway.setDepositsRestricted(true);
+    }
+
+    function testSetDepositAllowedAssetOnlyAdmin() public {
+        vm.prank(tssAddress);
+        vm.expectRevert(
+            abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, tssAddress, DEFAULT_ADMIN_ROLE)
+        );
+        gateway.setDepositAllowedAsset(address(token), true);
+    }
+
     function testForwardCallToReceiveNonPayable() public {
         string[] memory str = new string[](1);
         str[0] = "Hello, Foundry!";
@@ -1199,6 +1215,84 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         vm.prank(tssAddress);
         vm.expectRevert();
         gateway.updateAdditionalActionFee(newFee);
+    }
+
+    function testSetDepositsRestricted() public {
+        vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositAllowedAsset(address(zeta), true);
+        vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositsRestricted(true);
+        gateway.setDepositsRestricted(true);
+        assertTrue(gateway.depositsRestricted());
+
+        vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositsRestricted(false);
+        gateway.setDepositsRestricted(false);
+        assertFalse(gateway.depositsRestricted());
+    }
+
+    function testSetDepositAllowedAsset() public {
+        assertFalse(gateway.depositAllowedAssets(address(token)));
+
+        vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositAllowedAsset(address(token), true);
+        gateway.setDepositAllowedAsset(address(token), true);
+        assertTrue(gateway.depositAllowedAssets(address(token)));
+    }
+
+    function testRestrictedModeAllowsZetaByDefault() public {
+        uint256 amount = 100_000;
+        gateway.setDepositsRestricted(true);
+
+        zeta.approve(address(gateway), amount);
+        gateway.deposit(destination, amount, address(zeta), revertOptions);
+
+        assertEq(ownerAmount - amount, zeta.balanceOf(owner));
+    }
+
+    function testRestrictedModeBlocksNativeDeposits() public {
+        uint256 amount = 100_000;
+        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
+        gateway.setDepositsRestricted(true);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
+        gateway.deposit{ value: amount }(destination, revertOptions);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
+        gateway.deposit{ value: amount }(destination, amount, revertOptions);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
+        gateway.depositAndCall{ value: amount }(destination, payload, revertOptions);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
+        gateway.depositAndCall{ value: amount }(destination, amount, payload, revertOptions);
+    }
+
+    function testRestrictedModeBlocksNonZetaERC20Deposits() public {
+        uint256 amount = 100_000;
+        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
+        gateway.setDepositsRestricted(true);
+
+        token.approve(address(gateway), amount * 2);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(token)));
+        gateway.deposit(destination, amount, address(token), revertOptions);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(token)));
+        gateway.depositAndCall(destination, amount, address(token), payload, revertOptions);
+    }
+
+    function testRestrictedModeAllowsAllowlistedERC20Deposits() public {
+        uint256 amount = 100_000;
+        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
+        gateway.setDepositAllowedAsset(address(token), true);
+        gateway.setDepositsRestricted(true);
+
+        token.approve(address(gateway), amount * 2);
+        gateway.deposit(destination, amount, address(token), revertOptions);
+        gateway.depositAndCall{ value: ADDITIONAL_ACTION_FEE_WEI }(destination, amount, address(token), payload, revertOptions);
+
+        assertEq(amount * 2, token.balanceOf(address(custody)));
     }
 
     function testFeeSystemWithUpdatedFee() public {

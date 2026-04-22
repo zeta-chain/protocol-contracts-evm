@@ -51,6 +51,10 @@ contract GatewayEVM is
     /// @dev The first action in a transaction is free, subsequent actions incur this fee.
     /// @dev This is configurable by the admin role to allow for fee adjustments.
     uint256 public additionalActionFeeWei;
+    /// @notice Whether gateway deposits are restricted to an explicit allowlist.
+    bool public depositsRestricted;
+    /// @notice Allowlist used when deposit restriction mode is enabled.
+    mapping(address asset => bool allowed) public depositAllowedAssets;
 
     /// @notice New role identifier for tss role.
     bytes32 public constant TSS_ROLE = keccak256("TSS_ROLE");
@@ -127,6 +131,25 @@ contract GatewayEVM is
         uint256 oldFee = additionalActionFeeWei;
         additionalActionFeeWei = newFeeWei;
         emit UpdatedAdditionalActionFee(oldFee, newFeeWei);
+    }
+
+    /// @notice Enables or disables deposit restriction mode.
+    /// @param restricted Whether restriction mode should be enabled.
+    function setDepositsRestricted(bool restricted) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (restricted && !depositAllowedAssets[zetaToken]) {
+            depositAllowedAssets[zetaToken] = true;
+            emit UpdatedDepositAllowedAsset(zetaToken, true);
+        }
+        depositsRestricted = restricted;
+        emit UpdatedDepositsRestricted(restricted);
+    }
+
+    /// @notice Configures whether an asset is allowed for deposits in restricted mode.
+    /// @param asset Asset address (zero address for native token).
+    /// @param allowed Whether deposits of this asset are allowed in restricted mode.
+    function setDepositAllowedAsset(address asset, bool allowed) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        depositAllowedAssets[asset] = allowed;
+        emit UpdatedDepositAllowedAsset(asset, allowed);
     }
 
     /// @notice Transfers msg.value to destination contract and executes it's onRevert function.
@@ -267,6 +290,7 @@ contract GatewayEVM is
     /// @dev This function only works for the first action in a transaction (backward compatibility).
     /// @dev For subsequent actions, use the overloaded version with amount parameter.
     function deposit(address receiver, RevertOptions calldata revertOptions) external payable whenNotPaused {
+        _validateAllowedDepositAsset(address(0));
         GatewayEVMValidations.validateDepositParams(receiver, msg.value, revertOptions);
 
         // Check if this is a subsequent action (action index > 0)
@@ -297,6 +321,7 @@ contract GatewayEVM is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(address(0));
         GatewayEVMValidations.validateDepositParams(receiver, amount, revertOptions);
 
         uint256 feeCharged = _processFee();
@@ -324,6 +349,7 @@ contract GatewayEVM is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(asset);
         GatewayEVMValidations.validateDepositParams(receiver, amount, revertOptions);
 
         uint256 feeCharged = _processFee();
@@ -349,6 +375,7 @@ contract GatewayEVM is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(address(0));
         GatewayEVMValidations.validateDepositAndCallParams(receiver, msg.value, payload, revertOptions);
 
         // Check if this is a subsequent action (action index > 0)
@@ -381,6 +408,7 @@ contract GatewayEVM is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(address(0));
         GatewayEVMValidations.validateDepositAndCallParams(receiver, amount, payload, revertOptions);
 
         uint256 feeCharged = _processFee();
@@ -410,6 +438,7 @@ contract GatewayEVM is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(asset);
         GatewayEVMValidations.validateDepositAndCallParams(receiver, amount, payload, revertOptions);
 
         uint256 feeCharged = _processFee();
@@ -620,6 +649,15 @@ contract GatewayEVM is
         uint256 expectedValue = amount + feeCharged;
         if (msg.value != expectedValue) {
             revert IncorrectValueProvided(expectedValue, msg.value);
+        }
+    }
+
+    /// @notice Validates whether a deposit asset is allowed.
+    /// @dev Applies only when restricted mode is enabled.
+    /// @param asset Asset address (zero address for native token).
+    function _validateAllowedDepositAsset(address asset) internal view {
+        if (depositsRestricted && !depositAllowedAssets[asset]) {
+            revert AssetDepositNotAllowed(asset);
         }
     }
 
