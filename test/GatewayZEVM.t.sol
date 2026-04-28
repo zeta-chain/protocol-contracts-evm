@@ -513,7 +513,7 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
             amount,
             address(zrc20),
             message,
-            CallOptions({ gasLimit: gasLimit, isArbitraryCall: true }),
+            CallOptions({ gasLimit: gasLimit, isArbitraryCall: false }),
             revertOptions
         );
 
