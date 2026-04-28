@@ -168,7 +168,6 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.setConnector(address(0));
     }
 
-    
     function testForwardCallToReceiveOnCallUsingAuthCall() public {
         vm.expectEmit(true, true, true, true, address(receiver));
         address sender = address(0x123);
@@ -205,10 +204,6 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.execute(MessageContext({ sender: address(0x123) }), address(receiver), data);
     }
 
-    
-    
-    
-    
     function testExecuteFailsIfDestinationIsZeroAddress() public {
         bytes memory data = abi.encodeWithSignature("receiveNoParams()");
 
@@ -225,8 +220,6 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.execute(MessageContext({ sender: address(0x123) }), address(0), data);
     }
 
-    
-    
     function testExecuteWithNonReturnApprovalToken() public {
         NonReturnApprovalToken nonReturnToken = new NonReturnApprovalToken("USDT", "USDT");
         nonReturnToken.mint(owner, 1_000_000);
@@ -300,8 +293,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         vm.expectRevert(ZeroAddress.selector);
         gateway.executeRevert{ value: value }(address(0), data, revertContext);
     }
-
-    }
+}
 
 contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiverEVMEvents, INotSupportedMethods {
     using SafeERC20 for IERC20;

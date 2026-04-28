@@ -189,8 +189,6 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         assertEq(false, whitelisted);
     }
 
-    
-    
     function testForwardCallToReceiveERC20ThroughCustodyFailsIfSenderIsNotWithdrawer() public {
         uint256 amount = 100_000;
         bytes memory data =
@@ -221,7 +219,6 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         custody.withdrawAndCall(arbitraryCallMessageContext, address(0), address(token), amount, data);
     }
 
-    
     function testForwardCallToReceiveOnCallThroughCustody() public {
         uint256 amount = 100_000;
         address sender = address(0x123);
@@ -254,8 +251,6 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         assertEq(balanceGateway, 0);
     }
 
-    
-    
     function testForwardCallToReceiveERC20PartialThroughCustodyFailsIfSenderIsNotWithdrawer() public {
         uint256 amount = 100_000;
         bytes memory data = abi.encodeWithSignature(
@@ -278,7 +273,6 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         custody.withdrawAndCall(arbitraryCallMessageContext, address(receiver), address(token), amount, data);
     }
 
-    
     function testWithdrawFailsIfTokenIsNotWhitelisted() public {
         vm.startPrank(tssAddress);
         custody.unwhitelist(address(token));

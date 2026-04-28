@@ -271,7 +271,6 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         gateway.withdraw(abi.encodePacked(addr1), amount, address(zrc20), customGasLimit, revertOptions);
     }
 
-
     function testWithdrawZRC20WithCustomGasLimitRespectsZRC20GasLimit() public {
         uint256 amount = 1;
         uint256 zrc20MinGasLimit = MIN_GAS_LIMIT + 50_000;
@@ -283,7 +282,6 @@ contract GatewayZEVMInboundTest is Test, IGatewayZEVMEvents, IGatewayZEVMErrors 
         vm.expectRevert(InsufficientGasLimit.selector);
         gateway.withdraw(abi.encodePacked(addr1), amount, address(zrc20), lowGasLimit, revertOptions);
     }
-
 
     function testWithdrawZETAFailsIfAmountIsZero() public {
         // TODO: replace error to check once ZETA supported back

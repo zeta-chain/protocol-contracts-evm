@@ -153,7 +153,6 @@ contract ZetaConnectorNonNativeTest is
         zetaConnector.withdraw(destination, amount, internalSendHash);
     }
 
-    
     function testWithdrawAndCallReceiveOnCall() public {
         uint256 amount = 100_000;
         bytes32 internalSendHash = "";
@@ -189,7 +188,6 @@ contract ZetaConnectorNonNativeTest is
         assertEq(balanceGateway, 0);
     }
 
-    
     function testWithdrawAndCallReceiveERC20FailsIfSenderIsNotWithdrawer() public {
         uint256 amount = 100_000;
         bytes32 internalSendHash = "";
@@ -201,8 +199,6 @@ contract ZetaConnectorNonNativeTest is
         zetaConnector.withdrawAndCall(arbitraryCallMessageContext, address(receiver), amount, data, internalSendHash);
     }
 
-    
-    
     function testWithdrawAndRevert() public {
         uint256 amount = 100_000;
         bytes32 internalSendHash = "";

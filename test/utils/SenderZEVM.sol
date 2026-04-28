@@ -25,13 +25,7 @@ contract SenderZEVM {
     /// @param amount The amount of tokens to withdraw.
     /// @param zrc20 The address of the ZRC20 token.
     /// @dev Approves the gateway to withdraw tokens.
-    function withdrawReceiver(
-        bytes memory receiver,
-        uint256 amount,
-        address zrc20
-    )
-        external
-    {
+    function withdrawReceiver(bytes memory receiver, uint256 amount, address zrc20) external {
         // Approve gateway to withdraw
         if (!IZRC20(zrc20).approve(gateway, amount + 100_000)) revert ApprovalFailed();
 
