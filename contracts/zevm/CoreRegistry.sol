@@ -314,19 +314,19 @@ contract CoreRegistry is BaseRegistry {
     /// @param message The encoded function call to execute on the target chain.
     function _sendCrossChainMessage(uint256 targetChainId, bytes memory message) private {
         // Prepare call options
-        CallOptions memory callOptions = CallOptions({ gasLimit: CROSS_CHAIN_GAS_LIMIT, isArbitraryCall: false });
-
-        // Prepare revert options
-        RevertOptions memory revertOptions;
-
-        // Approve gas token amount for cctx
-        address gasZRC20 = _chains[targetChainId].gasZRC20;
-        (, uint256 gasFee) = IZRC20(gasZRC20).withdrawGasFeeWithGasLimit(CROSS_CHAIN_GAS_LIMIT);
-        if (!IZRC20(gasZRC20).transferFrom(msg.sender, address(this), gasFee)) {
-            revert TransferFailed();
-        }
-        IZRC20(gasZRC20).approve(address(gatewayZEVM), gasFee);
-
-        gatewayZEVM.call(_chains[targetChainId].registry, gasZRC20, message, callOptions, revertOptions);
+//        CallOptions memory callOptions = CallOptions({ gasLimit: CROSS_CHAIN_GAS_LIMIT, isArbitraryCall: false });
+//
+//        // Prepare revert options
+//        RevertOptions memory revertOptions;
+//
+//        // Approve gas token amount for cctx
+//        address gasZRC20 = _chains[targetChainId].gasZRC20;
+//        (, uint256 gasFee) = IZRC20(gasZRC20).withdrawGasFeeWithGasLimit(CROSS_CHAIN_GAS_LIMIT);
+//        if (!IZRC20(gasZRC20).transferFrom(msg.sender, address(this), gasFee)) {
+//            revert TransferFailed();
+//        }
+//        IZRC20(gasZRC20).approve(address(gatewayZEVM), gasFee);
+//
+//        gatewayZEVM.call(_chains[targetChainId].registry, gasZRC20, message, callOptions, revertOptions);
     }
 }
