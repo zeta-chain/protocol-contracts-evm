@@ -137,13 +137,16 @@ interface IGatewayEVMErrors {
     /// @param expected The expected value (amount + fee).
     /// @param provided The actual msg.value provided.
     error IncorrectValueProvided(uint256 expected, uint256 provided);
+
+    /// @notice Error indicating arbitrary calls are no longer supported.
+    error ArbitraryCallDisabled();
 }
 
 /// @title IGatewayEVM
 /// @notice Interface for the GatewayEVM contract.
 interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @notice Executes a call to a contract using ERC20 tokens.
-    /// @param messageContext Message context containing sender and arbitrary call flag.
+    /// @param messageContext Message context containing sender.
     /// @param token The address of the ERC20 token.
     /// @param to The address of the contract to call.
     /// @param amount The amount of tokens to transfer.
@@ -172,7 +175,7 @@ interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
 
     /// @notice Executes a call to a destination address without ERC20 tokens.
     /// @dev This function can only be called by the TSS address and it is payable.
-    /// @param messageContext Message context containing sender and arbitrary call flag.
+    /// @param messageContext Message context containing sender.
     /// @param destination Address to call.
     /// @param data Calldata to pass to the call.
     /// @return The result of the call.

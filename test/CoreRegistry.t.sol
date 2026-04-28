@@ -11,18 +11,18 @@ import "../contracts/helpers/interfaces/IBaseRegistry.sol";
 import { SystemContract } from "../contracts/zevm/SystemContract.sol";
 import "../contracts/zevm/ZRC20.sol";
 import "../contracts/zevm/interfaces/IGatewayZEVM.sol";
-import { console } from "../dependencies/forge-std-1.9.2/src/console.sol";
 
 // Mock GatewayZEVM
 contract MockGatewayZEVM {
     address public constant PROTOCOL_ADDRESS = 0x735b14BB79463307AAcBED86DAf3322B1e6226aB;
 
-    event CallEmitted(
+    event WithdrawAndCallEmitted(
         bytes receiver, address zrc20, bytes message, CallOptions callOptions, RevertOptions revertOptions
     );
 
-    function call(
+    function withdrawAndCall(
         bytes memory receiver,
+        uint256, /*amount*/
         address zrc20,
         bytes calldata message,
         CallOptions calldata callOptions,
@@ -30,7 +30,7 @@ contract MockGatewayZEVM {
     )
         external
     {
-        emit CallEmitted(receiver, zrc20, message, callOptions, revertOptions);
+        emit WithdrawAndCallEmitted(receiver, zrc20, message, callOptions, revertOptions);
     }
 }
 
