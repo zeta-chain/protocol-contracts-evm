@@ -50,7 +50,6 @@ contract GatewayEVMZEVMTest is
     address ownerEVM;
     address destination;
     address tssAddress;
-    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0) });
 
     // zevm
     address payable proxyZEVM;
@@ -134,150 +133,20 @@ contract GatewayEVMZEVMTest is
         });
     }
 
-    function testCallReceiverEVMFromZEVM() public {
-        string memory str = "Hello!";
-        uint256 num = 42;
-        bool flag = true;
-        uint256 value = 1 ether;
-
-        // Encode the function call data and call on zevm
-        bytes memory message = abi.encodeWithSelector(receiverEVM.receivePayable.selector, str, num, flag);
-        vm.prank(ownerZEVM);
-        vm.expectEmit(true, true, true, true, address(gatewayZEVM));
-        emit Called(
-            address(ownerZEVM),
-            address(zrc20),
-            abi.encodePacked(receiverEVM),
-            message,
-            CallOptions({ gasLimit: 100_000, isArbitraryCall: true }),
-            revertOptions
-        );
-        gatewayZEVM.call(
-            abi.encodePacked(receiverEVM),
-            address(zrc20),
-            message,
-            CallOptions({ gasLimit: 100_000, isArbitraryCall: true }),
-            revertOptions
-        );
-
-        // Call execute on evm
-        vm.deal(address(gatewayEVM), value);
-        vm.expectEmit(true, true, true, true, address(gatewayEVM));
-        emit Executed(address(receiverEVM), value, message);
-        vm.prank(tssAddress);
-        gatewayEVM.execute{ value: value }(arbitraryCallMessageContext, address(receiverEVM), message);
-    }
-
-    function testCallReceiverEVMFromSenderZEVM() public {
-        string memory str = "Hello!";
-        uint256 num = 42;
-        bool flag = true;
-        uint256 value = 1 ether;
-
-        // Encode the function call data and call on zevm
-        bytes memory message = abi.encodeWithSelector(receiverEVM.receivePayable.selector, str, num, flag);
-        bytes memory data = abi.encodeWithSignature(
-            "call(bytes,address,bytes,(uint256,bool),(address,bool,address,bytes,uint256))",
-            abi.encodePacked(receiverEVM),
-            address(zrc20),
-            message,
-            callOptions,
-            revertOptions
-        );
-        vm.expectCall(address(gatewayZEVM), 0, data);
-        vm.prank(ownerZEVM);
-        senderZEVM.callReceiver(abi.encodePacked(receiverEVM), address(zrc20), str, num, flag);
-
-        // Call execute on evm
-        vm.deal(address(gatewayEVM), value);
-        vm.expectEmit(true, true, true, true, address(receiverEVM));
-        emit ReceivedPayable(address(gatewayEVM), value, str, num, flag);
-        vm.expectEmit(true, true, true, true, address(gatewayEVM));
-        emit Executed(address(receiverEVM), value, message);
-        vm.prank(tssAddress);
-        gatewayEVM.execute{ value: value }(arbitraryCallMessageContext, address(receiverEVM), message);
-    }
-
-    function testWithdrawAndCallReceiverEVMFromZEVM() public {
-        string memory str = "Hello!";
-        uint256 num = 42;
-        bool flag = true;
-        uint256 value = 1 ether;
-
-        // Encode the function call data and call on zevm
-        bytes memory message = abi.encodeWithSelector(receiverEVM.receivePayable.selector, str, num, flag);
-        uint256 expectedGasFee = 100_000;
-        vm.expectEmit(true, true, true, true, address(gatewayZEVM));
-        emit WithdrawnAndCalled(
-            ownerZEVM,
-            0,
-            abi.encodePacked(receiverEVM),
-            address(zrc20),
-            500_000,
-            expectedGasFee,
-            zrc20.PROTOCOL_FLAT_FEE(),
-            message,
-            CallOptions({ gasLimit: 100_000, isArbitraryCall: true }),
-            revertOptions
-        );
-        vm.prank(ownerZEVM);
-        gatewayZEVM.withdrawAndCall(
-            abi.encodePacked(receiverEVM),
-            500_000,
-            address(zrc20),
-            message,
-            CallOptions({ gasLimit: 100_000, isArbitraryCall: true }),
-            revertOptions
-        );
-
-        // Check the balance after withdrawal
-        uint256 balanceOfAfterWithdrawal = zrc20.balanceOf(ownerZEVM);
-        assertEq(balanceOfAfterWithdrawal, 500_000 - expectedGasFee);
-
-        // Call execute on evm
-        vm.deal(address(gatewayEVM), value);
-        vm.expectEmit(true, true, true, true, address(receiverEVM));
-        emit ReceivedPayable(address(gatewayEVM), value, str, num, flag);
-        vm.expectEmit(true, true, true, true, address(gatewayEVM));
-        emit Executed(address(receiverEVM), value, message);
-        vm.prank(tssAddress);
-        gatewayEVM.execute{ value: value }(arbitraryCallMessageContext, address(receiverEVM), message);
-    }
-
-    function testWithdrawAndCallReceiverEVMFromSenderZEVM() public {
-        string memory str = "Hello!";
-        uint256 num = 42;
-        bool flag = true;
-        uint256 value = 1 ether;
-
-        // Encode the function call data and call on zevm
+    function testWithdrawReceiverEVMFromSenderZEVM() public {
         uint256 senderBalanceBeforeWithdrawal = IZRC20(zrc20).balanceOf(address(senderZEVM));
-        bytes memory message = abi.encodeWithSelector(receiverEVM.receivePayable.selector, str, num, flag);
         bytes memory data = abi.encodeWithSignature(
-            "withdrawAndCall(bytes,uint256,address,bytes,(uint256,bool),(address,bool,address,bytes,uint256))",
+            "withdraw(bytes,uint256,address,(address,bool,address,bytes,uint256))",
             abi.encodePacked(receiverEVM),
             500_000,
             address(zrc20),
-            message,
-            callOptions,
             revertOptions
         );
         vm.expectCall(address(gatewayZEVM), 0, data);
         vm.prank(ownerZEVM);
-        senderZEVM.withdrawAndCallReceiver(abi.encodePacked(receiverEVM), 500_000, address(zrc20), str, num, flag);
+        senderZEVM.withdrawReceiver(abi.encodePacked(receiverEVM), 500_000, address(zrc20));
 
-        // Call execute on evm
-        vm.deal(address(gatewayEVM), value);
-        vm.expectEmit(true, true, true, true, address(receiverEVM));
-        emit ReceivedPayable(address(gatewayEVM), value, str, num, flag);
-        vm.expectEmit(true, true, true, true, address(gatewayEVM));
-        emit Executed(address(receiverEVM), value, message);
-        vm.prank(tssAddress);
-        gatewayEVM.execute{ value: value }(arbitraryCallMessageContext, address(receiverEVM), message);
-
-        // Check the balance after withdrawal
         uint256 senderBalanceAfterWithdrawal = IZRC20(zrc20).balanceOf(address(senderZEVM));
-        // Expected gas fee 1
-        assertEq(senderBalanceAfterWithdrawal, senderBalanceBeforeWithdrawal - 500_000 - 100_000);
+        assertEq(senderBalanceAfterWithdrawal, senderBalanceBeforeWithdrawal - 500_000);
     }
 }

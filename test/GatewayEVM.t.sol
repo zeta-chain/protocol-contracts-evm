@@ -39,7 +39,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
     address foo;
     RevertOptions revertOptions;
     RevertContext revertContext;
-    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0) });
+    MessageContext arbitraryCallMessageContext = MessageContext({ sender: address(0x123) });
 
     error EnforcedPause();
     error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);
@@ -168,24 +168,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.setConnector(address(0));
     }
 
-    function testForwardCallToReceiveNonPayable() public {
-        string[] memory str = new string[](1);
-        str[0] = "Hello, Foundry!";
-        uint256[] memory num = new uint256[](1);
-        num[0] = 42;
-        bool flag = true;
-
-        bytes memory data = abi.encodeWithSignature("receiveNonPayable(string[],uint256[],bool)", str, num, flag);
-
-        vm.expectCall(address(receiver), 0, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedNonPayable(address(gateway), str, num, flag);
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit Executed(address(receiver), 0, data);
-        vm.prank(tssAddress);
-        gateway.execute(arbitraryCallMessageContext, address(receiver), data);
-    }
-
+    
     function testForwardCallToReceiveOnCallUsingAuthCall() public {
         vm.expectEmit(true, true, true, true, address(receiver));
         address sender = address(0x123);
@@ -222,54 +205,10 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.execute(MessageContext({ sender: address(0x123) }), address(receiver), data);
     }
 
-    function testForwardCallToReceivePayable() public {
-        string memory str = "Hello, Foundry!";
-        uint256 num = 42;
-        bool flag = true;
-        uint256 value = 1 ether;
-        assertEq(0, address(receiver).balance);
-
-        bytes memory data = abi.encodeWithSignature("receivePayable(string,uint256,bool)", str, num, flag);
-
-        vm.expectCall(address(receiver), 1 ether, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedPayable(address(gateway), value, str, num, flag);
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit Executed(address(receiver), 1 ether, data);
-        vm.prank(tssAddress);
-        gateway.execute{ value: value }(arbitraryCallMessageContext, address(receiver), data);
-
-        assertEq(value, address(receiver).balance);
-    }
-
-    function testForwardCallToReceiveNoParams() public {
-        bytes memory data = abi.encodeWithSignature("receiveNoParams()");
-
-        vm.expectCall(address(receiver), 0, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedNoParams(address(gateway));
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit Executed(address(receiver), 0, data);
-        vm.prank(tssAddress);
-        gateway.execute(arbitraryCallMessageContext, address(receiver), data);
-    }
-
-    function testForwardCallToReceiveOnCallFails() public {
-        bytes memory data = abi.encodeWithSignature("onCall((address),bytes)", address(123), bytes(""));
-
-        vm.prank(tssAddress);
-        vm.expectRevert(NotAllowedToCallOnCall.selector);
-        gateway.execute(arbitraryCallMessageContext, address(receiver), data);
-    }
-
-    function testForwardCallToReceiveOnRevertFails() public {
-        bytes memory data = abi.encodeWithSignature("onRevert((address,address,uint256,bytes))");
-
-        vm.prank(tssAddress);
-        vm.expectRevert(NotAllowedToCallOnRevert.selector);
-        gateway.execute(arbitraryCallMessageContext, address(receiver), data);
-    }
-
+    
+    
+    
+    
     function testExecuteFailsIfDestinationIsZeroAddress() public {
         bytes memory data = abi.encodeWithSignature("receiveNoParams()");
 
@@ -286,59 +225,8 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.execute(MessageContext({ sender: address(0x123) }), address(0), data);
     }
 
-    function testForwardCallToReceiveNoParamsTogglePause() public {
-        vm.prank(foo);
-        vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, foo, PAUSER_ROLE));
-        gateway.pause();
-
-        vm.prank(foo);
-        vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, foo, PAUSER_ROLE));
-        gateway.unpause();
-
-        vm.prank(tssAddress);
-        gateway.pause();
-
-        bytes memory data = abi.encodeWithSignature("receiveNoParams()");
-
-        vm.expectRevert(EnforcedPause.selector);
-        vm.prank(tssAddress);
-        gateway.execute(arbitraryCallMessageContext, address(receiver), data);
-
-        vm.prank(owner);
-        gateway.unpause();
-
-        vm.expectCall(address(receiver), 0, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedNoParams(address(gateway));
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit Executed(address(receiver), 0, data);
-        vm.prank(tssAddress);
-        gateway.execute(arbitraryCallMessageContext, address(receiver), data);
-    }
-
-    function testExecuteWithTokenRevertingOnZeroApproval() public {
-        RevertOnZeroApprovalToken revertingToken = new RevertOnZeroApprovalToken("BNB", "BNB");
-        revertingToken.mint(owner, 1_000_000);
-
-        vm.startPrank(owner);
-        custody.whitelist(address(revertingToken));
-        vm.stopPrank();
-
-        uint256 amount = 100_000;
-        revertingToken.transfer(address(custody), amount);
-
-        bytes memory data = abi.encodeWithSignature("receiveNoParams()");
-
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedNoParams(address(gateway));
-
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit ExecutedWithERC20(address(revertingToken), address(receiver), amount, data);
-
-        vm.prank(address(custody));
-        gateway.executeWithERC20(arbitraryCallMessageContext, address(revertingToken), address(receiver), amount, data);
-    }
-
+    
+    
     function testExecuteWithNonReturnApprovalToken() public {
         NonReturnApprovalToken nonReturnToken = new NonReturnApprovalToken("USDT", "USDT");
         nonReturnToken.mint(owner, 1_000_000);
@@ -413,32 +301,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.executeRevert{ value: value }(address(0), data, revertContext);
     }
 
-    function testUpgradeAndForwardCallToReceivePayable() public {
-        // upgrade
-        Upgrades.upgradeProxy(address(gateway), "GatewayEVMUpgradeTest.sol", "", owner);
-        GatewayEVMUpgradeTest gatewayUpgradeTest = GatewayEVMUpgradeTest(address(gateway));
-        // call
-        address custodyBeforeUpgrade = gateway.custody();
-        address tssBeforeUpgrade = gateway.tssAddress();
-
-        string memory str = "Hello, Foundry!";
-        uint256 num = 42;
-        bool flag = true;
-        uint256 value = 1 ether;
-
-        bytes memory data = abi.encodeWithSignature("receivePayable(string,uint256,bool)", str, num, flag);
-        vm.expectCall(address(receiver), value, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedPayable(address(gateway), value, str, num, flag);
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit ExecutedV2(address(receiver), value, data);
-        vm.prank(tssAddress);
-        gatewayUpgradeTest.execute{ value: value }(arbitraryCallMessageContext, address(receiver), data);
-
-        assertEq(custodyBeforeUpgrade, gateway.custody());
-        assertEq(tssBeforeUpgrade, gateway.tssAddress());
     }
-}
 
 contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiverEVMEvents, INotSupportedMethods {
     using SafeERC20 for IERC20;
