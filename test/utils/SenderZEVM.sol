@@ -20,33 +20,6 @@ contract SenderZEVM {
         gateway = gateway_;
     }
 
-    /// @notice Call a receiver on EVM.
-    /// @param receiver The address of the receiver on the external chain.
-    /// @param zrc20 Address of zrc20 to pay fees.
-    /// @param str A string parameter to pass to the receiver's function.
-    /// @param num A numeric parameter to pass to the receiver's function.
-    /// @param flag A boolean parameter to pass to the receiver's function.
-    /// @dev Encodes the function call and passes it to the gateway.
-    function callReceiver(bytes memory receiver, address zrc20, string memory str, uint256 num, bool flag) external {
-        // Encode the function call to the receiver's receivePayable method
-        bytes memory message = abi.encodeWithSignature("receivePayable(string,uint256,bool)", str, num, flag);
-
-        RevertOptions memory revertOptions = RevertOptions({
-            revertAddress: address(0x321),
-            callOnRevert: true,
-            abortAddress: address(0x321),
-            revertMessage: "",
-            onRevertGasLimit: 0
-        });
-
-        CallOptions memory callOptions = CallOptions({ gasLimit: 100_000, isArbitraryCall: false });
-
-        IZRC20(zrc20).approve(gateway, 100_000);
-
-        // Pass encoded call to gateway
-        IGatewayZEVM(gateway).call(receiver, zrc20, message, callOptions, revertOptions);
-    }
-
     /// @notice Withdraw and call a receiver on EVM.
     /// @param receiver The address of the receiver on the external chain.
     /// @param amount The amount of tokens to withdraw.
