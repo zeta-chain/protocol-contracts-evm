@@ -11,6 +11,7 @@ import "../contracts/evm/interfaces/IGatewayEVM.sol";
 
 import "./mocks/NonReturnApprovalToken.sol";
 import "./mocks/RevertOnZeroApprovalToken.sol";
+import "./utils/FeeOnTransferERC20.sol";
 import "./utils/IReceiverEVM.sol";
 import "./utils/ReceiverEVM.sol";
 import "./utils/TestERC20.sol";
@@ -481,6 +482,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
     ERC20Custody custody;
     ZetaConnectorNonNative zetaConnector;
     TestERC20 token;
+    FeeOnTransferERC20 feeToken;
     ZetaNonEth zeta;
     address owner;
     address destination;
@@ -496,6 +498,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         tssAddress = address(0x5678);
 
         token = new TestERC20("test", "TTK");
+        feeToken = new FeeOnTransferERC20("fee", "FEE", 2);
 
         zeta = new ZetaNonEth(tssAddress, tssAddress);
         proxy = Upgrades.deployUUPSProxy(
@@ -522,9 +525,11 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         gateway.setConnector(address(zetaConnector));
 
         custody.whitelist(address(token));
+        custody.whitelist(address(feeToken));
         vm.stopPrank();
 
         token.mint(owner, ownerAmount);
+        feeToken.mint(owner, ownerAmount);
         vm.prank(tssAddress);
         zetaConnector.withdraw(owner, ownerAmount, "");
 
@@ -555,6 +560,25 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertEq(amount, custodyBalanceAfter);
 
         uint256 ownerAmountAfter = token.balanceOf(owner);
+        assertEq(ownerAmount - amount, ownerAmountAfter);
+    }
+
+    function testDepositERC20ToCustodyEmitsBalanceDeltaForFeeOnTransferToken() public {
+        uint256 amount = 100_000;
+        uint256 expectedReceived = 99_980;
+        uint256 custodyBalanceBefore = feeToken.balanceOf(address(custody));
+        assertEq(0, custodyBalanceBefore);
+
+        feeToken.approve(address(gateway), amount);
+
+        vm.expectEmit(true, true, true, true, address(gateway));
+        emit Deposited(owner, destination, expectedReceived, address(feeToken), "", revertOptions);
+        gateway.deposit(destination, amount, address(feeToken), revertOptions);
+
+        uint256 custodyBalanceAfter = feeToken.balanceOf(address(custody));
+        assertEq(expectedReceived, custodyBalanceAfter);
+
+        uint256 ownerAmountAfter = feeToken.balanceOf(owner);
         assertEq(ownerAmount - amount, ownerAmountAfter);
     }
 
@@ -786,6 +810,27 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertEq(amount, custodyBalanceAfter);
 
         uint256 ownerAmountAfter = token.balanceOf(owner);
+        assertEq(ownerAmount - amount, ownerAmountAfter);
+    }
+
+    function testDepositERC20ToCustodyWithPayloadEmitsBalanceDeltaForFeeOnTransferToken() public {
+        uint256 amount = 100_000;
+        uint256 expectedReceived = 99_980;
+        uint256 custodyBalanceBefore = feeToken.balanceOf(address(custody));
+        assertEq(0, custodyBalanceBefore);
+
+        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
+
+        feeToken.approve(address(gateway), amount);
+
+        vm.expectEmit(true, true, true, true, address(gateway));
+        emit DepositedAndCalled(owner, destination, expectedReceived, address(feeToken), payload, revertOptions);
+        gateway.depositAndCall(destination, amount, address(feeToken), payload, revertOptions);
+
+        uint256 custodyBalanceAfter = feeToken.balanceOf(address(custody));
+        assertEq(expectedReceived, custodyBalanceAfter);
+
+        uint256 ownerAmountAfter = feeToken.balanceOf(owner);
         assertEq(ownerAmount - amount, ownerAmountAfter);
     }
 

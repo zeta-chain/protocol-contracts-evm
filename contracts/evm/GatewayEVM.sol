@@ -329,9 +329,9 @@ contract GatewayEVM is
         uint256 feeCharged = _processFee();
         _validateChargedFeeForERC20(feeCharged);
 
-        _transferFromToAssetHandler(msg.sender, asset, amount);
+        uint256 depositedAmount = _transferFromToAssetHandler(msg.sender, asset, amount);
 
-        emit Deposited(msg.sender, receiver, amount, asset, "", revertOptions);
+        emit Deposited(msg.sender, receiver, depositedAmount, asset, "", revertOptions);
     }
 
     /// @notice Deposits ETH to the TSS address and calls an omnichain smart contract.
@@ -415,9 +415,9 @@ contract GatewayEVM is
         uint256 feeCharged = _processFee();
         _validateChargedFeeForERC20(feeCharged);
 
-        _transferFromToAssetHandler(msg.sender, asset, amount);
+        uint256 depositedAmount = _transferFromToAssetHandler(msg.sender, asset, amount);
 
-        emit DepositedAndCalled(msg.sender, receiver, amount, asset, payload, revertOptions);
+        emit DepositedAndCalled(msg.sender, receiver, depositedAmount, asset, payload, revertOptions);
     }
 
     /// @notice Calls an omnichain smart contract without asset transfer.
@@ -491,7 +491,15 @@ contract GatewayEVM is
     /// @param from Address of the sender.
     /// @param token Address of the ERC20 token.
     /// @param amount Amount of tokens to transfer.
-    function _transferFromToAssetHandler(address from, address token, uint256 amount) private {
+    /// @return depositedAmount Amount of tokens actually received by the asset handler.
+    function _transferFromToAssetHandler(
+        address from,
+        address token,
+        uint256 amount
+    )
+        private
+        returns (uint256 depositedAmount)
+    {
         if (token == zetaToken) {
             // transfer amount to gateway
             IERC20(token).safeTransferFrom(from, address(this), amount);
@@ -499,10 +507,13 @@ contract GatewayEVM is
             if (!IERC20(token).approve(zetaConnector, amount)) revert ApprovalFailed(token, zetaConnector);
             // send tokens to connector
             ZetaConnectorBase(zetaConnector).deposit(amount);
+            return amount;
         } else {
             // transfer to custody
             if (!IERC20Custody(custody).whitelisted(token)) revert NotWhitelistedInCustody(token);
+            uint256 oldBalance = IERC20(token).balanceOf(custody);
             IERC20(token).safeTransferFrom(from, custody, amount);
+            return IERC20(token).balanceOf(custody) - oldBalance;
         }
     }
 
