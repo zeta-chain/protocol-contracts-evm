@@ -9,6 +9,7 @@ contract FeeOnTransferERC20 is TestERC20 {
     uint256 public immutable FEE_BPS;
 
     constructor(string memory name, string memory symbol, uint256 feeBps_) TestERC20(name, symbol) {
+        require(feeBps_ <= 10_000, "FeeOnTransferERC20: feeBps exceeds 10000");
         FEE_BPS = feeBps_;
     }
 

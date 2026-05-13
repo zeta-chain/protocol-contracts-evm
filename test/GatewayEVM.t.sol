@@ -582,6 +582,39 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertEq(ownerAmount - amount, ownerAmountAfter);
     }
 
+    function testDepositERC20ToCustodyEmitsFullAmountForZeroFeeToken() public {
+        uint256 amount = 100_000;
+        FeeOnTransferERC20 zeroFeeToken = new FeeOnTransferERC20("zero fee", "ZRF", 0);
+        custody.whitelist(address(zeroFeeToken));
+        zeroFeeToken.mint(owner, ownerAmount);
+
+        zeroFeeToken.approve(address(gateway), amount);
+
+        vm.expectEmit(true, true, true, true, address(gateway));
+        emit Deposited(owner, destination, amount, address(zeroFeeToken), "", revertOptions);
+        gateway.deposit(destination, amount, address(zeroFeeToken), revertOptions);
+
+        assertEq(amount, zeroFeeToken.balanceOf(address(custody)));
+        assertEq(ownerAmount - amount, zeroFeeToken.balanceOf(owner));
+    }
+
+    function testDepositERC20ToCustodyEmitsBalanceDeltaForHighFeeToken() public {
+        uint256 amount = 100_000;
+        uint256 expectedReceived = 50_000;
+        FeeOnTransferERC20 highFeeToken = new FeeOnTransferERC20("high fee", "HIF", 5000);
+        custody.whitelist(address(highFeeToken));
+        highFeeToken.mint(owner, ownerAmount);
+
+        highFeeToken.approve(address(gateway), amount);
+
+        vm.expectEmit(true, true, true, true, address(gateway));
+        emit Deposited(owner, destination, expectedReceived, address(highFeeToken), "", revertOptions);
+        gateway.deposit(destination, amount, address(highFeeToken), revertOptions);
+
+        assertEq(expectedReceived, highFeeToken.balanceOf(address(custody)));
+        assertEq(ownerAmount - amount, highFeeToken.balanceOf(owner));
+    }
+
     function testDepositERC20ToCustodyFailsIfTokenIsNotWhitelisted() public {
         uint256 amount = 100_000;
         token.approve(address(gateway), amount);
