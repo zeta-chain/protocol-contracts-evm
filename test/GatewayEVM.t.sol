@@ -170,12 +170,12 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.setConnector(address(0));
     }
 
-    function testSetDepositsRestrictedOnlyAdmin() public {
+    function testSetDepositPausedOnlyAdmin() public {
         vm.prank(tssAddress);
         vm.expectRevert(
             abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, tssAddress, DEFAULT_ADMIN_ROLE)
         );
-        gateway.setDepositsRestricted(true);
+        gateway.setDepositPaused(true);
     }
 
     function testSetDepositAllowedAssetOnlyAdmin() public {
@@ -1217,18 +1217,18 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         gateway.updateAdditionalActionFee(newFee);
     }
 
-    function testSetDepositsRestricted() public {
+    function testSetDepositPaused() public {
         vm.expectEmit(true, true, true, true);
         emit UpdatedDepositAllowedAsset(address(zeta), true);
         vm.expectEmit(true, true, true, true);
-        emit UpdatedDepositsRestricted(true);
-        gateway.setDepositsRestricted(true);
-        assertTrue(gateway.depositsRestricted());
+        emit UpdatedDepositPaused(true);
+        gateway.setDepositPaused(true);
+        assertTrue(gateway.depositPaused());
 
         vm.expectEmit(true, true, true, true);
-        emit UpdatedDepositsRestricted(false);
-        gateway.setDepositsRestricted(false);
-        assertFalse(gateway.depositsRestricted());
+        emit UpdatedDepositPaused(false);
+        gateway.setDepositPaused(false);
+        assertFalse(gateway.depositPaused());
     }
 
     function testSetDepositAllowedAsset() public {
@@ -1240,9 +1240,9 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertTrue(gateway.depositAllowedAssets(address(token)));
     }
 
-    function testRestrictedModeAllowsZetaByDefault() public {
+    function testDepositPauseAllowsZetaByDefault() public {
         uint256 amount = 100_000;
-        gateway.setDepositsRestricted(true);
+        gateway.setDepositPaused(true);
 
         zeta.approve(address(gateway), amount);
         gateway.deposit(destination, amount, address(zeta), revertOptions);
@@ -1250,10 +1250,10 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertEq(ownerAmount - amount, zeta.balanceOf(owner));
     }
 
-    function testRestrictedModeBlocksNativeDeposits() public {
+    function testDepositPauseBlocksNativeDeposits() public {
         uint256 amount = 100_000;
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
-        gateway.setDepositsRestricted(true);
+        gateway.setDepositPaused(true);
 
         vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
         gateway.deposit{ value: amount }(destination, revertOptions);
@@ -1268,10 +1268,10 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         gateway.depositAndCall{ value: amount }(destination, amount, payload, revertOptions);
     }
 
-    function testRestrictedModeBlocksNonZetaERC20Deposits() public {
+    function testDepositPauseBlocksNonZetaERC20Deposits() public {
         uint256 amount = 100_000;
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
-        gateway.setDepositsRestricted(true);
+        gateway.setDepositPaused(true);
 
         token.approve(address(gateway), amount * 2);
 
@@ -1282,15 +1282,17 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         gateway.depositAndCall(destination, amount, address(token), payload, revertOptions);
     }
 
-    function testRestrictedModeAllowsAllowlistedERC20Deposits() public {
+    function testDepositPauseAllowsAllowlistedERC20Deposits() public {
         uint256 amount = 100_000;
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
         gateway.setDepositAllowedAsset(address(token), true);
-        gateway.setDepositsRestricted(true);
+        gateway.setDepositPaused(true);
 
         token.approve(address(gateway), amount * 2);
         gateway.deposit(destination, amount, address(token), revertOptions);
-        gateway.depositAndCall{ value: ADDITIONAL_ACTION_FEE_WEI }(destination, amount, address(token), payload, revertOptions);
+        gateway.depositAndCall{ value: ADDITIONAL_ACTION_FEE_WEI }(
+            destination, amount, address(token), payload, revertOptions
+        );
 
         assertEq(amount * 2, token.balanceOf(address(custody)));
     }

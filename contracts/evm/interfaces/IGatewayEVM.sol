@@ -76,13 +76,13 @@ interface IGatewayEVMEvents {
     /// @param newFeeWei new fee in wei
     event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 
-    /// @notice Emitted when deposit restriction mode is updated.
-    /// @param restricted Whether deposit restriction mode is enabled.
-    event UpdatedDepositsRestricted(bool restricted);
+    /// @notice Emitted when deposit pause (allowlist-only) mode is updated.
+    /// @param paused Whether deposits are paused for non-allowlisted assets.
+    event UpdatedDepositPaused(bool paused);
 
     /// @notice Emitted when a deposit asset allowlist entry is updated.
     /// @param asset The asset address (zero address for native token).
-    /// @param allowed Whether deposits for this asset are allowed while restricted mode is enabled.
+    /// @param allowed Whether deposits for this asset are allowed while `depositPaused` is true.
     event UpdatedDepositAllowedAsset(address indexed asset, bool allowed);
 }
 
@@ -149,7 +149,7 @@ interface IGatewayEVMErrors {
     /// @param provided The actual msg.value provided.
     error IncorrectValueProvided(uint256 expected, uint256 provided);
 
-    /// @notice Error thrown when restricted mode blocks deposits for the provided asset.
+    /// @notice Error thrown when deposit pause blocks deposits for the provided asset.
     /// @param asset The asset address (zero address for native token).
     error AssetDepositNotAllowed(address asset);
 }
@@ -157,13 +157,13 @@ interface IGatewayEVMErrors {
 /// @title IGatewayEVM
 /// @notice Interface for the GatewayEVM contract.
 interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
-    /// @notice Enables or disables deposit restriction mode.
-    /// @param restricted Whether restriction mode should be enabled.
-    function setDepositsRestricted(bool restricted) external;
+    /// @notice Pauses or unpauses deposits (allowlist-only while paused).
+    /// @param paused Whether deposits should be paused (non-allowlisted assets blocked).
+    function setDepositPaused(bool paused) external;
 
-    /// @notice Configures whether an asset is allowed for deposits in restricted mode.
+    /// @notice Configures whether an asset may deposit while `depositPaused` is true.
     /// @param asset Asset address (zero address for native token).
-    /// @param allowed Whether deposits of this asset are allowed in restricted mode.
+    /// @param allowed Whether deposits of this asset are allowed while deposits are paused.
     function setDepositAllowedAsset(address asset, bool allowed) external;
 
     /// @notice Executes a call to a contract using ERC20 tokens.
