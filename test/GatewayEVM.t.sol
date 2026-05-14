@@ -1221,9 +1221,12 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         vm.expectEmit(true, true, true, true);
         emit UpdatedDepositAllowedAsset(address(zeta), true);
         vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositAllowedAsset(address(0), true);
+        vm.expectEmit(true, true, true, true);
         emit UpdatedDepositPaused(true);
         gateway.setDepositPaused(true);
         assertTrue(gateway.depositPaused());
+        assertTrue(gateway.depositAllowedAssets(address(0)));
 
         vm.expectEmit(true, true, true, true);
         emit UpdatedDepositPaused(false);
@@ -1254,6 +1257,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         uint256 amount = 100_000;
         bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
         gateway.setDepositPaused(true);
+        gateway.setDepositAllowedAsset(address(0), false);
 
         vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
         gateway.deposit{ value: amount }(destination, revertOptions);
@@ -1295,6 +1299,19 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         );
 
         assertEq(amount * 2, token.balanceOf(address(custody)));
+    }
+
+    function testDepositPauseAllowsNativeByDefault() public {
+        uint256 amount = 100_000;
+        uint256 tssBalanceBefore = tssAddress.balance;
+
+        gateway.setDepositPaused(true);
+
+        vm.expectEmit(true, true, true, true, address(gateway));
+        emit Deposited(owner, destination, amount, address(0), "", revertOptions);
+        gateway.deposit{ value: amount }(destination, revertOptions);
+
+        assertEq(tssBalanceBefore + amount, tssAddress.balance);
     }
 
     function testFeeSystemWithUpdatedFee() public {

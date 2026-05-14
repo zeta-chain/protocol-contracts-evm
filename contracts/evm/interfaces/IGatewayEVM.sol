@@ -158,6 +158,8 @@ interface IGatewayEVMErrors {
 /// @notice Interface for the GatewayEVM contract.
 interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
     /// @notice Pauses or unpauses deposits (allowlist-only while paused).
+    /// @dev When enabling pause, ZETA and native gas (`address(0)`) are allowlisted if missing so bridging
+    ///      and native deposits on this chain stay usable until admin adjusts `depositAllowedAssets`.
     /// @param paused Whether deposits should be paused (non-allowlisted assets blocked).
     function setDepositPaused(bool paused) external;
 

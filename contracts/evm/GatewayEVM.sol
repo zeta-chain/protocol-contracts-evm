@@ -53,7 +53,7 @@ contract GatewayEVM is
     uint256 public additionalActionFeeWei;
     /// @notice When true, deposits are paused except for assets explicitly allowed via `depositAllowedAssets`.
     bool public depositPaused;
-    /// @notice Per-asset allowlist used while `depositPaused` is true.
+    /// @notice Per-asset allowlist used while `depositPaused` is true (`address(0)` = chain native gas token).
     mapping(address asset => bool allowed) public depositAllowedAssets;
 
     /// @notice New role identifier for tss role.
@@ -134,11 +134,19 @@ contract GatewayEVM is
     }
 
     /// @notice Pauses or unpauses deposits (allowlist-only while paused).
+    /// @dev When enabling pause, ZETA and the chain native asset (`address(0)`, e.g. ETH or BNB)
+    ///      are allowlisted if not already, so users can still bridge ZETA and pay native gas on this chain.
     /// @param paused Whether deposits should be paused (non-allowlisted assets blocked).
     function setDepositPaused(bool paused) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        if (paused && !depositAllowedAssets[zetaToken]) {
-            depositAllowedAssets[zetaToken] = true;
-            emit UpdatedDepositAllowedAsset(zetaToken, true);
+        if (paused) {
+            if (!depositAllowedAssets[zetaToken]) {
+                depositAllowedAssets[zetaToken] = true;
+                emit UpdatedDepositAllowedAsset(zetaToken, true);
+            }
+            if (!depositAllowedAssets[address(0)]) {
+                depositAllowedAssets[address(0)] = true;
+                emit UpdatedDepositAllowedAsset(address(0), true);
+            }
         }
         depositPaused = paused;
         emit UpdatedDepositPaused(paused);
