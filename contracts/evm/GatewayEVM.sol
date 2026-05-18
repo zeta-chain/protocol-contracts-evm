@@ -143,7 +143,7 @@ contract GatewayEVM is
         emit Reverted(destination, address(0), msg.value, data, revertContext);
     }
 
-    /// @notice Executes a call to a destination address without ERC20 tokens.
+    /// @notice Executes an authenticated call to a destination address without ERC20 tokens.
     /// @dev This function can only be called by the TSS address and it is payable.
     /// @param messageContext Message context containing sender.
     /// @param destination Address to call.
@@ -162,15 +162,8 @@ contract GatewayEVM is
         returns (bytes memory)
     {
         if (destination == address(0)) revert ZeroAddress();
-        bytes memory result;
-        // Execute the call on the target contract
-        // if sender is provided in messageContext call is authenticated and target is Callable.onCall
-        // otherwise, call is arbitrary
-        if (messageContext.sender == address(0)) {
-            result = _executeArbitraryCall(destination, data);
-        } else {
-            result = _executeAuthenticatedCall(messageContext, destination, data);
-        }
+        if (messageContext.sender == address(0)) revert ArbitraryCallDisabled();
+        bytes memory result = _executeAuthenticatedCall(messageContext, destination, data);
 
         emit Executed(destination, msg.value, data);
 
@@ -199,18 +192,12 @@ contract GatewayEVM is
     {
         if (amount == 0) revert InsufficientERC20Amount();
         if (to == address(0)) revert ZeroAddress();
+        if (messageContext.sender == address(0)) revert ArbitraryCallDisabled();
         // Approve the target contract to spend the tokens
         if (!_resetApproval(token, to)) revert ApprovalFailed();
         // Approve token to spender
         IERC20(token).forceApprove(to, amount);
-        // Execute the call on the target contract
-        // if sender is provided in messageContext call is authenticated and target is Callable.onCall
-        // otherwise, call is arbitrary
-        if (messageContext.sender == address(0)) {
-            _executeArbitraryCall(to, data);
-        } else {
-            _executeAuthenticatedCall(messageContext, to, data);
-        }
+        _executeAuthenticatedCall(messageContext, to, data);
 
         // Reset approval
         if (!_resetApproval(token, to)) revert ApprovalFailed();
@@ -536,18 +523,6 @@ contract GatewayEVM is
         }
     }
 
-    /// @dev Private function to execute an arbitrary call to a destination address.
-    /// @param destination Address to call.
-    /// @param data Calldata to pass to the call.
-    /// @return The result of the call.
-    function _executeArbitraryCall(address destination, bytes calldata data) private returns (bytes memory) {
-        _revertIfOnCallOrOnRevert(data);
-        (bool success, bytes memory result) = destination.call{ value: msg.value }(data);
-        if (!success) revert ExecutionFailed();
-
-        return result;
-    }
-
     /// @dev Private function to execute an authenticated call to a destination address.
     /// @param messageContext Message context containing sender and arbitrary call flag.
     /// @param destination Address to call.
@@ -562,24 +537,6 @@ contract GatewayEVM is
         returns (bytes memory)
     {
         return Callable(destination).onCall{ value: msg.value }(messageContext, data);
-    }
-
-    // @dev prevent spoofing onCall and onRevert functions
-    function _revertIfOnCallOrOnRevert(bytes calldata data) private pure {
-        if (data.length >= 4) {
-            bytes4 functionSelector;
-            assembly {
-                functionSelector := calldataload(data.offset)
-            }
-
-            if (functionSelector == Callable.onCall.selector) {
-                revert NotAllowedToCallOnCall();
-            }
-
-            if (functionSelector == Revertable.onRevert.selector) {
-                revert NotAllowedToCallOnRevert();
-            }
-        }
     }
 
     /// @notice Processes fee collection for cross-chain actions within a transaction.

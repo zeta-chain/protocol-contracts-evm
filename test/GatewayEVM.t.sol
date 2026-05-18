@@ -177,12 +177,8 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
 
         bytes memory data = abi.encodeWithSignature("receiveNonPayable(string[],uint256[],bool)", str, num, flag);
 
-        vm.expectCall(address(receiver), 0, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedNonPayable(address(gateway), str, num, flag);
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit Executed(address(receiver), 0, data);
         vm.prank(tssAddress);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         gateway.execute(arbitraryCallMessageContext, address(receiver), data);
     }
 
@@ -231,26 +227,17 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
 
         bytes memory data = abi.encodeWithSignature("receivePayable(string,uint256,bool)", str, num, flag);
 
-        vm.expectCall(address(receiver), 1 ether, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedPayable(address(gateway), value, str, num, flag);
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit Executed(address(receiver), 1 ether, data);
         vm.prank(tssAddress);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         gateway.execute{ value: value }(arbitraryCallMessageContext, address(receiver), data);
-
-        assertEq(value, address(receiver).balance);
+        assertEq(0, address(receiver).balance);
     }
 
     function testForwardCallToReceiveNoParams() public {
         bytes memory data = abi.encodeWithSignature("receiveNoParams()");
 
-        vm.expectCall(address(receiver), 0, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedNoParams(address(gateway));
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit Executed(address(receiver), 0, data);
         vm.prank(tssAddress);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         gateway.execute(arbitraryCallMessageContext, address(receiver), data);
     }
 
@@ -258,7 +245,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         bytes memory data = abi.encodeWithSignature("onCall((address),bytes)", address(123), bytes(""));
 
         vm.prank(tssAddress);
-        vm.expectRevert(NotAllowedToCallOnCall.selector);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         gateway.execute(arbitraryCallMessageContext, address(receiver), data);
     }
 
@@ -266,7 +253,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         bytes memory data = abi.encodeWithSignature("onRevert((address,address,uint256,bytes))");
 
         vm.prank(tssAddress);
-        vm.expectRevert(NotAllowedToCallOnRevert.selector);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         gateway.execute(arbitraryCallMessageContext, address(receiver), data);
     }
 
@@ -307,12 +294,8 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         vm.prank(owner);
         gateway.unpause();
 
-        vm.expectCall(address(receiver), 0, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedNoParams(address(gateway));
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit Executed(address(receiver), 0, data);
         vm.prank(tssAddress);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         gateway.execute(arbitraryCallMessageContext, address(receiver), data);
     }
 
@@ -329,13 +312,8 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
 
         bytes memory data = abi.encodeWithSignature("receiveNoParams()");
 
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedNoParams(address(gateway));
-
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit ExecutedWithERC20(address(revertingToken), address(receiver), amount, data);
-
         vm.prank(address(custody));
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         gateway.executeWithERC20(arbitraryCallMessageContext, address(revertingToken), address(receiver), amount, data);
     }
 
@@ -353,6 +331,7 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         bytes memory data = abi.encodeWithSignature("receiveNoParams()");
 
         vm.prank(address(custody));
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         gateway.executeWithERC20(arbitraryCallMessageContext, address(nonReturnToken), address(receiver), amount, data);
     }
 
@@ -427,12 +406,8 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         uint256 value = 1 ether;
 
         bytes memory data = abi.encodeWithSignature("receivePayable(string,uint256,bool)", str, num, flag);
-        vm.expectCall(address(receiver), value, data);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedPayable(address(gateway), value, str, num, flag);
-        vm.expectEmit(true, true, true, true, address(gateway));
-        emit ExecutedV2(address(receiver), value, data);
         vm.prank(tssAddress);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         gatewayUpgradeTest.execute{ value: value }(arbitraryCallMessageContext, address(receiver), data);
 
         assertEq(custodyBeforeUpgrade, gateway.custody());

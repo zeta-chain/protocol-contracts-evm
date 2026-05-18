@@ -252,6 +252,7 @@ contract GatewayZEVM is
     {
         if (receiver.length == 0) revert ZeroAddress();
         if (amount == 0) revert InsufficientZRC20Amount();
+        if (callOptions.isArbitraryCall) revert ArbitraryCallNotSupported();
         _validateMinGasLimit(callOptions.gasLimit, zrc20);
         if (message.length + revertOptions.revertMessage.length > MAX_MESSAGE_SIZE) revert MessageSizeExceeded();
 
@@ -344,44 +345,6 @@ contract GatewayZEVM is
         // emit WithdrawnAndCalled(
         //     msg.sender, chainId, receiver, address(zetaToken), amount, 0, 0, message, callOptions, revertOptions
         // );
-    }
-
-    /// @notice Call a smart contract on an external chain without asset transfer.
-    /// @param receiver The receiver address on the external chain.
-    /// @param zrc20 Address of zrc20 to pay fees.
-    /// @param message The calldata to pass to the contract call.
-    /// @param callOptions Call options including gas limit and arbirtrary call flag.
-    /// @param revertOptions Revert options.
-    function call(
-        bytes memory receiver,
-        address zrc20,
-        bytes calldata message,
-        CallOptions calldata callOptions,
-        RevertOptions calldata revertOptions
-    )
-        external
-        whenNotPaused
-    {
-        _validateMinGasLimit(callOptions.gasLimit, zrc20);
-        if (message.length + revertOptions.revertMessage.length > MAX_MESSAGE_SIZE) revert MessageSizeExceeded();
-
-        _call(receiver, zrc20, message, callOptions, revertOptions);
-    }
-
-    function _call(
-        bytes memory receiver,
-        address zrc20,
-        bytes calldata message,
-        CallOptions memory callOptions,
-        RevertOptions memory revertOptions
-    )
-        private
-    {
-        if (receiver.length == 0) revert ZeroAddress();
-
-        _burnProtocolFees(zrc20, callOptions.gasLimit);
-
-        emit Called(msg.sender, zrc20, receiver, message, callOptions, revertOptions);
     }
 
     /// @notice Deposit foreign coins into ZRC20.

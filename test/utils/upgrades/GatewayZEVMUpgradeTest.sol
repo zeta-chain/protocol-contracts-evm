@@ -235,6 +235,7 @@ contract GatewayZEVMUpgradeTest is
     {
         if (receiver.length == 0) revert ZeroAddress();
         if (amount == 0) revert InsufficientZRC20Amount();
+        if (callOptions.isArbitraryCall) revert ArbitraryCallNotSupported();
         if (callOptions.gasLimit == 0) revert InsufficientGasLimit();
         if (message.length + revertOptions.revertMessage.length > MAX_MESSAGE_SIZE) revert MessageSizeExceeded();
 
@@ -350,71 +351,6 @@ contract GatewayZEVMUpgradeTest is
         emit Withdrawn(
             msg.sender, chainId, receiver, address(zetaToken), amount, 0, 0, message, callOptions, revertOptions
         );
-    }
-
-    /// @notice Call a smart contract on an external chain without asset transfer.
-    /// @param receiver The receiver address on the external chain.
-    /// @param zrc20 Address of zrc20 to pay fees.
-    /// @param message The calldata to pass to the contract call.
-    /// @param callOptions Call options including gas limit and arbirtrary call flag.
-    /// @param revertOptions Revert options.
-    function call(
-        bytes memory receiver,
-        address zrc20,
-        bytes calldata message,
-        CallOptions calldata callOptions,
-        RevertOptions calldata revertOptions
-    )
-        external
-        nonReentrant
-        whenNotPaused
-    {
-        if (callOptions.gasLimit == 0) revert InsufficientGasLimit();
-        if (message.length + revertOptions.revertMessage.length > MAX_MESSAGE_SIZE) revert MessageSizeExceeded();
-
-        _call(receiver, zrc20, message, callOptions, revertOptions);
-    }
-
-    /// @notice Call a smart contract on an external chain without asset transfer.
-    /// @param receiver The receiver address on the external chain.
-    /// @param zrc20 Address of zrc20 to pay fees.
-    /// @param message The calldata to pass to the contract call.
-    /// @param gasLimit Gas limit.
-    /// @param revertOptions Revert options.
-    function call(
-        bytes memory receiver,
-        address zrc20,
-        bytes calldata message,
-        uint256 gasLimit,
-        RevertOptions calldata revertOptions
-    )
-        external
-        nonReentrant
-        whenNotPaused
-    {
-        if (gasLimit == 0) revert InsufficientGasLimit();
-        if (message.length + revertOptions.revertMessage.length > MAX_MESSAGE_SIZE) revert MessageSizeExceeded();
-
-        _call(receiver, zrc20, message, CallOptions({ gasLimit: gasLimit, isArbitraryCall: true }), revertOptions);
-    }
-
-    function _call(
-        bytes memory receiver,
-        address zrc20,
-        bytes calldata message,
-        CallOptions memory callOptions,
-        RevertOptions memory revertOptions
-    )
-        private
-    {
-        if (receiver.length == 0) revert ZeroAddress();
-
-        (address gasZRC20, uint256 gasFee) = IZRC20(zrc20).withdrawGasFeeWithGasLimit(callOptions.gasLimit);
-        if (!IZRC20(gasZRC20).transferFrom(msg.sender, PROTOCOL_ADDRESS, gasFee)) {
-            revert GasFeeTransferFailed();
-        }
-
-        emit Called(msg.sender, zrc20, receiver, message, callOptions, revertOptions);
     }
 
     /// @notice Deposit foreign coins into ZRC20.

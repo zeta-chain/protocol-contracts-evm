@@ -11,6 +11,8 @@ import "./interfaces/IZRC20.sol";
 contract CoreRegistry is BaseRegistry {
     /// @notice Cross-chain message gas limit
     uint256 public constant CROSS_CHAIN_GAS_LIMIT = 500_000;
+    /// @notice Dust amount used for cross-chain registry messages via withdrawAndCall.
+    uint256 private constant CROSS_CHAIN_MESSAGE_AMOUNT = 1;
     /// @notice Instance of the GatewayZEVM contract for cross-chain communication
     IGatewayZEVM public gatewayZEVM;
 
@@ -322,11 +324,14 @@ contract CoreRegistry is BaseRegistry {
         // Approve gas token amount for cctx
         address gasZRC20 = _chains[targetChainId].gasZRC20;
         (, uint256 gasFee) = IZRC20(gasZRC20).withdrawGasFeeWithGasLimit(CROSS_CHAIN_GAS_LIMIT);
-        if (!IZRC20(gasZRC20).transferFrom(msg.sender, address(this), gasFee)) {
+        uint256 totalAmount = gasFee + CROSS_CHAIN_MESSAGE_AMOUNT;
+        if (!IZRC20(gasZRC20).transferFrom(msg.sender, address(this), totalAmount)) {
             revert TransferFailed();
         }
-        IZRC20(gasZRC20).approve(address(gatewayZEVM), gasFee);
+        IZRC20(gasZRC20).approve(address(gatewayZEVM), totalAmount);
 
-        gatewayZEVM.call(_chains[targetChainId].registry, gasZRC20, message, callOptions, revertOptions);
+        gatewayZEVM.withdrawAndCall(
+            _chains[targetChainId].registry, CROSS_CHAIN_MESSAGE_AMOUNT, gasZRC20, message, callOptions, revertOptions
+        );
     }
 }

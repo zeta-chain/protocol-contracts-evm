@@ -163,31 +163,12 @@ contract ZetaConnectorNonNativeTest is
         uint256 balanceBeforeZetaConnector = zetaToken.balanceOf(address(zetaConnector));
         assertEq(balanceBeforeZetaConnector, 0);
 
-        bytes memory mintData =
-            abi.encodeWithSignature("mint(address,uint256,bytes32)", address(gateway), amount, internalSendHash);
-        vm.expectCall(address(zetaToken), 0, mintData);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedERC20(address(gateway), amount, address(zetaToken), destination);
-        vm.expectEmit(true, true, true, true, address(zetaConnector));
-        emit WithdrawnAndCalled(address(receiver), amount, data);
         vm.prank(tssAddress);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         zetaConnector.withdrawAndCall(arbitraryCallMessageContext, address(receiver), amount, data, internalSendHash);
 
-        // Verify that the tokens were transferred to the destination address
-        uint256 balanceAfter = zetaToken.balanceOf(destination);
-        assertEq(balanceAfter, amount);
-
-        // Verify that zeta connector doesn't hold any tokens
-        uint256 balanceAfterZetaConnector = zetaToken.balanceOf(address(zetaConnector));
-        assertEq(balanceAfterZetaConnector, 0);
-
-        // Verify that the approval was reset
-        uint256 allowance = zetaToken.allowance(address(gateway), address(receiver));
-        assertEq(allowance, 0);
-
-        // Verify that gateway doesn't hold any tokens
-        uint256 balanceGateway = zetaToken.balanceOf(address(gateway));
-        assertEq(balanceGateway, 0);
+        assertEq(zetaToken.balanceOf(destination), 0);
+        assertEq(zetaToken.balanceOf(address(zetaConnector)), 0);
     }
 
     function testWithdrawAndCallReceiveOnCall() public {
@@ -232,7 +213,7 @@ contract ZetaConnectorNonNativeTest is
         bytes memory message = bytes("1");
         bytes memory data = abi.encodeWithSignature("onCall((address),bytes)", sender, message);
 
-        vm.expectRevert(NotAllowedToCallOnCall.selector);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         vm.prank(tssAddress);
         zetaConnector.withdrawAndCall(arbitraryCallMessageContext, address(receiver), amount, data, internalSendHash);
     }
@@ -257,14 +238,8 @@ contract ZetaConnectorNonNativeTest is
         uint256 balanceBeforeZetaConnector = zetaToken.balanceOf(address(zetaConnector));
         assertEq(balanceBeforeZetaConnector, 0);
 
-        bytes memory mintData =
-            abi.encodeWithSignature("mint(address,uint256,bytes32)", address(gateway), amount, internalSendHash);
-        vm.expectCall(address(zetaToken), 0, mintData);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedNoParams(address(gateway));
-        vm.expectEmit(true, true, true, true, address(zetaConnector));
-        emit WithdrawnAndCalled(address(receiver), amount, data);
         vm.prank(tssAddress);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         zetaConnector.withdrawAndCall(arbitraryCallMessageContext, address(receiver), amount, data, internalSendHash);
 
         // Verify that the no tokens were transferred to the destination address
@@ -275,13 +250,7 @@ contract ZetaConnectorNonNativeTest is
         uint256 balanceAfterZetaConnector = zetaToken.balanceOf(address(zetaConnector));
         assertEq(balanceAfterZetaConnector, 0);
 
-        // Verify that the approval was reset
-        uint256 allowance = zetaToken.allowance(address(gateway), address(receiver));
-        assertEq(allowance, 0);
-
-        // Verify that gateway doesn't hold any tokens
-        uint256 balanceGateway = zetaToken.balanceOf(address(gateway));
-        assertEq(balanceGateway, 0);
+        assertEq(zetaToken.balanceOf(address(gateway)), 0);
     }
 
     function testWithdrawAndCallReceiveERC20Partial() public {
@@ -295,19 +264,9 @@ contract ZetaConnectorNonNativeTest is
         uint256 balanceBeforeZetaConnector = zetaToken.balanceOf(address(zetaConnector));
         assertEq(balanceBeforeZetaConnector, 0);
 
-        bytes memory mintData =
-            abi.encodeWithSignature("mint(address,uint256,bytes32)", address(gateway), amount, internalSendHash);
-        vm.expectCall(address(zetaToken), 0, mintData);
-        vm.expectEmit(true, true, true, true, address(receiver));
-        emit ReceivedERC20(address(gateway), amount / 2, address(zetaToken), destination);
-        vm.expectEmit(true, true, true, true, address(zetaConnector));
-        emit WithdrawnAndCalled(address(receiver), amount, data);
         vm.prank(tssAddress);
+        vm.expectRevert(ArbitraryCallDisabled.selector);
         zetaConnector.withdrawAndCall(arbitraryCallMessageContext, address(receiver), amount, data, internalSendHash);
-
-        // Verify that the tokens were transferred to the destination address
-        uint256 balanceAfter = zetaToken.balanceOf(destination);
-        assertEq(balanceAfter, amount / 2);
 
         // Verify that zeta connector doesn't hold any tokens
         uint256 balanceAfterZetaConnector = zetaToken.balanceOf(address(zetaConnector));

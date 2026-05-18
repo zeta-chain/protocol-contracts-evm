@@ -113,6 +113,9 @@ interface IGatewayZEVMErrors {
 
     /// @notice Error indicating message size exceeded in external functions.
     error MessageSizeExceeded();
+
+    /// @notice Error indicating arbitrary calls are not supported.
+    error ArbitraryCallNotSupported();
 }
 
 /// @title IGatewayZEVM
@@ -172,21 +175,6 @@ interface IGatewayZEVM is IGatewayZEVMErrors, IGatewayZEVMEvents {
         bytes memory receiver,
         uint256 amount,
         uint256 chainId,
-        bytes calldata message,
-        CallOptions calldata callOptions,
-        RevertOptions calldata revertOptions
-    )
-        external;
-
-    /// @notice Call a smart contract on an external chain without asset transfer.
-    /// @param receiver The receiver address on the external chain.
-    /// @param zrc20 Address of zrc20 to pay fees.
-    /// @param message The calldata to pass to the contract call.
-    /// @param callOptions Call options including gas limit and arbirtrary call flag.
-    /// @param revertOptions Revert options.
-    function call(
-        bytes memory receiver,
-        address zrc20,
         bytes calldata message,
         CallOptions calldata callOptions,
         RevertOptions calldata revertOptions
