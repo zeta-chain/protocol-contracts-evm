@@ -61,6 +61,33 @@ uint256 public additionalActionFeeWei
 ```
 
 
+#### depositPaused
+When true, deposits are paused except for assets explicitly allowed via `depositAllowedAssets`.
+
+
+```solidity
+bool public depositPaused
+```
+
+
+#### depositPauseDefaultsApplied
+Whether default ZETA/native allowlist entries were applied on the first pause enable.
+
+
+```solidity
+bool private depositPauseDefaultsApplied
+```
+
+
+#### depositAllowedAssets
+Per-asset allowlist used while `depositPaused` is true (`address(0)` = chain native gas token).
+
+
+```solidity
+mapping(address asset => bool allowed) public depositAllowedAssets
+```
+
+
 #### TSS_ROLE
 New role identifier for tss role.
 
@@ -199,6 +226,41 @@ function updateAdditionalActionFee(uint256 newFeeWei) external onlyRole(DEFAULT_
 |Name|Type|Description|
 |----|----|-----------|
 |`newFeeWei`|`uint256`|The new fee amount in wei for additional actions in the same transaction.|
+
+
+#### setDepositPaused
+
+Pauses or unpauses deposits (allowlist-only while paused).
+
+On the first pause enable only, ZETA and the chain native asset (`address(0)`, e.g. ETH or BNB)
+are allowlisted if not already, so users can still bridge ZETA and pay native gas on this chain.
+Later re-pauses do not reset the allowlist, preserving explicit admin blocks.
+
+
+```solidity
+function setDepositPaused(bool paused) external onlyRole(DEFAULT_ADMIN_ROLE);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`paused`|`bool`|Whether deposits should be paused (non-allowlisted assets blocked).|
+
+
+#### setDepositAllowedAsset
+
+Configures whether an asset may deposit while `depositPaused` is true.
+
+
+```solidity
+function setDepositAllowedAsset(address asset, bool allowed) external onlyRole(DEFAULT_ADMIN_ROLE);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|Asset address (zero address for native token).|
+|`allowed`|`bool`|Whether deposits of this asset are allowed while deposits are paused.|
 
 
 #### executeRevert
@@ -707,6 +769,23 @@ function _validateChargedFeeForETHWithAmount(uint256 amount, uint256 feeCharged)
 |----|----|-----------|
 |`amount`|`uint256`|The amount to deposit (excluding fees).|
 |`feeCharged`|`uint256`|The fee amount that was charged.|
+
+
+#### _validateAllowedDepositAsset
+
+Validates whether a deposit asset is allowed.
+
+Applies only when `depositPaused` is true.
+
+
+```solidity
+function _validateAllowedDepositAsset(address asset) internal view;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|Asset address (zero address for native token).|
 
 
 #### _getNextActionIndex
@@ -2065,6 +2144,41 @@ Interface for the GatewayEVM contract.
 
 
 ### Functions
+#### setDepositPaused
+
+Pauses or unpauses deposits (allowlist-only while paused).
+
+On the first pause enable only, ZETA and native gas (`address(0)`) are allowlisted if missing so
+bridging and native deposits stay usable until admin adjusts `depositAllowedAssets`. Re-pauses
+do not reset the allowlist.
+
+
+```solidity
+function setDepositPaused(bool paused) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`paused`|`bool`|Whether deposits should be paused (non-allowlisted assets blocked).|
+
+
+#### setDepositAllowedAsset
+
+Configures whether an asset may deposit while `depositPaused` is true.
+
+
+```solidity
+function setDepositAllowedAsset(address asset, bool allowed) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|Asset address (zero address for native token).|
+|`allowed`|`bool`|Whether deposits of this asset are allowed while deposits are paused.|
+
+
 #### executeWithERC20
 
 Executes a call to a contract using ERC20 tokens.
@@ -2507,6 +2621,20 @@ error IncorrectValueProvided(uint256 expected, uint256 provided);
 |`expected`|`uint256`|The expected value (amount + fee).|
 |`provided`|`uint256`|The actual msg.value provided.|
 
+#### AssetDepositNotAllowed
+Error thrown when deposit pause blocks deposits for the provided asset.
+
+
+```solidity
+error AssetDepositNotAllowed(address asset);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|The asset address (zero address for native token).|
+
 
 
 ## IGatewayEVMEvents
@@ -2668,6 +2796,35 @@ event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 |----|----|-----------|
 |`oldFeeWei`|`uint256`|old fee in wei|
 |`newFeeWei`|`uint256`|new fee in wei|
+
+#### UpdatedDepositPaused
+Emitted when deposit pause (allowlist-only) mode is updated.
+
+
+```solidity
+event UpdatedDepositPaused(bool paused);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`paused`|`bool`|Whether deposits are paused for non-allowlisted assets.|
+
+#### UpdatedDepositAllowedAsset
+Emitted when a deposit asset allowlist entry is updated.
+
+
+```solidity
+event UpdatedDepositAllowedAsset(address indexed asset, bool allowed);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|The asset address (zero address for native token).|
+|`allowed`|`bool`|Whether deposits for this asset are allowed while `depositPaused` is true.|
 
 
 

@@ -28,20 +28,6 @@
     "type": "zetaToken"
   },
   {
-    "address": "0x28acc3a03af7658e52456617ac5ba6933ebf8dfb03469697b3673577a4262e24,0x6fc08f682551e52c2cc34362a20f744ba6a3d8d17f6583fa2f774887c4079700,0xbba474f7c62206287bfaa00039ba7090246d9d34c707de48497acd242f40d7b6,0x6b2fe12c605d64e14ca69f9aba51550593ba92ff43376d0a6cc26a5ca226f9bd,0x6b2fe12c605d64e14ca69f9aba51550593ba92ff43376d0a6cc26a5ca226f9bd",
-    "category": "omnichain",
-    "chain_id": 103,
-    "chain_name": "sui_testnet",
-    "type": "gateway"
-  },
-  {
-    "address": "ZETAjseVjuFsxdRxo6MmTCvqFwb3ZHUx56Co3vCmGis",
-    "category": "omnichain",
-    "chain_id": 901,
-    "chain_name": "solana_devnet",
-    "type": "gateway"
-  },
-  {
     "address": "0x239e96c8f17C85c30100AC26F635Ea15f23E9c67",
     "category": "messaging",
     "chain_id": 7001,
@@ -512,97 +498,6 @@
     "chain_id": "18332",
     "chain_name": "btc_testnet",
     "type": "tss"
-  },
-  {
-    "address": "0x1B088fbAfD7ab966022944AD7b90B9f1113DC027",
-    "category": "omnichain",
-    "chain_id": 43113,
-    "chain_name": "avalanche_testnet",
-    "type": "erc20Custody"
-  },
-  {
-    "address": "0x0dA86Dc3F9B71F84a0E97B0e2291e50B7a5df10f",
-    "category": "omnichain",
-    "chain_id": 43113,
-    "chain_name": "avalanche_testnet",
-    "type": "gateway"
-  },
-  {
-    "address": "0x60E6b70bC2761f878Ff992276612F67FbABC1761",
-    "category": "messaging",
-    "chain_id": 80002,
-    "chain_name": "amoy_testnet",
-    "type": "connector"
-  },
-  {
-    "address": "0xd80be3710f08d280f51115e072e5d2a778946cd7",
-    "category": "omnichain",
-    "chain_id": 80002,
-    "chain_name": "amoy_testnet",
-    "type": "erc20Custody"
-  },
-  {
-    "address": "0x0c487a766110c85d301d96e33579c5b317fa4995",
-    "category": "omnichain",
-    "chain_id": 80002,
-    "chain_name": "amoy_testnet",
-    "type": "gateway"
-  },
-  {
-    "address": "0x1432612E60cad487C857E7D38AFf57134916c902",
-    "category": "messaging",
-    "chain_id": 80002,
-    "chain_name": "amoy_testnet",
-    "type": "zetaToken"
-  },
-  {
-    "address": "0xc0B74d761ef4EC9e9473f65687d36B9F13DB0dCc",
-    "category": "messaging",
-    "chain_id": 84532,
-    "chain_name": "base_sepolia",
-    "type": "connector"
-  },
-  {
-    "address": "0xd80be3710f08d280f51115e072e5d2a778946cd7",
-    "category": "omnichain",
-    "chain_id": 84532,
-    "chain_name": "base_sepolia",
-    "type": "erc20Custody"
-  },
-  {
-    "address": "0x0c487a766110c85d301d96e33579c5b317fa4995",
-    "category": "omnichain",
-    "chain_id": 84532,
-    "chain_name": "base_sepolia",
-    "type": "gateway"
-  },
-  {
-    "address": "0xf4e63991E7475b659bd97Bba85f32a7259239D5d",
-    "category": "messaging",
-    "chain_id": 84532,
-    "chain_name": "base_sepolia",
-    "type": "zetaToken"
-  },
-  {
-    "address": "0x1B088fbAfD7ab966022944AD7b90B9f1113DC027",
-    "category": "omnichain",
-    "chain_id": 421614,
-    "chain_name": "arbitrum_sepolia",
-    "type": "erc20Custody"
-  },
-  {
-    "address": "0x0dA86Dc3F9B71F84a0E97B0e2291e50B7a5df10f",
-    "category": "omnichain",
-    "chain_id": 421614,
-    "chain_name": "arbitrum_sepolia",
-    "type": "gateway"
-  },
-  {
-    "address": "0:87115e4a012e747d9bce013ce2244010c6d5e3b0f88ddbc63420519b8619e5a0",
-    "category": "omnichain",
-    "chain_id": 2015141,
-    "chain_name": "ton_testnet",
-    "type": "gateway"
   },
   {
     "address": "0xdf75CFa73A434B9F69fdA4dB3Fe3D23426958Fb1",
