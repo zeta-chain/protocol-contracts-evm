@@ -170,6 +170,22 @@ contract GatewayEVMTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiver
         gateway.setConnector(address(0));
     }
 
+    function testSetDepositPausedOnlyAdmin() public {
+        vm.prank(tssAddress);
+        vm.expectRevert(
+            abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, tssAddress, DEFAULT_ADMIN_ROLE)
+        );
+        gateway.setDepositPaused(true);
+    }
+
+    function testSetDepositAllowedAssetOnlyAdmin() public {
+        vm.prank(tssAddress);
+        vm.expectRevert(
+            abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, tssAddress, DEFAULT_ADMIN_ROLE)
+        );
+        gateway.setDepositAllowedAsset(address(token), true);
+    }
+
     function testForwardCallToReceiveNonPayable() public {
         string[] memory str = new string[](1);
         str[0] = "Hello, Foundry!";
@@ -1199,6 +1215,121 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         vm.prank(tssAddress);
         vm.expectRevert();
         gateway.updateAdditionalActionFee(newFee);
+    }
+
+    function testSetDepositPaused() public {
+        vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositAllowedAsset(address(zeta), true);
+        vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositAllowedAsset(address(0), true);
+        vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositPaused(true);
+        gateway.setDepositPaused(true);
+        assertTrue(gateway.depositPaused());
+        assertTrue(gateway.depositAllowedAssets(address(0)));
+
+        vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositPaused(false);
+        gateway.setDepositPaused(false);
+        assertFalse(gateway.depositPaused());
+    }
+
+    function testSetDepositAllowedAsset() public {
+        assertFalse(gateway.depositAllowedAssets(address(token)));
+
+        vm.expectEmit(true, true, true, true);
+        emit UpdatedDepositAllowedAsset(address(token), true);
+        gateway.setDepositAllowedAsset(address(token), true);
+        assertTrue(gateway.depositAllowedAssets(address(token)));
+    }
+
+    function testDepositPauseAllowsZetaByDefault() public {
+        uint256 amount = 100_000;
+        gateway.setDepositPaused(true);
+
+        zeta.approve(address(gateway), amount);
+        gateway.deposit(destination, amount, address(zeta), revertOptions);
+
+        assertEq(ownerAmount - amount, zeta.balanceOf(owner));
+    }
+
+    function testDepositPauseBlocksNativeDeposits() public {
+        uint256 amount = 100_000;
+        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
+        gateway.setDepositPaused(true);
+        gateway.setDepositAllowedAsset(address(0), false);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
+        gateway.deposit{ value: amount }(destination, revertOptions);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
+        gateway.deposit{ value: amount }(destination, amount, revertOptions);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
+        gateway.depositAndCall{ value: amount }(destination, payload, revertOptions);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(0)));
+        gateway.depositAndCall{ value: amount }(destination, amount, payload, revertOptions);
+    }
+
+    function testDepositPauseBlocksNonZetaERC20Deposits() public {
+        uint256 amount = 100_000;
+        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
+        gateway.setDepositPaused(true);
+
+        token.approve(address(gateway), amount * 2);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(token)));
+        gateway.deposit(destination, amount, address(token), revertOptions);
+
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(token)));
+        gateway.depositAndCall(destination, amount, address(token), payload, revertOptions);
+    }
+
+    function testDepositPauseAllowsAllowlistedERC20Deposits() public {
+        uint256 amount = 100_000;
+        bytes memory payload = abi.encodeWithSignature("hello(address)", destination);
+        gateway.setDepositAllowedAsset(address(token), true);
+        gateway.setDepositPaused(true);
+
+        token.approve(address(gateway), amount * 2);
+        gateway.deposit(destination, amount, address(token), revertOptions);
+        gateway.depositAndCall{ value: ADDITIONAL_ACTION_FEE_WEI }(
+            destination, amount, address(token), payload, revertOptions
+        );
+
+        assertEq(amount * 2, token.balanceOf(address(custody)));
+    }
+
+    function testDepositPauseAllowsNativeByDefault() public {
+        uint256 amount = 100_000;
+        uint256 tssBalanceBefore = tssAddress.balance;
+
+        gateway.setDepositPaused(true);
+
+        vm.expectEmit(true, true, true, true, address(gateway));
+        emit Deposited(owner, destination, amount, address(0), "", revertOptions);
+        gateway.deposit{ value: amount }(destination, revertOptions);
+
+        assertEq(tssBalanceBefore + amount, tssAddress.balance);
+    }
+
+    function testSetDepositPausedPreservesExplicitZetaBlockAfterRePause() public {
+        uint256 amount = 100_000;
+
+        gateway.setDepositPaused(true);
+        gateway.setDepositAllowedAsset(address(zeta), false);
+        assertFalse(gateway.depositAllowedAssets(address(zeta)));
+
+        gateway.setDepositPaused(false);
+        gateway.setDepositPaused(true);
+
+        assertFalse(gateway.depositAllowedAssets(address(zeta)));
+        assertTrue(gateway.depositPaused());
+
+        zeta.approve(address(gateway), amount);
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(zeta)));
+        gateway.deposit(destination, amount, address(zeta), revertOptions);
     }
 
     function testFeeSystemWithUpdatedFee() public {

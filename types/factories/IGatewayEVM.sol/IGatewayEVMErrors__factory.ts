@@ -32,6 +32,17 @@ const _abi = [
   },
   {
     type: "error",
+    name: "AssetDepositNotAllowed",
+    inputs: [
+      {
+        name: "asset",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
     name: "ConnectorInitialized",
     inputs: [],
   },

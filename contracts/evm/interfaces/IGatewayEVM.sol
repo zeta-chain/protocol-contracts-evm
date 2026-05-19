@@ -75,6 +75,15 @@ interface IGatewayEVMEvents {
     /// @param oldFeeWei old fee in wei
     /// @param newFeeWei new fee in wei
     event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
+
+    /// @notice Emitted when deposit pause (allowlist-only) mode is updated.
+    /// @param paused Whether deposits are paused for non-allowlisted assets.
+    event UpdatedDepositPaused(bool paused);
+
+    /// @notice Emitted when a deposit asset allowlist entry is updated.
+    /// @param asset The asset address (zero address for native token).
+    /// @param allowed Whether deposits for this asset are allowed while `depositPaused` is true.
+    event UpdatedDepositAllowedAsset(address indexed asset, bool allowed);
 }
 
 /// @title IGatewayEVMErrors
@@ -139,11 +148,27 @@ interface IGatewayEVMErrors {
     /// @param expected The expected value (amount + fee).
     /// @param provided The actual msg.value provided.
     error IncorrectValueProvided(uint256 expected, uint256 provided);
+
+    /// @notice Error thrown when deposit pause blocks deposits for the provided asset.
+    /// @param asset The asset address (zero address for native token).
+    error AssetDepositNotAllowed(address asset);
 }
 
 /// @title IGatewayEVM
 /// @notice Interface for the GatewayEVM contract.
 interface IGatewayEVM is IGatewayEVMErrors, IGatewayEVMEvents {
+    /// @notice Pauses or unpauses deposits (allowlist-only while paused).
+    /// @dev On the first pause enable only, ZETA and native gas (`address(0)`) are allowlisted if missing so
+    ///      bridging and native deposits stay usable until admin adjusts `depositAllowedAssets`. Re-pauses
+    ///      do not reset the allowlist.
+    /// @param paused Whether deposits should be paused (non-allowlisted assets blocked).
+    function setDepositPaused(bool paused) external;
+
+    /// @notice Configures whether an asset may deposit while `depositPaused` is true.
+    /// @param asset Asset address (zero address for native token).
+    /// @param allowed Whether deposits of this asset are allowed while deposits are paused.
+    function setDepositAllowedAsset(address asset, bool allowed) external;
+
     /// @notice Executes a call to a contract using ERC20 tokens.
     /// @param messageContext Message context containing sender and arbitrary call flag.
     /// @param token The address of the ERC20 token.

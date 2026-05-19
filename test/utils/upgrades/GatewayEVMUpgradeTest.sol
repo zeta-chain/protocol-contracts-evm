@@ -53,6 +53,12 @@ contract GatewayEVMUpgradeTest is
     /// @dev The first action in a transaction is free, subsequent actions incur this fee.
     /// @dev This is configurable by the admin role to allow for fee adjustments.
     uint256 public additionalActionFeeWei;
+    /// @notice When true, deposits are paused except for assets explicitly allowed via `depositAllowedAssets`.
+    bool public depositPaused;
+    /// @notice Whether default ZETA/native allowlist entries were applied on the first pause enable.
+    bool private depositPauseDefaultsApplied;
+    /// @notice Per-asset allowlist used while `depositPaused` is true (`address(0)` = chain native gas token).
+    mapping(address asset => bool allowed) public depositAllowedAssets;
 
     /// @dev Modified event for testing upgrade.
     event ExecutedV2(address indexed destination, uint256 value, bytes data);
@@ -131,6 +137,32 @@ contract GatewayEVMUpgradeTest is
         uint256 oldFee = additionalActionFeeWei;
         additionalActionFeeWei = newFeeWei;
         emit UpdatedAdditionalActionFee(oldFee, newFeeWei);
+    }
+
+    /// @notice Pauses or unpauses deposits (allowlist-only while paused).
+    /// @param paused Whether deposits should be paused (non-allowlisted assets blocked).
+    function setDepositPaused(bool paused) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (paused && !depositPauseDefaultsApplied) {
+            depositPauseDefaultsApplied = true;
+            if (!depositAllowedAssets[zetaToken]) {
+                depositAllowedAssets[zetaToken] = true;
+                emit UpdatedDepositAllowedAsset(zetaToken, true);
+            }
+            if (!depositAllowedAssets[address(0)]) {
+                depositAllowedAssets[address(0)] = true;
+                emit UpdatedDepositAllowedAsset(address(0), true);
+            }
+        }
+        depositPaused = paused;
+        emit UpdatedDepositPaused(paused);
+    }
+
+    /// @notice Configures whether an asset may deposit while `depositPaused` is true.
+    /// @param asset Asset address (zero address for native token).
+    /// @param allowed Whether deposits of this asset are allowed while deposits are paused.
+    function setDepositAllowedAsset(address asset, bool allowed) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        depositAllowedAssets[asset] = allowed;
+        emit UpdatedDepositAllowedAsset(asset, allowed);
     }
 
     /// @notice Transfers msg.value to destination contract and executes it's onRevert function.
@@ -271,6 +303,7 @@ contract GatewayEVMUpgradeTest is
     /// @dev This function only works for the first action in a transaction (backward compatibility).
     /// @dev For subsequent actions, use the overloaded version with amount parameter.
     function deposit(address receiver, RevertOptions calldata revertOptions) external payable whenNotPaused {
+        _validateAllowedDepositAsset(address(0));
         GatewayEVMValidations.validateDepositParams(receiver, msg.value, revertOptions);
 
         // Check if this is a subsequent action (action index > 0)
@@ -301,6 +334,7 @@ contract GatewayEVMUpgradeTest is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(address(0));
         GatewayEVMValidations.validateDepositParams(receiver, amount, revertOptions);
 
         uint256 feeCharged = _processFee();
@@ -328,6 +362,7 @@ contract GatewayEVMUpgradeTest is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(asset);
         GatewayEVMValidations.validateDepositParams(receiver, amount, revertOptions);
 
         uint256 feeCharged = _processFee();
@@ -353,6 +388,7 @@ contract GatewayEVMUpgradeTest is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(address(0));
         GatewayEVMValidations.validateDepositAndCallParams(receiver, msg.value, payload, revertOptions);
 
         // Check if this is a subsequent action (action index > 0)
@@ -385,6 +421,7 @@ contract GatewayEVMUpgradeTest is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(address(0));
         GatewayEVMValidations.validateDepositAndCallParams(receiver, amount, payload, revertOptions);
 
         uint256 feeCharged = _processFee();
@@ -414,6 +451,7 @@ contract GatewayEVMUpgradeTest is
         payable
         whenNotPaused
     {
+        _validateAllowedDepositAsset(asset);
         GatewayEVMValidations.validateDepositAndCallParams(receiver, amount, payload, revertOptions);
 
         uint256 feeCharged = _processFee();
@@ -624,6 +662,15 @@ contract GatewayEVMUpgradeTest is
         uint256 expectedValue = amount + feeCharged;
         if (msg.value != expectedValue) {
             revert IncorrectValueProvided(expectedValue, msg.value);
+        }
+    }
+
+    /// @notice Validates whether a deposit asset is allowed.
+    /// @dev Applies only when `depositPaused` is true.
+    /// @param asset Asset address (zero address for native token).
+    function _validateAllowedDepositAsset(address asset) internal view {
+        if (depositPaused && !depositAllowedAssets[asset]) {
+            revert AssetDepositNotAllowed(asset);
         }
     }
 
