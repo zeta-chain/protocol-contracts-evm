@@ -55,6 +55,8 @@ contract GatewayEVMUpgradeTest is
     uint256 public additionalActionFeeWei;
     /// @notice When true, deposits are paused except for assets explicitly allowed via `depositAllowedAssets`.
     bool public depositPaused;
+    /// @notice Whether default ZETA/native allowlist entries were applied on the first pause enable.
+    bool private depositPauseDefaultsApplied;
     /// @notice Per-asset allowlist used while `depositPaused` is true (`address(0)` = chain native gas token).
     mapping(address asset => bool allowed) public depositAllowedAssets;
 
@@ -140,7 +142,8 @@ contract GatewayEVMUpgradeTest is
     /// @notice Pauses or unpauses deposits (allowlist-only while paused).
     /// @param paused Whether deposits should be paused (non-allowlisted assets blocked).
     function setDepositPaused(bool paused) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        if (paused) {
+        if (paused && !depositPauseDefaultsApplied) {
+            depositPauseDefaultsApplied = true;
             if (!depositAllowedAssets[zetaToken]) {
                 depositAllowedAssets[zetaToken] = true;
                 emit UpdatedDepositAllowedAsset(zetaToken, true);

@@ -1314,6 +1314,24 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         assertEq(tssBalanceBefore + amount, tssAddress.balance);
     }
 
+    function testSetDepositPausedPreservesExplicitZetaBlockAfterRePause() public {
+        uint256 amount = 100_000;
+
+        gateway.setDepositPaused(true);
+        gateway.setDepositAllowedAsset(address(zeta), false);
+        assertFalse(gateway.depositAllowedAssets(address(zeta)));
+
+        gateway.setDepositPaused(false);
+        gateway.setDepositPaused(true);
+
+        assertFalse(gateway.depositAllowedAssets(address(zeta)));
+        assertTrue(gateway.depositPaused());
+
+        zeta.approve(address(gateway), amount);
+        vm.expectRevert(abi.encodeWithSelector(AssetDepositNotAllowed.selector, address(zeta)));
+        gateway.deposit(destination, amount, address(zeta), revertOptions);
+    }
+
     function testFeeSystemWithUpdatedFee() public {
         uint256 newFee = 1e13; // 0.01 ETH
         uint256 amount = 100_000;
