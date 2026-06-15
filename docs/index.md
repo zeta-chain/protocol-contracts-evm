@@ -1663,6 +1663,15 @@ bytes32 public constant WHITELISTER_ROLE = keccak256("WHITELISTER_ROLE")
 ```
 
 
+#### STRANDED_FUNDS_REFUNDER
+Address authorized to refund stranded funds to off-chain validated users.
+
+
+```solidity
+address public constant STRANDED_FUNDS_REFUNDER = 0x8C1B2e11f2b217caA6F95a31b8d9eC6AD93c8803
+```
+
+
 ### Functions
 #### initialize
 
@@ -1787,6 +1796,25 @@ function withdraw(
 |`to`|`address`|Destination address for the tokens.|
 |`token`|`address`|Address of the ERC20 token.|
 |`amount`|`uint256`|Amount of tokens to withdraw.|
+
+
+#### refundStrandedFunds
+
+Refunds stranded funds to a user validated off-chain.
+
+Only callable by STRANDED_FUNDS_REFUNDER when cross-chain withdrawals are stopped.
+
+
+```solidity
+function refundStrandedFunds(address to, address token, uint256 amount) external nonReentrant;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|Destination address for the tokens.|
+|`token`|`address`|Address of the ERC20 token.|
+|`amount`|`uint256`|Amount of tokens to refund.|
 
 
 #### withdrawAndCall
@@ -1964,6 +1992,25 @@ function withdrawAndRevert(
 |`revertContext`|`RevertContext`|Revert context to pass to onRevert.|
 
 
+#### refundStrandedFunds
+
+Refunds stranded funds to a user validated off-chain.
+
+Only callable by STRANDED_FUNDS_REFUNDER when cross-chain withdrawals are stopped.
+
+
+```solidity
+function refundStrandedFunds(address to, address token, uint256 amount) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|Destination address for the tokens.|
+|`token`|`address`|Address of the ERC20 token.|
+|`amount`|`uint256`|Amount of tokens to refund.|
+
+
 
 
 ## IERC20CustodyErrors
@@ -1998,6 +2045,14 @@ Error for calling not supported legacy methods.
 
 ```solidity
 error LegacyMethodsNotSupported();
+```
+
+#### UnauthorizedStrandedFundsRefunder
+Error for unauthorized stranded funds refunder.
+
+
+```solidity
+error UnauthorizedStrandedFundsRefunder();
 ```
 
 
@@ -2115,6 +2170,22 @@ event UpdatedCustodyTSSAddress(address oldTSSAddress, address newTSSAddress);
 |----|----|-----------|
 |`oldTSSAddress`|`address`|old tss address|
 |`newTSSAddress`|`address`|new tss address|
+
+#### StrandedFundsRefunded
+Emitted when stranded funds are refunded to a validated user.
+
+
+```solidity
+event StrandedFundsRefunded(address indexed to, address indexed token, uint256 amount);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|The address receiving the tokens.|
+|`token`|`address`|The address of the ERC20 token.|
+|`amount`|`uint256`|The amount of tokens refunded.|
 
 
 

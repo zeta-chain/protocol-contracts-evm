@@ -31,7 +31,7 @@ var (
 
 // IERC20CustodyErrorsMetaData contains all meta data concerning the IERC20CustodyErrors contract.
 var IERC20CustodyErrorsMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"error\",\"name\":\"LegacyMethodsNotSupported\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"NotWhitelisted\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"ZeroAddress\",\"inputs\":[]}]",
+	ABI: "[{\"type\":\"error\",\"name\":\"LegacyMethodsNotSupported\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"NotWhitelisted\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"UnauthorizedStrandedFundsRefunder\",\"inputs\":[]},{\"type\":\"error\",\"name\":\"ZeroAddress\",\"inputs\":[]}]",
 }
 
 // IERC20CustodyErrorsABI is the input ABI used to generate the binding from.
