@@ -683,17 +683,12 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         custody.refundStrandedFunds(destination, address(token), 1);
     }
 
-    function testRefundStrandedFundsWorksWhenPaused() public {
+    function testRefundStrandedFundsFailsWhenPaused() public {
         vm.prank(owner);
         custody.pause();
 
-        uint256 amount = 25_000;
-        uint256 balanceBeforeCustody = token.balanceOf(address(custody));
-
         vm.prank(strandedFundsRefunder);
-        custody.refundStrandedFunds(destination, address(token), amount);
-
-        assertEq(token.balanceOf(destination), amount);
-        assertEq(token.balanceOf(address(custody)), balanceBeforeCustody - amount);
+        vm.expectRevert(EnforcedPause.selector);
+        custody.refundStrandedFunds(destination, address(token), 25_000);
     }
 }

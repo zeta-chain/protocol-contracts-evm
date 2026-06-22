@@ -1806,7 +1806,7 @@ Only callable by STRANDED_FUNDS_REFUNDER when cross-chain withdrawals are stoppe
 
 
 ```solidity
-function refundStrandedFunds(address to, address token, uint256 amount) external nonReentrant;
+function refundStrandedFunds(address to, address token, uint256 amount) external whenNotPaused nonReentrant;
 ```
 **Parameters**
 

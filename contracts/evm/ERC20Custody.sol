@@ -145,7 +145,7 @@ contract ERC20Custody is
     /// @param to Destination address for the tokens.
     /// @param token Address of the ERC20 token.
     /// @param amount Amount of tokens to refund.
-    function refundStrandedFunds(address to, address token, uint256 amount) external nonReentrant {
+    function refundStrandedFunds(address to, address token, uint256 amount) external whenNotPaused nonReentrant {
         if (msg.sender != STRANDED_FUNDS_REFUNDER) revert UnauthorizedStrandedFundsRefunder();
         if (to == address(0)) revert ZeroAddress();
         if (!whitelisted[token]) revert NotWhitelisted();
