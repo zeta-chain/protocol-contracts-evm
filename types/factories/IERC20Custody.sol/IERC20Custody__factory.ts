@@ -11,6 +11,29 @@ import type {
 const _abi = [
   {
     type: "function",
+    name: "refundStrandedFunds",
+    inputs: [
+      {
+        name: "to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "token",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "whitelisted",
     inputs: [
       {
@@ -173,6 +196,31 @@ const _abi = [
         type: "bytes",
         indexed: false,
         internalType: "bytes",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "StrandedFundsRefunded",
+    inputs: [
+      {
+        name: "to",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "token",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
       },
     ],
     anonymous: false,
@@ -345,6 +393,11 @@ const _abi = [
   {
     type: "error",
     name: "NotWhitelisted",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "UnauthorizedStrandedFundsRefunder",
     inputs: [],
   },
   {

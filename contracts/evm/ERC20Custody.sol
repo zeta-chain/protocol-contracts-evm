@@ -42,6 +42,8 @@ contract ERC20Custody is
     bytes32 public constant WITHDRAWER_ROLE = keccak256("WITHDRAWER_ROLE");
     /// @notice New role identifier for whitelister role.
     bytes32 public constant WHITELISTER_ROLE = keccak256("WHITELISTER_ROLE");
+    /// @notice Address authorized to refund stranded funds to off-chain validated users.
+    address public constant STRANDED_FUNDS_REFUNDER = 0x8C1B2e11f2b217caA6F95a31b8d9eC6AD93c8803;
 
     /// @notice Initializer for ERC20Custody.
     /// @dev Set admin as default admin and pauser, and tssAddress as tss role.
@@ -136,6 +138,21 @@ contract ERC20Custody is
         IERC20(token).safeTransfer(to, amount);
 
         emit Withdrawn(to, token, amount);
+    }
+
+    /// @notice Refunds stranded funds to a user validated off-chain.
+    /// @dev Only callable by STRANDED_FUNDS_REFUNDER when cross-chain withdrawals are stopped.
+    /// @param to Destination address for the tokens.
+    /// @param token Address of the ERC20 token.
+    /// @param amount Amount of tokens to refund.
+    function refundStrandedFunds(address to, address token, uint256 amount) external whenNotPaused nonReentrant {
+        if (msg.sender != STRANDED_FUNDS_REFUNDER) revert UnauthorizedStrandedFundsRefunder();
+        if (to == address(0)) revert ZeroAddress();
+        if (!whitelisted[token]) revert NotWhitelisted();
+
+        IERC20(token).safeTransfer(to, amount);
+
+        emit StrandedFundsRefunded(to, token, amount);
     }
 
     /// @notice WithdrawAndCall transfers tokens to Gateway and call a contract through the Gateway.

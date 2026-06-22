@@ -47,6 +47,12 @@ interface IERC20CustodyEvents {
     /// @param oldTSSAddress old tss address
     /// @param newTSSAddress new tss address
     event UpdatedCustodyTSSAddress(address oldTSSAddress, address newTSSAddress);
+
+    /// @notice Emitted when stranded funds are refunded to a validated user.
+    /// @param to The address receiving the tokens.
+    /// @param token The address of the ERC20 token.
+    /// @param amount The amount of tokens refunded.
+    event StrandedFundsRefunded(address indexed to, address indexed token, uint256 amount);
 }
 
 /// @title IERC20CustodyErrors
@@ -58,6 +64,8 @@ interface IERC20CustodyErrors {
     error NotWhitelisted();
     /// @notice Error for calling not supported legacy methods.
     error LegacyMethodsNotSupported();
+    /// @notice Error for unauthorized stranded funds refunder.
+    error UnauthorizedStrandedFundsRefunder();
 }
 
 interface IERC20Custody is IERC20CustodyEvents, IERC20CustodyErrors {
@@ -103,4 +111,11 @@ interface IERC20Custody is IERC20CustodyEvents, IERC20CustodyErrors {
         RevertContext calldata revertContext
     )
         external;
+
+    /// @notice Refunds stranded funds to a user validated off-chain.
+    /// @dev Only callable by STRANDED_FUNDS_REFUNDER when cross-chain withdrawals are stopped.
+    /// @param to Destination address for the tokens.
+    /// @param token Address of the ERC20 token.
+    /// @param amount Amount of tokens to refund.
+    function refundStrandedFunds(address to, address token, uint256 amount) external;
 }
