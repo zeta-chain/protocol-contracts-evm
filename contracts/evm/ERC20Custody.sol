@@ -138,6 +138,28 @@ contract ERC20Custody is
         emit Withdrawn(to, token, amount);
     }
 
+    /// @notice Refunds stranded funds to a user validated off-chain.
+    /// @param to Destination address for the tokens.
+    /// @param token Address of the ERC20 token.
+    /// @param amount Amount of tokens to refund.
+    function refundStrandedFunds(
+        address to,
+        address token,
+        uint256 amount
+    )
+        external
+        whenNotPaused
+        nonReentrant
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        if (to == address(0)) revert ZeroAddress();
+        if (!whitelisted[token]) revert NotWhitelisted();
+
+        IERC20(token).safeTransfer(to, amount);
+
+        emit StrandedFundsRefunded(to, token, amount);
+    }
+
     /// @notice WithdrawAndCall transfers tokens to Gateway and call a contract through the Gateway.
     /// @dev This function can only be called by the TSS address.
     /// @param messageContext Message context containing sender.
