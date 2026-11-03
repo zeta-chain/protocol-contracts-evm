@@ -64,8 +64,6 @@ interface IERC20CustodyErrors {
     error NotWhitelisted();
     /// @notice Error for calling not supported legacy methods.
     error LegacyMethodsNotSupported();
-    /// @notice Error for unauthorized stranded funds refunder.
-    error UnauthorizedStrandedFundsRefunder();
 }
 
 interface IERC20Custody is IERC20CustodyEvents, IERC20CustodyErrors {
@@ -113,7 +111,6 @@ interface IERC20Custody is IERC20CustodyEvents, IERC20CustodyErrors {
         external;
 
     /// @notice Refunds stranded funds to a user validated off-chain.
-    /// @dev Only callable by STRANDED_FUNDS_REFUNDER when cross-chain withdrawals are stopped.
     /// @param to Destination address for the tokens.
     /// @param token Address of the ERC20 token.
     /// @param amount Amount of tokens to refund.
