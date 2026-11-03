@@ -1663,15 +1663,6 @@ bytes32 public constant WHITELISTER_ROLE = keccak256("WHITELISTER_ROLE")
 ```
 
 
-#### STRANDED_FUNDS_REFUNDER
-Address authorized to refund stranded funds to off-chain validated users.
-
-
-```solidity
-address public constant STRANDED_FUNDS_REFUNDER = 0x8C1B2e11f2b217caA6F95a31b8d9eC6AD93c8803
-```
-
-
 ### Functions
 #### initialize
 
@@ -1802,11 +1793,17 @@ function withdraw(
 
 Refunds stranded funds to a user validated off-chain.
 
-Only callable by STRANDED_FUNDS_REFUNDER when cross-chain withdrawals are stopped.
-
 
 ```solidity
-function refundStrandedFunds(address to, address token, uint256 amount) external whenNotPaused nonReentrant;
+function refundStrandedFunds(
+    address to,
+    address token,
+    uint256 amount
+)
+    external
+    whenNotPaused
+    nonReentrant
+    onlyRole(DEFAULT_ADMIN_ROLE);
 ```
 **Parameters**
 
@@ -1996,8 +1993,6 @@ function withdrawAndRevert(
 
 Refunds stranded funds to a user validated off-chain.
 
-Only callable by STRANDED_FUNDS_REFUNDER when cross-chain withdrawals are stopped.
-
 
 ```solidity
 function refundStrandedFunds(address to, address token, uint256 amount) external;
@@ -2045,14 +2040,6 @@ Error for calling not supported legacy methods.
 
 ```solidity
 error LegacyMethodsNotSupported();
-```
-
-#### UnauthorizedStrandedFundsRefunder
-Error for unauthorized stranded funds refunder.
-
-
-```solidity
-error UnauthorizedStrandedFundsRefunder();
 ```
 
 

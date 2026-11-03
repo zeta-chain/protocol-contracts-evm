@@ -21,11 +21,6 @@ const _abi = [
   },
   {
     type: "error",
-    name: "UnauthorizedStrandedFundsRefunder",
-    inputs: [],
-  },
-  {
-    type: "error",
     name: "ZeroAddress",
     inputs: [],
   },

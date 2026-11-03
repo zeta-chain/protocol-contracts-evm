@@ -46,7 +46,6 @@ export interface ERC20CustodyUpgradeTestInterface extends Interface {
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "PAUSER_ROLE"
-      | "STRANDED_FUNDS_REFUNDER"
       | "UPGRADE_INTERFACE_VERSION"
       | "WHITELISTER_ROLE"
       | "WITHDRAWER_ROLE"
@@ -103,10 +102,6 @@ export interface ERC20CustodyUpgradeTestInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "PAUSER_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "STRANDED_FUNDS_REFUNDER",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -228,10 +223,6 @@ export interface ERC20CustodyUpgradeTestInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "PAUSER_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "STRANDED_FUNDS_REFUNDER",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -637,8 +628,6 @@ export interface ERC20CustodyUpgradeTest extends BaseContract {
 
   PAUSER_ROLE: TypedContractMethod<[], [string], "view">;
 
-  STRANDED_FUNDS_REFUNDER: TypedContractMethod<[], [string], "view">;
-
   UPGRADE_INTERFACE_VERSION: TypedContractMethod<[], [string], "view">;
 
   WHITELISTER_ROLE: TypedContractMethod<[], [string], "view">;
@@ -777,9 +766,6 @@ export interface ERC20CustodyUpgradeTest extends BaseContract {
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "PAUSER_ROLE"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "STRANDED_FUNDS_REFUNDER"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "UPGRADE_INTERFACE_VERSION"
