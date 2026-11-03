@@ -78,9 +78,11 @@ export interface GatewayEVMInterface extends Interface {
       | "deposit(address,uint256,address,(address,bool,address,bytes,uint256))"
       | "deposit(address,uint256,(address,bool,address,bytes,uint256))"
       | "deposit(address,(address,bool,address,bytes,uint256))"
+      | "depositAllowedAssets"
       | "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))"
       | "depositAndCall(address,bytes,(address,bool,address,bytes,uint256))"
       | "depositAndCall(address,uint256,address,bytes,(address,bool,address,bytes,uint256))"
+      | "depositPaused"
       | "execute"
       | "executeRevert"
       | "executeWithERC20"
@@ -96,6 +98,8 @@ export interface GatewayEVMInterface extends Interface {
       | "revokeRole"
       | "setConnector"
       | "setCustody"
+      | "setDepositAllowedAsset"
+      | "setDepositPaused"
       | "supportsInterface"
       | "tssAddress"
       | "unpause"
@@ -121,6 +125,8 @@ export interface GatewayEVMInterface extends Interface {
       | "RoleRevoked"
       | "Unpaused"
       | "UpdatedAdditionalActionFee"
+      | "UpdatedDepositAllowedAsset"
+      | "UpdatedDepositPaused"
       | "UpdatedGatewayTSSAddress"
       | "Upgraded"
   ): EventFragment;
@@ -168,6 +174,10 @@ export interface GatewayEVMInterface extends Interface {
     values: [AddressLike, RevertOptionsStruct]
   ): string;
   encodeFunctionData(
+    functionFragment: "depositAllowedAssets",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))",
     values: [AddressLike, BigNumberish, BytesLike, RevertOptionsStruct]
   ): string;
@@ -184,6 +194,10 @@ export interface GatewayEVMInterface extends Interface {
       BytesLike,
       RevertOptionsStruct
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "depositPaused",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "execute",
@@ -252,6 +266,14 @@ export interface GatewayEVMInterface extends Interface {
     values: [AddressLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "setDepositAllowedAsset",
+    values: [AddressLike, boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setDepositPaused",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
@@ -318,6 +340,10 @@ export interface GatewayEVMInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "depositAllowedAssets",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))",
     data: BytesLike
   ): Result;
@@ -327,6 +353,10 @@ export interface GatewayEVMInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "depositAndCall(address,uint256,address,bytes,(address,bool,address,bytes,uint256))",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "depositPaused",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "execute", data: BytesLike): Result;
@@ -365,6 +395,14 @@ export interface GatewayEVMInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setCustody", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setDepositAllowedAsset",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setDepositPaused",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -655,6 +693,31 @@ export namespace UpdatedAdditionalActionFeeEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
+export namespace UpdatedDepositAllowedAssetEvent {
+  export type InputTuple = [asset: AddressLike, allowed: boolean];
+  export type OutputTuple = [asset: string, allowed: boolean];
+  export interface OutputObject {
+    asset: string;
+    allowed: boolean;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace UpdatedDepositPausedEvent {
+  export type InputTuple = [paused: boolean];
+  export type OutputTuple = [paused: boolean];
+  export interface OutputObject {
+    paused: boolean;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export namespace UpdatedGatewayTSSAddressEvent {
   export type InputTuple = [
     oldTSSAddress: AddressLike,
@@ -779,6 +842,12 @@ export interface GatewayEVM extends BaseContract {
     "payable"
   >;
 
+  depositAllowedAssets: TypedContractMethod<
+    [asset: AddressLike],
+    [boolean],
+    "view"
+  >;
+
   "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))": TypedContractMethod<
     [
       receiver: AddressLike,
@@ -811,6 +880,8 @@ export interface GatewayEVM extends BaseContract {
     [void],
     "payable"
   >;
+
+  depositPaused: TypedContractMethod<[], [boolean], "view">;
 
   execute: TypedContractMethod<
     [
@@ -902,6 +973,18 @@ export interface GatewayEVM extends BaseContract {
 
   setCustody: TypedContractMethod<
     [custody_: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  setDepositAllowedAsset: TypedContractMethod<
+    [asset: AddressLike, allowed: boolean],
+    [void],
+    "nonpayable"
+  >;
+
+  setDepositPaused: TypedContractMethod<
+    [paused: boolean],
     [void],
     "nonpayable"
   >;
@@ -1008,6 +1091,9 @@ export interface GatewayEVM extends BaseContract {
     "payable"
   >;
   getFunction(
+    nameOrSignature: "depositAllowedAssets"
+  ): TypedContractMethod<[asset: AddressLike], [boolean], "view">;
+  getFunction(
     nameOrSignature: "depositAndCall(address,uint256,bytes,(address,bool,address,bytes,uint256))"
   ): TypedContractMethod<
     [
@@ -1043,6 +1129,9 @@ export interface GatewayEVM extends BaseContract {
     [void],
     "payable"
   >;
+  getFunction(
+    nameOrSignature: "depositPaused"
+  ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
     nameOrSignature: "execute"
   ): TypedContractMethod<
@@ -1144,6 +1233,16 @@ export interface GatewayEVM extends BaseContract {
   getFunction(
     nameOrSignature: "setCustody"
   ): TypedContractMethod<[custody_: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setDepositAllowedAsset"
+  ): TypedContractMethod<
+    [asset: AddressLike, allowed: boolean],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "setDepositPaused"
+  ): TypedContractMethod<[paused: boolean], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "supportsInterface"
   ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
@@ -1263,6 +1362,20 @@ export interface GatewayEVM extends BaseContract {
     UpdatedAdditionalActionFeeEvent.InputTuple,
     UpdatedAdditionalActionFeeEvent.OutputTuple,
     UpdatedAdditionalActionFeeEvent.OutputObject
+  >;
+  getEvent(
+    key: "UpdatedDepositAllowedAsset"
+  ): TypedContractEvent<
+    UpdatedDepositAllowedAssetEvent.InputTuple,
+    UpdatedDepositAllowedAssetEvent.OutputTuple,
+    UpdatedDepositAllowedAssetEvent.OutputObject
+  >;
+  getEvent(
+    key: "UpdatedDepositPaused"
+  ): TypedContractEvent<
+    UpdatedDepositPausedEvent.InputTuple,
+    UpdatedDepositPausedEvent.OutputTuple,
+    UpdatedDepositPausedEvent.OutputObject
   >;
   getEvent(
     key: "UpdatedGatewayTSSAddress"
@@ -1421,6 +1534,28 @@ export interface GatewayEVM extends BaseContract {
       UpdatedAdditionalActionFeeEvent.InputTuple,
       UpdatedAdditionalActionFeeEvent.OutputTuple,
       UpdatedAdditionalActionFeeEvent.OutputObject
+    >;
+
+    "UpdatedDepositAllowedAsset(address,bool)": TypedContractEvent<
+      UpdatedDepositAllowedAssetEvent.InputTuple,
+      UpdatedDepositAllowedAssetEvent.OutputTuple,
+      UpdatedDepositAllowedAssetEvent.OutputObject
+    >;
+    UpdatedDepositAllowedAsset: TypedContractEvent<
+      UpdatedDepositAllowedAssetEvent.InputTuple,
+      UpdatedDepositAllowedAssetEvent.OutputTuple,
+      UpdatedDepositAllowedAssetEvent.OutputObject
+    >;
+
+    "UpdatedDepositPaused(bool)": TypedContractEvent<
+      UpdatedDepositPausedEvent.InputTuple,
+      UpdatedDepositPausedEvent.OutputTuple,
+      UpdatedDepositPausedEvent.OutputObject
+    >;
+    UpdatedDepositPaused: TypedContractEvent<
+      UpdatedDepositPausedEvent.InputTuple,
+      UpdatedDepositPausedEvent.OutputTuple,
+      UpdatedDepositPausedEvent.OutputObject
     >;
 
     "UpdatedGatewayTSSAddress(address,address)": TypedContractEvent<

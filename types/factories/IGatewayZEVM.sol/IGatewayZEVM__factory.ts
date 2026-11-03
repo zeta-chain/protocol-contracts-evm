@@ -11,78 +11,6 @@ import type {
 const _abi = [
   {
     type: "function",
-    name: "call",
-    inputs: [
-      {
-        name: "receiver",
-        type: "bytes",
-        internalType: "bytes",
-      },
-      {
-        name: "zrc20",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "message",
-        type: "bytes",
-        internalType: "bytes",
-      },
-      {
-        name: "callOptions",
-        type: "tuple",
-        internalType: "struct CallOptions",
-        components: [
-          {
-            name: "gasLimit",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "isArbitraryCall",
-            type: "bool",
-            internalType: "bool",
-          },
-        ],
-      },
-      {
-        name: "revertOptions",
-        type: "tuple",
-        internalType: "struct RevertOptions",
-        components: [
-          {
-            name: "revertAddress",
-            type: "address",
-            internalType: "address",
-          },
-          {
-            name: "callOnRevert",
-            type: "bool",
-            internalType: "bool",
-          },
-          {
-            name: "abortAddress",
-            type: "address",
-            internalType: "address",
-          },
-          {
-            name: "revertMessage",
-            type: "bytes",
-            internalType: "bytes",
-          },
-          {
-            name: "onRevertGasLimit",
-            type: "uint256",
-            internalType: "uint256",
-          },
-        ],
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     name: "deposit",
     inputs: [
       {
@@ -896,6 +824,11 @@ const _abi = [
       },
     ],
     anonymous: false,
+  },
+  {
+    type: "error",
+    name: "ArbitraryCallNotSupported",
+    inputs: [],
   },
   {
     type: "error",

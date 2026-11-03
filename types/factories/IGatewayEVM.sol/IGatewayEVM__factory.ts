@@ -551,6 +551,37 @@ const _abi = [
     stateMutability: "nonpayable",
   },
   {
+    type: "function",
+    name: "setDepositAllowedAsset",
+    inputs: [
+      {
+        name: "asset",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "allowed",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setDepositPaused",
+    inputs: [
+      {
+        name: "paused",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
     type: "event",
     name: "Called",
     inputs: [
@@ -884,6 +915,38 @@ const _abi = [
   },
   {
     type: "event",
+    name: "UpdatedDepositAllowedAsset",
+    inputs: [
+      {
+        name: "asset",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "allowed",
+        type: "bool",
+        indexed: false,
+        internalType: "bool",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "UpdatedDepositPaused",
+    inputs: [
+      {
+        name: "paused",
+        type: "bool",
+        indexed: false,
+        internalType: "bool",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "UpdatedGatewayTSSAddress",
     inputs: [
       {
@@ -910,6 +973,22 @@ const _abi = [
     type: "error",
     name: "ApprovalFailed",
     inputs: [],
+  },
+  {
+    type: "error",
+    name: "ArbitraryCallDisabled",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "AssetDepositNotAllowed",
+    inputs: [
+      {
+        name: "asset",
+        type: "address",
+        internalType: "address",
+      },
+    ],
   },
   {
     type: "error",

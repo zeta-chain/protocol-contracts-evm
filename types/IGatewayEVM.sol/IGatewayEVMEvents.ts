@@ -67,6 +67,8 @@ export interface IGatewayEVMEventsInterface extends Interface {
       | "ExecutedWithERC20"
       | "Reverted"
       | "UpdatedAdditionalActionFee"
+      | "UpdatedDepositAllowedAsset"
+      | "UpdatedDepositPaused"
       | "UpdatedGatewayTSSAddress"
   ): EventFragment;
 }
@@ -242,6 +244,31 @@ export namespace UpdatedAdditionalActionFeeEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
+export namespace UpdatedDepositAllowedAssetEvent {
+  export type InputTuple = [asset: AddressLike, allowed: boolean];
+  export type OutputTuple = [asset: string, allowed: boolean];
+  export interface OutputObject {
+    asset: string;
+    allowed: boolean;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace UpdatedDepositPausedEvent {
+  export type InputTuple = [paused: boolean];
+  export type OutputTuple = [paused: boolean];
+  export interface OutputObject {
+    paused: boolean;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export namespace UpdatedGatewayTSSAddressEvent {
   export type InputTuple = [
     oldTSSAddress: AddressLike,
@@ -355,6 +382,20 @@ export interface IGatewayEVMEvents extends BaseContract {
     UpdatedAdditionalActionFeeEvent.OutputObject
   >;
   getEvent(
+    key: "UpdatedDepositAllowedAsset"
+  ): TypedContractEvent<
+    UpdatedDepositAllowedAssetEvent.InputTuple,
+    UpdatedDepositAllowedAssetEvent.OutputTuple,
+    UpdatedDepositAllowedAssetEvent.OutputObject
+  >;
+  getEvent(
+    key: "UpdatedDepositPaused"
+  ): TypedContractEvent<
+    UpdatedDepositPausedEvent.InputTuple,
+    UpdatedDepositPausedEvent.OutputTuple,
+    UpdatedDepositPausedEvent.OutputObject
+  >;
+  getEvent(
     key: "UpdatedGatewayTSSAddress"
   ): TypedContractEvent<
     UpdatedGatewayTSSAddressEvent.InputTuple,
@@ -438,6 +479,28 @@ export interface IGatewayEVMEvents extends BaseContract {
       UpdatedAdditionalActionFeeEvent.InputTuple,
       UpdatedAdditionalActionFeeEvent.OutputTuple,
       UpdatedAdditionalActionFeeEvent.OutputObject
+    >;
+
+    "UpdatedDepositAllowedAsset(address,bool)": TypedContractEvent<
+      UpdatedDepositAllowedAssetEvent.InputTuple,
+      UpdatedDepositAllowedAssetEvent.OutputTuple,
+      UpdatedDepositAllowedAssetEvent.OutputObject
+    >;
+    UpdatedDepositAllowedAsset: TypedContractEvent<
+      UpdatedDepositAllowedAssetEvent.InputTuple,
+      UpdatedDepositAllowedAssetEvent.OutputTuple,
+      UpdatedDepositAllowedAssetEvent.OutputObject
+    >;
+
+    "UpdatedDepositPaused(bool)": TypedContractEvent<
+      UpdatedDepositPausedEvent.InputTuple,
+      UpdatedDepositPausedEvent.OutputTuple,
+      UpdatedDepositPausedEvent.OutputObject
+    >;
+    UpdatedDepositPaused: TypedContractEvent<
+      UpdatedDepositPausedEvent.InputTuple,
+      UpdatedDepositPausedEvent.OutputTuple,
+      UpdatedDepositPausedEvent.OutputObject
     >;
 
     "UpdatedGatewayTSSAddress(address,address)": TypedContractEvent<

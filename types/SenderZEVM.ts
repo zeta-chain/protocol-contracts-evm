@@ -23,13 +23,9 @@ import type {
 
 export interface SenderZEVMInterface extends Interface {
   getFunction(
-    nameOrSignature: "callReceiver" | "gateway" | "withdrawAndCallReceiver"
+    nameOrSignature: "gateway" | "withdrawAndCallReceiver"
   ): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: "callReceiver",
-    values: [BytesLike, AddressLike, string, BigNumberish, boolean]
-  ): string;
   encodeFunctionData(functionFragment: "gateway", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "withdrawAndCallReceiver",
@@ -43,10 +39,6 @@ export interface SenderZEVMInterface extends Interface {
     ]
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "callReceiver",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "gateway", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "withdrawAndCallReceiver",
@@ -97,18 +89,6 @@ export interface SenderZEVM extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  callReceiver: TypedContractMethod<
-    [
-      receiver: BytesLike,
-      zrc20: AddressLike,
-      str: string,
-      num: BigNumberish,
-      flag: boolean
-    ],
-    [void],
-    "nonpayable"
-  >;
-
   gateway: TypedContractMethod<[], [string], "view">;
 
   withdrawAndCallReceiver: TypedContractMethod<
@@ -128,19 +108,6 @@ export interface SenderZEVM extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
-  getFunction(
-    nameOrSignature: "callReceiver"
-  ): TypedContractMethod<
-    [
-      receiver: BytesLike,
-      zrc20: AddressLike,
-      str: string,
-      num: BigNumberish,
-      flag: boolean
-    ],
-    [void],
-    "nonpayable"
-  >;
   getFunction(
     nameOrSignature: "gateway"
   ): TypedContractMethod<[], [string], "view">;

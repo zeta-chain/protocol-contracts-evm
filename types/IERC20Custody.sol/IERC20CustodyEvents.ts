@@ -39,6 +39,7 @@ export interface IERC20CustodyEventsInterface extends Interface {
   getEvent(
     nameOrSignatureOrTopic:
       | "Deposited"
+      | "StrandedFundsRefunded"
       | "Unwhitelisted"
       | "UpdatedCustodyTSSAddress"
       | "Whitelisted"
@@ -66,6 +67,24 @@ export namespace DepositedEvent {
     asset: string;
     amount: bigint;
     message: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace StrandedFundsRefundedEvent {
+  export type InputTuple = [
+    to: AddressLike,
+    token: AddressLike,
+    amount: BigNumberish
+  ];
+  export type OutputTuple = [to: string, token: string, amount: bigint];
+  export interface OutputObject {
+    to: string;
+    token: string;
+    amount: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -239,6 +258,13 @@ export interface IERC20CustodyEvents extends BaseContract {
     DepositedEvent.OutputObject
   >;
   getEvent(
+    key: "StrandedFundsRefunded"
+  ): TypedContractEvent<
+    StrandedFundsRefundedEvent.InputTuple,
+    StrandedFundsRefundedEvent.OutputTuple,
+    StrandedFundsRefundedEvent.OutputObject
+  >;
+  getEvent(
     key: "Unwhitelisted"
   ): TypedContractEvent<
     UnwhitelistedEvent.InputTuple,
@@ -291,6 +317,17 @@ export interface IERC20CustodyEvents extends BaseContract {
       DepositedEvent.InputTuple,
       DepositedEvent.OutputTuple,
       DepositedEvent.OutputObject
+    >;
+
+    "StrandedFundsRefunded(address,address,uint256)": TypedContractEvent<
+      StrandedFundsRefundedEvent.InputTuple,
+      StrandedFundsRefundedEvent.OutputTuple,
+      StrandedFundsRefundedEvent.OutputObject
+    >;
+    StrandedFundsRefunded: TypedContractEvent<
+      StrandedFundsRefundedEvent.InputTuple,
+      StrandedFundsRefundedEvent.OutputTuple,
+      StrandedFundsRefundedEvent.OutputObject
     >;
 
     "Unwhitelisted(address)": TypedContractEvent<

@@ -58,6 +58,7 @@ export interface ERC20CustodyInterface extends Interface {
       | "pause"
       | "paused"
       | "proxiableUUID"
+      | "refundStrandedFunds"
       | "renounceRole"
       | "revokeRole"
       | "setSupportsLegacy"
@@ -83,6 +84,7 @@ export interface ERC20CustodyInterface extends Interface {
       | "RoleAdminChanged"
       | "RoleGranted"
       | "RoleRevoked"
+      | "StrandedFundsRefunded"
       | "Unpaused"
       | "Unwhitelisted"
       | "UpdatedCustodyTSSAddress"
@@ -139,6 +141,10 @@ export interface ERC20CustodyInterface extends Interface {
   encodeFunctionData(
     functionFragment: "proxiableUUID",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "refundStrandedFunds",
+    values: [AddressLike, AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
@@ -243,6 +249,10 @@ export interface ERC20CustodyInterface extends Interface {
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "refundStrandedFunds",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -392,6 +402,24 @@ export namespace RoleRevokedEvent {
     role: string;
     account: string;
     sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace StrandedFundsRefundedEvent {
+  export type InputTuple = [
+    to: AddressLike,
+    token: AddressLike,
+    amount: BigNumberish
+  ];
+  export type OutputTuple = [to: string, token: string, amount: bigint];
+  export interface OutputObject {
+    to: string;
+    token: string;
+    amount: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -626,6 +654,12 @@ export interface ERC20Custody extends BaseContract {
 
   proxiableUUID: TypedContractMethod<[], [string], "view">;
 
+  refundStrandedFunds: TypedContractMethod<
+    [to: AddressLike, token: AddressLike, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
   renounceRole: TypedContractMethod<
     [role: BytesLike, callerConfirmation: AddressLike],
     [void],
@@ -772,6 +806,13 @@ export interface ERC20Custody extends BaseContract {
     nameOrSignature: "proxiableUUID"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
+    nameOrSignature: "refundStrandedFunds"
+  ): TypedContractMethod<
+    [to: AddressLike, token: AddressLike, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "renounceRole"
   ): TypedContractMethod<
     [role: BytesLike, callerConfirmation: AddressLike],
@@ -896,6 +937,13 @@ export interface ERC20Custody extends BaseContract {
     RoleRevokedEvent.OutputObject
   >;
   getEvent(
+    key: "StrandedFundsRefunded"
+  ): TypedContractEvent<
+    StrandedFundsRefundedEvent.InputTuple,
+    StrandedFundsRefundedEvent.OutputTuple,
+    StrandedFundsRefundedEvent.OutputObject
+  >;
+  getEvent(
     key: "Unpaused"
   ): TypedContractEvent<
     UnpausedEvent.InputTuple,
@@ -1017,6 +1065,17 @@ export interface ERC20Custody extends BaseContract {
       RoleRevokedEvent.InputTuple,
       RoleRevokedEvent.OutputTuple,
       RoleRevokedEvent.OutputObject
+    >;
+
+    "StrandedFundsRefunded(address,address,uint256)": TypedContractEvent<
+      StrandedFundsRefundedEvent.InputTuple,
+      StrandedFundsRefundedEvent.OutputTuple,
+      StrandedFundsRefundedEvent.OutputObject
+    >;
+    StrandedFundsRefunded: TypedContractEvent<
+      StrandedFundsRefundedEvent.InputTuple,
+      StrandedFundsRefundedEvent.OutputTuple,
+      StrandedFundsRefundedEvent.OutputObject
     >;
 
     "Unpaused(address)": TypedContractEvent<

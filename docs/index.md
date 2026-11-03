@@ -61,6 +61,33 @@ uint256 public additionalActionFeeWei
 ```
 
 
+#### depositPaused
+When true, deposits are paused except for assets explicitly allowed via `depositAllowedAssets`.
+
+
+```solidity
+bool public depositPaused
+```
+
+
+#### depositPauseDefaultsApplied
+Whether default ZETA/native allowlist entries were applied on the first pause enable.
+
+
+```solidity
+bool private depositPauseDefaultsApplied
+```
+
+
+#### depositAllowedAssets
+Per-asset allowlist used while `depositPaused` is true (`address(0)` = chain native gas token).
+
+
+```solidity
+mapping(address asset => bool allowed) public depositAllowedAssets
+```
+
+
 #### TSS_ROLE
 New role identifier for tss role.
 
@@ -201,6 +228,41 @@ function updateAdditionalActionFee(uint256 newFeeWei) external onlyRole(DEFAULT_
 |`newFeeWei`|`uint256`|The new fee amount in wei for additional actions in the same transaction.|
 
 
+#### setDepositPaused
+
+Pauses or unpauses deposits (allowlist-only while paused).
+
+On the first pause enable only, ZETA and the chain native asset (`address(0)`, e.g. ETH or BNB)
+are allowlisted if not already, so users can still bridge ZETA and pay native gas on this chain.
+Later re-pauses do not reset the allowlist, preserving explicit admin blocks.
+
+
+```solidity
+function setDepositPaused(bool paused) external onlyRole(DEFAULT_ADMIN_ROLE);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`paused`|`bool`|Whether deposits should be paused (non-allowlisted assets blocked).|
+
+
+#### setDepositAllowedAsset
+
+Configures whether an asset may deposit while `depositPaused` is true.
+
+
+```solidity
+function setDepositAllowedAsset(address asset, bool allowed) external onlyRole(DEFAULT_ADMIN_ROLE);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|Asset address (zero address for native token).|
+|`allowed`|`bool`|Whether deposits of this asset are allowed while deposits are paused.|
+
+
 #### executeRevert
 
 Transfers msg.value to destination contract and executes it's onRevert function.
@@ -231,7 +293,7 @@ function executeRevert(
 
 #### execute
 
-Executes a call to a destination address without ERC20 tokens.
+Executes an authenticated call to a destination address without ERC20 tokens.
 
 This function can only be called by the TSS address and it is payable.
 
@@ -597,28 +659,6 @@ function _transferToAssetHandler(address token, uint256 amount) private;
 |`amount`|`uint256`|Amount of tokens to transfer.|
 
 
-#### _executeArbitraryCall
-
-Private function to execute an arbitrary call to a destination address.
-
-
-```solidity
-function _executeArbitraryCall(address destination, bytes calldata data) private returns (bytes memory);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`destination`|`address`|Address to call.|
-|`data`|`bytes`|Calldata to pass to the call.|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bytes`|The result of the call.|
-
-
 #### _executeAuthenticatedCall
 
 Private function to execute an authenticated call to a destination address.
@@ -647,13 +687,6 @@ function _executeAuthenticatedCall(
 |----|----|-----------|
 |`<none>`|`bytes`|The result of the call.|
 
-
-#### _revertIfOnCallOrOnRevert
-
-
-```solidity
-function _revertIfOnCallOrOnRevert(bytes calldata data) private pure;
-```
 
 #### _processFee
 
@@ -707,6 +740,23 @@ function _validateChargedFeeForETHWithAmount(uint256 amount, uint256 feeCharged)
 |----|----|-----------|
 |`amount`|`uint256`|The amount to deposit (excluding fees).|
 |`feeCharged`|`uint256`|The fee amount that was charged.|
+
+
+#### _validateAllowedDepositAsset
+
+Validates whether a deposit asset is allowed.
+
+Applies only when `depositPaused` is true.
+
+
+```solidity
+function _validateAllowedDepositAsset(address asset) internal view;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|Asset address (zero address for native token).|
 
 
 #### _getNextActionIndex
@@ -1077,47 +1127,6 @@ function withdrawAndCall(
     external
     view
     whenNotPaused;
-```
-
-#### call
-
-Call a smart contract on an external chain without asset transfer.
-
-
-```solidity
-function call(
-    bytes memory receiver,
-    address zrc20,
-    bytes calldata message,
-    CallOptions calldata callOptions,
-    RevertOptions calldata revertOptions
-)
-    external
-    whenNotPaused;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`receiver`|`bytes`|The receiver address on the external chain.|
-|`zrc20`|`address`|Address of zrc20 to pay fees.|
-|`message`|`bytes`|The calldata to pass to the contract call.|
-|`callOptions`|`CallOptions`|Call options including gas limit and arbirtrary call flag.|
-|`revertOptions`|`RevertOptions`|Revert options.|
-
-
-#### _call
-
-
-```solidity
-function _call(
-    bytes memory receiver,
-    address zrc20,
-    bytes calldata message,
-    CallOptions memory callOptions,
-    RevertOptions memory revertOptions
-)
-    private;
 ```
 
 #### deposit
@@ -1533,6 +1542,31 @@ function withdraw(
 |`amount`|`uint256`|Amount of tokens to withdraw.|
 
 
+#### refundStrandedFunds
+
+Refunds stranded funds to a user validated off-chain.
+
+
+```solidity
+function refundStrandedFunds(
+    address to,
+    address token,
+    uint256 amount
+)
+    external
+    whenNotPaused
+    nonReentrant
+    onlyRole(DEFAULT_ADMIN_ROLE);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|Destination address for the tokens.|
+|`token`|`address`|Address of the ERC20 token.|
+|`amount`|`uint256`|Amount of tokens to refund.|
+
+
 #### withdrawAndCall
 
 WithdrawAndCall transfers tokens to Gateway and call a contract through the Gateway.
@@ -1708,6 +1742,23 @@ function withdrawAndRevert(
 |`revertContext`|`RevertContext`|Revert context to pass to onRevert.|
 
 
+#### refundStrandedFunds
+
+Refunds stranded funds to a user validated off-chain.
+
+
+```solidity
+function refundStrandedFunds(address to, address token, uint256 amount) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|Destination address for the tokens.|
+|`token`|`address`|Address of the ERC20 token.|
+|`amount`|`uint256`|Amount of tokens to refund.|
+
+
 
 
 ## IERC20CustodyErrors
@@ -1860,6 +1911,22 @@ event UpdatedCustodyTSSAddress(address oldTSSAddress, address newTSSAddress);
 |`oldTSSAddress`|`address`|old tss address|
 |`newTSSAddress`|`address`|new tss address|
 
+#### StrandedFundsRefunded
+Emitted when stranded funds are refunded to a validated user.
+
+
+```solidity
+event StrandedFundsRefunded(address indexed to, address indexed token, uint256 amount);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|The address receiving the tokens.|
+|`token`|`address`|The address of the ERC20 token.|
+|`amount`|`uint256`|The amount of tokens refunded.|
+
 
 
 ## Callable
@@ -1888,6 +1955,41 @@ Interface for the GatewayEVM contract.
 
 
 ### Functions
+#### setDepositPaused
+
+Pauses or unpauses deposits (allowlist-only while paused).
+
+On the first pause enable only, ZETA and native gas (`address(0)`) are allowlisted if missing so
+bridging and native deposits stay usable until admin adjusts `depositAllowedAssets`. Re-pauses
+do not reset the allowlist.
+
+
+```solidity
+function setDepositPaused(bool paused) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`paused`|`bool`|Whether deposits should be paused (non-allowlisted assets blocked).|
+
+
+#### setDepositAllowedAsset
+
+Configures whether an asset may deposit while `depositPaused` is true.
+
+
+```solidity
+function setDepositAllowedAsset(address asset, bool allowed) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|Asset address (zero address for native token).|
+|`allowed`|`bool`|Whether deposits of this asset are allowed while deposits are paused.|
+
+
 #### executeWithERC20
 
 Executes a call to a contract using ERC20 tokens.
@@ -1907,7 +2009,7 @@ function executeWithERC20(
 
 |Name|Type|Description|
 |----|----|-----------|
-|`messageContext`|`MessageContext`|Message context containing sender and arbitrary call flag.|
+|`messageContext`|`MessageContext`|Message context containing sender.|
 |`token`|`address`|The address of the ERC20 token.|
 |`to`|`address`|The address of the contract to call.|
 |`amount`|`uint256`|The amount of tokens to transfer.|
@@ -1960,7 +2062,7 @@ function execute(
 
 |Name|Type|Description|
 |----|----|-----------|
-|`messageContext`|`MessageContext`|Message context containing sender and arbitrary call flag.|
+|`messageContext`|`MessageContext`|Message context containing sender.|
 |`destination`|`address`|Address to call.|
 |`data`|`bytes`|Calldata to pass to the call.|
 
@@ -2318,6 +2420,28 @@ error IncorrectValueProvided(uint256 expected, uint256 provided);
 |`expected`|`uint256`|The expected value (amount + fee).|
 |`provided`|`uint256`|The actual msg.value provided.|
 
+#### ArbitraryCallDisabled
+Error indicating arbitrary calls are no longer supported.
+
+
+```solidity
+error ArbitraryCallDisabled();
+```
+
+#### AssetDepositNotAllowed
+Error thrown when deposit pause blocks deposits for the provided asset.
+
+
+```solidity
+error AssetDepositNotAllowed(address asset);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|The asset address (zero address for native token).|
+
 
 
 ## IGatewayEVMEvents
@@ -2479,6 +2603,35 @@ event UpdatedAdditionalActionFee(uint256 oldFeeWei, uint256 newFeeWei);
 |----|----|-----------|
 |`oldFeeWei`|`uint256`|old fee value.|
 |`newFeeWei`|`uint256`|new fee value.|
+
+#### UpdatedDepositPaused
+Emitted when deposit pause (allowlist-only) mode is updated.
+
+
+```solidity
+event UpdatedDepositPaused(bool paused);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`paused`|`bool`|Whether deposits are paused for non-allowlisted assets.|
+
+#### UpdatedDepositAllowedAsset
+Emitted when a deposit asset allowlist entry is updated.
+
+
+```solidity
+event UpdatedDepositAllowedAsset(address indexed asset, bool allowed);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|The asset address (zero address for native token).|
+|`allowed`|`bool`|Whether deposits for this asset are allowed while `depositPaused` is true.|
 
 
 
@@ -5992,6 +6145,15 @@ uint256 public constant CROSS_CHAIN_GAS_LIMIT = 500_000
 ```
 
 
+#### CROSS_CHAIN_MESSAGE_AMOUNT
+Dust amount used for cross-chain registry messages via withdrawAndCall.
+
+
+```solidity
+uint256 private constant CROSS_CHAIN_MESSAGE_AMOUNT = 1
+```
+
+
 #### gatewayZEVM
 Instance of the GatewayZEVM contract for cross-chain communication
 
@@ -6507,32 +6669,6 @@ function withdrawAndCall(
 |`revertOptions`|`RevertOptions`|Revert options.|
 
 
-#### call
-
-Call a smart contract on an external chain without asset transfer.
-
-
-```solidity
-function call(
-    bytes memory receiver,
-    address zrc20,
-    bytes calldata message,
-    CallOptions calldata callOptions,
-    RevertOptions calldata revertOptions
-)
-    external;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`receiver`|`bytes`|The receiver address on the external chain.|
-|`zrc20`|`address`|Address of zrc20 to pay fees.|
-|`message`|`bytes`|The calldata to pass to the contract call.|
-|`callOptions`|`CallOptions`|Call options including gas limit and arbirtrary call flag.|
-|`revertOptions`|`RevertOptions`|Revert options.|
-
-
 #### deposit
 
 Deposit foreign coins into ZRC20.
@@ -6780,6 +6916,14 @@ Error indicating message size exceeded in external functions.
 
 ```solidity
 error MessageSizeExceeded();
+```
+
+#### ArbitraryCallNotSupported
+Error indicating arbitrary calls are not supported.
+
+
+```solidity
+error ArbitraryCallNotSupported();
 ```
 
 

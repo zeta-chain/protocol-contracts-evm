@@ -46,8 +46,8 @@ type RevertOptions struct {
 
 // MockGatewayZEVMMetaData contains all meta data concerning the MockGatewayZEVM contract.
 var MockGatewayZEVMMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"PROTOCOL_ADDRESS\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"call\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"zrc20\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"message\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"callOptions\",\"type\":\"tuple\",\"internalType\":\"structCallOptions\",\"components\":[{\"name\":\"gasLimit\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"isArbitraryCall\",\"type\":\"bool\",\"internalType\":\"bool\"}]},{\"name\":\"revertOptions\",\"type\":\"tuple\",\"internalType\":\"structRevertOptions\",\"components\":[{\"name\":\"revertAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"callOnRevert\",\"type\":\"bool\",\"internalType\":\"bool\"},{\"name\":\"abortAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"revertMessage\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"onRevertGasLimit\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"CallEmitted\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"},{\"name\":\"zrc20\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"message\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"},{\"name\":\"callOptions\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structCallOptions\",\"components\":[{\"name\":\"gasLimit\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"isArbitraryCall\",\"type\":\"bool\",\"internalType\":\"bool\"}]},{\"name\":\"revertOptions\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structRevertOptions\",\"components\":[{\"name\":\"revertAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"callOnRevert\",\"type\":\"bool\",\"internalType\":\"bool\"},{\"name\":\"abortAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"revertMessage\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"onRevertGasLimit\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"anonymous\":false}]",
-	Bin: "0x6080604052348015600e575f80fd5b5061052f8061001c5f395ff3fe608060405234801561000f575f80fd5b5060043610610034575f3560e01c806306cb8983146100385780632722feee1461004d575b5f80fd5b61004b61004636600461019a565b610091565b005b61006873735b14bb79463307aacbed86daf3322b1e6226ab81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b7ffa84a91b0ed9555afae4459021634264ec770c42989afa595d13944058e229e58686868686866040516100ca96959493929190610440565b60405180910390a1505050505050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b803573ffffffffffffffffffffffffffffffffffffffff8116811461012a575f80fd5b919050565b5f8083601f84011261013f575f80fd5b50813567ffffffffffffffff811115610156575f80fd5b60208301915083602082850101111561016d575f80fd5b9250929050565b5f60408284031215610184575f80fd5b50919050565b5f60a08284031215610184575f80fd5b5f805f805f8060c087890312156101af575f80fd5b863567ffffffffffffffff8111156101c5575f80fd5b8701601f810189136101d5575f80fd5b803567ffffffffffffffff8111156101ef576101ef6100da565b6040517fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0603f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f8501160116810181811067ffffffffffffffff8211171561025b5761025b6100da565b6040528181528282016020018b1015610272575f80fd5b816020840160208301375f6020838301015280985050505061029660208801610107565b9450604087013567ffffffffffffffff8111156102b1575f80fd5b6102bd89828a0161012f565b90955093506102d190508860608901610174565b915060a087013567ffffffffffffffff8111156102ec575f80fd5b6102f889828a0161018a565b9150509295509295509295565b81835281816020850137505f602082840101525f60207fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f840116840101905092915050565b8035801515811461012a575f80fd5b73ffffffffffffffffffffffffffffffffffffffff61037982610107565b1682526103886020820161034c565b1515602083015273ffffffffffffffffffffffffffffffffffffffff6103b060408301610107565b1660408301525f60608201357fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe18336030181126103eb575f80fd5b820160208101903567ffffffffffffffff811115610407575f80fd5b803603821315610415575f80fd5b60a0606086015261042a60a086018284610305565b6080948501359590940194909452509092915050565b60c081525f87518060c08401528060208a0160e085015e5f60e082850101527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f8201168301905073ffffffffffffffffffffffffffffffffffffffff8816602084015260e08382030160408401526104be60e082018789610305565b8535606085015290506104d36020860161034c565b1515608084015282810360a08401526104ec818561035b565b999850505050505050505056fea2646970667358221220e1773077505114fa5bb1d929ae42090e932ffe5f3105c4cf6dab63871634104064736f6c634300081a0033",
+	ABI: "[{\"type\":\"function\",\"name\":\"PROTOCOL_ADDRESS\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"withdrawAndCall\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"zrc20\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"message\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"callOptions\",\"type\":\"tuple\",\"internalType\":\"structCallOptions\",\"components\":[{\"name\":\"gasLimit\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"isArbitraryCall\",\"type\":\"bool\",\"internalType\":\"bool\"}]},{\"name\":\"revertOptions\",\"type\":\"tuple\",\"internalType\":\"structRevertOptions\",\"components\":[{\"name\":\"revertAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"callOnRevert\",\"type\":\"bool\",\"internalType\":\"bool\"},{\"name\":\"abortAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"revertMessage\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"onRevertGasLimit\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"WithdrawAndCallEmitted\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"},{\"name\":\"zrc20\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"message\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"},{\"name\":\"callOptions\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structCallOptions\",\"components\":[{\"name\":\"gasLimit\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"isArbitraryCall\",\"type\":\"bool\",\"internalType\":\"bool\"}]},{\"name\":\"revertOptions\",\"type\":\"tuple\",\"indexed\":false,\"internalType\":\"structRevertOptions\",\"components\":[{\"name\":\"revertAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"callOnRevert\",\"type\":\"bool\",\"internalType\":\"bool\"},{\"name\":\"abortAddress\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"revertMessage\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"onRevertGasLimit\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"anonymous\":false}]",
+	Bin: "0x6080604052348015600e575f80fd5b506105378061001c5f395ff3fe608060405234801561000f575f80fd5b5060043610610034575f3560e01c80632722feee146100385780637b15118b1461007c575b5f80fd5b61005373735b14bb79463307aacbed86daf3322b1e6226ab81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b61008f61008a36600461019b565b610091565b005b7f712fc301a93269775bb67d50a844ab29eb58b69625ff0faaeeb042c10e166e608786868686866040516100ca96959493929190610448565b60405180910390a150505050505050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b803573ffffffffffffffffffffffffffffffffffffffff8116811461012b575f80fd5b919050565b5f8083601f840112610140575f80fd5b50813567ffffffffffffffff811115610157575f80fd5b60208301915083602082850101111561016e575f80fd5b9250929050565b5f60408284031215610185575f80fd5b50919050565b5f60a08284031215610185575f80fd5b5f805f805f805f60e0888a0312156101b1575f80fd5b873567ffffffffffffffff8111156101c7575f80fd5b8801601f81018a136101d7575f80fd5b803567ffffffffffffffff8111156101f1576101f16100db565b6040517fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0603f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f8501160116810181811067ffffffffffffffff8211171561025d5761025d6100db565b6040528181528282016020018c1015610274575f80fd5b816020840160208301375f60209282018301529850890135965061029c905060408901610108565b9450606088013567ffffffffffffffff8111156102b7575f80fd5b6102c38a828b01610130565b90955093506102d790508960808a01610175565b915060c088013567ffffffffffffffff8111156102f2575f80fd5b6102fe8a828b0161018b565b91505092959891949750929550565b81835281816020850137505f602082840101525f60207fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f840116840101905092915050565b8035801515811461012b575f80fd5b73ffffffffffffffffffffffffffffffffffffffff61038182610108565b16825261039060208201610354565b1515602083015273ffffffffffffffffffffffffffffffffffffffff6103b860408301610108565b1660408301525f60608201357fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe18336030181126103f3575f80fd5b820160208101903567ffffffffffffffff81111561040f575f80fd5b80360382131561041d575f80fd5b60a0606086015261043260a08601828461030d565b6080948501359590940194909452509092915050565b60c081525f87518060c08401528060208a0160e085015e5f60e082850101527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f8201168301905073ffffffffffffffffffffffffffffffffffffffff8816602084015260e08382030160408401526104c660e08201878961030d565b8535606085015290506104db60208601610354565b1515608084015282810360a08401526104f48185610363565b999850505050505050505056fea26469706673582212207d2e053f93597a8778f1211d86892abfae7d37b30d7b6c4c6bb01117d97205c864736f6c634300081a0033",
 }
 
 // MockGatewayZEVMABI is the input ABI used to generate the binding from.
@@ -248,30 +248,30 @@ func (_MockGatewayZEVM *MockGatewayZEVMCallerSession) PROTOCOLADDRESS() (common.
 	return _MockGatewayZEVM.Contract.PROTOCOLADDRESS(&_MockGatewayZEVM.CallOpts)
 }
 
-// Call is a paid mutator transaction binding the contract method 0x06cb8983.
+// WithdrawAndCall is a paid mutator transaction binding the contract method 0x7b15118b.
 //
-// Solidity: function call(bytes receiver, address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions) returns()
-func (_MockGatewayZEVM *MockGatewayZEVMTransactor) Call(opts *bind.TransactOpts, receiver []byte, zrc20 common.Address, message []byte, callOptions CallOptions, revertOptions RevertOptions) (*types.Transaction, error) {
-	return _MockGatewayZEVM.contract.Transact(opts, "call", receiver, zrc20, message, callOptions, revertOptions)
+// Solidity: function withdrawAndCall(bytes receiver, uint256 , address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions) returns()
+func (_MockGatewayZEVM *MockGatewayZEVMTransactor) WithdrawAndCall(opts *bind.TransactOpts, receiver []byte, arg1 *big.Int, zrc20 common.Address, message []byte, callOptions CallOptions, revertOptions RevertOptions) (*types.Transaction, error) {
+	return _MockGatewayZEVM.contract.Transact(opts, "withdrawAndCall", receiver, arg1, zrc20, message, callOptions, revertOptions)
 }
 
-// Call is a paid mutator transaction binding the contract method 0x06cb8983.
+// WithdrawAndCall is a paid mutator transaction binding the contract method 0x7b15118b.
 //
-// Solidity: function call(bytes receiver, address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions) returns()
-func (_MockGatewayZEVM *MockGatewayZEVMSession) Call(receiver []byte, zrc20 common.Address, message []byte, callOptions CallOptions, revertOptions RevertOptions) (*types.Transaction, error) {
-	return _MockGatewayZEVM.Contract.Call(&_MockGatewayZEVM.TransactOpts, receiver, zrc20, message, callOptions, revertOptions)
+// Solidity: function withdrawAndCall(bytes receiver, uint256 , address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions) returns()
+func (_MockGatewayZEVM *MockGatewayZEVMSession) WithdrawAndCall(receiver []byte, arg1 *big.Int, zrc20 common.Address, message []byte, callOptions CallOptions, revertOptions RevertOptions) (*types.Transaction, error) {
+	return _MockGatewayZEVM.Contract.WithdrawAndCall(&_MockGatewayZEVM.TransactOpts, receiver, arg1, zrc20, message, callOptions, revertOptions)
 }
 
-// Call is a paid mutator transaction binding the contract method 0x06cb8983.
+// WithdrawAndCall is a paid mutator transaction binding the contract method 0x7b15118b.
 //
-// Solidity: function call(bytes receiver, address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions) returns()
-func (_MockGatewayZEVM *MockGatewayZEVMTransactorSession) Call(receiver []byte, zrc20 common.Address, message []byte, callOptions CallOptions, revertOptions RevertOptions) (*types.Transaction, error) {
-	return _MockGatewayZEVM.Contract.Call(&_MockGatewayZEVM.TransactOpts, receiver, zrc20, message, callOptions, revertOptions)
+// Solidity: function withdrawAndCall(bytes receiver, uint256 , address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions) returns()
+func (_MockGatewayZEVM *MockGatewayZEVMTransactorSession) WithdrawAndCall(receiver []byte, arg1 *big.Int, zrc20 common.Address, message []byte, callOptions CallOptions, revertOptions RevertOptions) (*types.Transaction, error) {
+	return _MockGatewayZEVM.Contract.WithdrawAndCall(&_MockGatewayZEVM.TransactOpts, receiver, arg1, zrc20, message, callOptions, revertOptions)
 }
 
-// MockGatewayZEVMCallEmittedIterator is returned from FilterCallEmitted and is used to iterate over the raw logs and unpacked data for CallEmitted events raised by the MockGatewayZEVM contract.
-type MockGatewayZEVMCallEmittedIterator struct {
-	Event *MockGatewayZEVMCallEmitted // Event containing the contract specifics and raw log
+// MockGatewayZEVMWithdrawAndCallEmittedIterator is returned from FilterWithdrawAndCallEmitted and is used to iterate over the raw logs and unpacked data for WithdrawAndCallEmitted events raised by the MockGatewayZEVM contract.
+type MockGatewayZEVMWithdrawAndCallEmittedIterator struct {
+	Event *MockGatewayZEVMWithdrawAndCallEmitted // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -285,7 +285,7 @@ type MockGatewayZEVMCallEmittedIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *MockGatewayZEVMCallEmittedIterator) Next() bool {
+func (it *MockGatewayZEVMWithdrawAndCallEmittedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -294,7 +294,7 @@ func (it *MockGatewayZEVMCallEmittedIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(MockGatewayZEVMCallEmitted)
+			it.Event = new(MockGatewayZEVMWithdrawAndCallEmitted)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -309,7 +309,7 @@ func (it *MockGatewayZEVMCallEmittedIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(MockGatewayZEVMCallEmitted)
+		it.Event = new(MockGatewayZEVMWithdrawAndCallEmitted)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -325,19 +325,19 @@ func (it *MockGatewayZEVMCallEmittedIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *MockGatewayZEVMCallEmittedIterator) Error() error {
+func (it *MockGatewayZEVMWithdrawAndCallEmittedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *MockGatewayZEVMCallEmittedIterator) Close() error {
+func (it *MockGatewayZEVMWithdrawAndCallEmittedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// MockGatewayZEVMCallEmitted represents a CallEmitted event raised by the MockGatewayZEVM contract.
-type MockGatewayZEVMCallEmitted struct {
+// MockGatewayZEVMWithdrawAndCallEmitted represents a WithdrawAndCallEmitted event raised by the MockGatewayZEVM contract.
+type MockGatewayZEVMWithdrawAndCallEmitted struct {
 	Receiver      []byte
 	Zrc20         common.Address
 	Message       []byte
@@ -346,24 +346,24 @@ type MockGatewayZEVMCallEmitted struct {
 	Raw           types.Log // Blockchain specific contextual infos
 }
 
-// FilterCallEmitted is a free log retrieval operation binding the contract event 0xfa84a91b0ed9555afae4459021634264ec770c42989afa595d13944058e229e5.
+// FilterWithdrawAndCallEmitted is a free log retrieval operation binding the contract event 0x712fc301a93269775bb67d50a844ab29eb58b69625ff0faaeeb042c10e166e60.
 //
-// Solidity: event CallEmitted(bytes receiver, address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions)
-func (_MockGatewayZEVM *MockGatewayZEVMFilterer) FilterCallEmitted(opts *bind.FilterOpts) (*MockGatewayZEVMCallEmittedIterator, error) {
+// Solidity: event WithdrawAndCallEmitted(bytes receiver, address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions)
+func (_MockGatewayZEVM *MockGatewayZEVMFilterer) FilterWithdrawAndCallEmitted(opts *bind.FilterOpts) (*MockGatewayZEVMWithdrawAndCallEmittedIterator, error) {
 
-	logs, sub, err := _MockGatewayZEVM.contract.FilterLogs(opts, "CallEmitted")
+	logs, sub, err := _MockGatewayZEVM.contract.FilterLogs(opts, "WithdrawAndCallEmitted")
 	if err != nil {
 		return nil, err
 	}
-	return &MockGatewayZEVMCallEmittedIterator{contract: _MockGatewayZEVM.contract, event: "CallEmitted", logs: logs, sub: sub}, nil
+	return &MockGatewayZEVMWithdrawAndCallEmittedIterator{contract: _MockGatewayZEVM.contract, event: "WithdrawAndCallEmitted", logs: logs, sub: sub}, nil
 }
 
-// WatchCallEmitted is a free log subscription operation binding the contract event 0xfa84a91b0ed9555afae4459021634264ec770c42989afa595d13944058e229e5.
+// WatchWithdrawAndCallEmitted is a free log subscription operation binding the contract event 0x712fc301a93269775bb67d50a844ab29eb58b69625ff0faaeeb042c10e166e60.
 //
-// Solidity: event CallEmitted(bytes receiver, address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions)
-func (_MockGatewayZEVM *MockGatewayZEVMFilterer) WatchCallEmitted(opts *bind.WatchOpts, sink chan<- *MockGatewayZEVMCallEmitted) (event.Subscription, error) {
+// Solidity: event WithdrawAndCallEmitted(bytes receiver, address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions)
+func (_MockGatewayZEVM *MockGatewayZEVMFilterer) WatchWithdrawAndCallEmitted(opts *bind.WatchOpts, sink chan<- *MockGatewayZEVMWithdrawAndCallEmitted) (event.Subscription, error) {
 
-	logs, sub, err := _MockGatewayZEVM.contract.WatchLogs(opts, "CallEmitted")
+	logs, sub, err := _MockGatewayZEVM.contract.WatchLogs(opts, "WithdrawAndCallEmitted")
 	if err != nil {
 		return nil, err
 	}
@@ -373,8 +373,8 @@ func (_MockGatewayZEVM *MockGatewayZEVMFilterer) WatchCallEmitted(opts *bind.Wat
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(MockGatewayZEVMCallEmitted)
-				if err := _MockGatewayZEVM.contract.UnpackLog(event, "CallEmitted", log); err != nil {
+				event := new(MockGatewayZEVMWithdrawAndCallEmitted)
+				if err := _MockGatewayZEVM.contract.UnpackLog(event, "WithdrawAndCallEmitted", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -395,12 +395,12 @@ func (_MockGatewayZEVM *MockGatewayZEVMFilterer) WatchCallEmitted(opts *bind.Wat
 	}), nil
 }
 
-// ParseCallEmitted is a log parse operation binding the contract event 0xfa84a91b0ed9555afae4459021634264ec770c42989afa595d13944058e229e5.
+// ParseWithdrawAndCallEmitted is a log parse operation binding the contract event 0x712fc301a93269775bb67d50a844ab29eb58b69625ff0faaeeb042c10e166e60.
 //
-// Solidity: event CallEmitted(bytes receiver, address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions)
-func (_MockGatewayZEVM *MockGatewayZEVMFilterer) ParseCallEmitted(log types.Log) (*MockGatewayZEVMCallEmitted, error) {
-	event := new(MockGatewayZEVMCallEmitted)
-	if err := _MockGatewayZEVM.contract.UnpackLog(event, "CallEmitted", log); err != nil {
+// Solidity: event WithdrawAndCallEmitted(bytes receiver, address zrc20, bytes message, (uint256,bool) callOptions, (address,bool,address,bytes,uint256) revertOptions)
+func (_MockGatewayZEVM *MockGatewayZEVMFilterer) ParseWithdrawAndCallEmitted(log types.Log) (*MockGatewayZEVMWithdrawAndCallEmitted, error) {
+	event := new(MockGatewayZEVMWithdrawAndCallEmitted)
+	if err := _MockGatewayZEVM.contract.UnpackLog(event, "WithdrawAndCallEmitted", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
