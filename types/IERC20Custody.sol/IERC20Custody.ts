@@ -44,7 +44,6 @@ export type RevertContextStructOutput = [
 export interface IERC20CustodyInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "refundStrandedFunds"
       | "whitelisted"
       | "withdraw"
       | "withdrawAndCall"
@@ -54,7 +53,6 @@ export interface IERC20CustodyInterface extends Interface {
   getEvent(
     nameOrSignatureOrTopic:
       | "Deposited"
-      | "StrandedFundsRefunded"
       | "Unwhitelisted"
       | "UpdatedCustodyTSSAddress"
       | "Whitelisted"
@@ -63,10 +61,6 @@ export interface IERC20CustodyInterface extends Interface {
       | "WithdrawnAndReverted"
   ): EventFragment;
 
-  encodeFunctionData(
-    functionFragment: "refundStrandedFunds",
-    values: [AddressLike, AddressLike, BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "whitelisted",
     values: [AddressLike]
@@ -96,10 +90,6 @@ export interface IERC20CustodyInterface extends Interface {
     ]
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "refundStrandedFunds",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "whitelisted",
     data: BytesLike
@@ -133,24 +123,6 @@ export namespace DepositedEvent {
     asset: string;
     amount: bigint;
     message: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace StrandedFundsRefundedEvent {
-  export type InputTuple = [
-    to: AddressLike,
-    token: AddressLike,
-    amount: BigNumberish
-  ];
-  export type OutputTuple = [to: string, token: string, amount: bigint];
-  export interface OutputObject {
-    to: string;
-    token: string;
-    amount: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -312,12 +284,6 @@ export interface IERC20Custody extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  refundStrandedFunds: TypedContractMethod<
-    [to: AddressLike, token: AddressLike, amount: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-
   whitelisted: TypedContractMethod<[token: AddressLike], [boolean], "view">;
 
   withdraw: TypedContractMethod<
@@ -354,13 +320,6 @@ export interface IERC20Custody extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
-  getFunction(
-    nameOrSignature: "refundStrandedFunds"
-  ): TypedContractMethod<
-    [to: AddressLike, token: AddressLike, amount: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
   getFunction(
     nameOrSignature: "whitelisted"
   ): TypedContractMethod<[token: AddressLike], [boolean], "view">;
@@ -404,13 +363,6 @@ export interface IERC20Custody extends BaseContract {
     DepositedEvent.InputTuple,
     DepositedEvent.OutputTuple,
     DepositedEvent.OutputObject
-  >;
-  getEvent(
-    key: "StrandedFundsRefunded"
-  ): TypedContractEvent<
-    StrandedFundsRefundedEvent.InputTuple,
-    StrandedFundsRefundedEvent.OutputTuple,
-    StrandedFundsRefundedEvent.OutputObject
   >;
   getEvent(
     key: "Unwhitelisted"
@@ -465,17 +417,6 @@ export interface IERC20Custody extends BaseContract {
       DepositedEvent.InputTuple,
       DepositedEvent.OutputTuple,
       DepositedEvent.OutputObject
-    >;
-
-    "StrandedFundsRefunded(address,address,uint256)": TypedContractEvent<
-      StrandedFundsRefundedEvent.InputTuple,
-      StrandedFundsRefundedEvent.OutputTuple,
-      StrandedFundsRefundedEvent.OutputObject
-    >;
-    StrandedFundsRefunded: TypedContractEvent<
-      StrandedFundsRefundedEvent.InputTuple,
-      StrandedFundsRefundedEvent.OutputTuple,
-      StrandedFundsRefundedEvent.OutputObject
     >;
 
     "Unwhitelisted(address)": TypedContractEvent<

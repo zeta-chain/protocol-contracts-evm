@@ -23,6 +23,38 @@ import type {
   TypedContractMethod,
 } from "./common";
 
+export type CallOptionsStruct = {
+  gasLimit: BigNumberish;
+  isArbitraryCall: boolean;
+};
+
+export type CallOptionsStructOutput = [
+  gasLimit: bigint,
+  isArbitraryCall: boolean
+] & { gasLimit: bigint; isArbitraryCall: boolean };
+
+export type RevertOptionsStruct = {
+  revertAddress: AddressLike;
+  callOnRevert: boolean;
+  abortAddress: AddressLike;
+  revertMessage: BytesLike;
+  onRevertGasLimit: BigNumberish;
+};
+
+export type RevertOptionsStructOutput = [
+  revertAddress: string,
+  callOnRevert: boolean,
+  abortAddress: string,
+  revertMessage: string,
+  onRevertGasLimit: bigint
+] & {
+  revertAddress: string;
+  callOnRevert: boolean;
+  abortAddress: string;
+  revertMessage: string;
+  onRevertGasLimit: bigint;
+};
+
 export type MessageContextStruct = {
   sender: BytesLike;
   senderEVM: AddressLike;
@@ -49,38 +81,6 @@ export type RevertContextStructOutput = [
   revertMessage: string
 ] & { sender: string; asset: string; amount: bigint; revertMessage: string };
 
-export type RevertOptionsStruct = {
-  revertAddress: AddressLike;
-  callOnRevert: boolean;
-  abortAddress: AddressLike;
-  revertMessage: BytesLike;
-  onRevertGasLimit: BigNumberish;
-};
-
-export type RevertOptionsStructOutput = [
-  revertAddress: string,
-  callOnRevert: boolean,
-  abortAddress: string,
-  revertMessage: string,
-  onRevertGasLimit: bigint
-] & {
-  revertAddress: string;
-  callOnRevert: boolean;
-  abortAddress: string;
-  revertMessage: string;
-  onRevertGasLimit: bigint;
-};
-
-export type CallOptionsStruct = {
-  gasLimit: BigNumberish;
-  isArbitraryCall: boolean;
-};
-
-export type CallOptionsStructOutput = [
-  gasLimit: bigint,
-  isArbitraryCall: boolean
-] & { gasLimit: bigint; isArbitraryCall: boolean };
-
 export interface GatewayZEVMUpgradeTestInterface extends Interface {
   getFunction(
     nameOrSignature:
@@ -89,6 +89,8 @@ export interface GatewayZEVMUpgradeTestInterface extends Interface {
       | "PAUSER_ROLE"
       | "PROTOCOL_ADDRESS"
       | "UPGRADE_INTERFACE_VERSION"
+      | "call(bytes,address,bytes,(uint256,bool),(address,bool,address,bytes,uint256))"
+      | "call(bytes,address,bytes,uint256,(address,bool,address,bytes,uint256))"
       | "deposit"
       | "depositAndCall((bytes,address,uint256),uint256,address,bytes)"
       | "depositAndCall((bytes,address,uint256),address,uint256,address,bytes)"
@@ -150,6 +152,26 @@ export interface GatewayZEVMUpgradeTestInterface extends Interface {
   encodeFunctionData(
     functionFragment: "UPGRADE_INTERFACE_VERSION",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "call(bytes,address,bytes,(uint256,bool),(address,bool,address,bytes,uint256))",
+    values: [
+      BytesLike,
+      AddressLike,
+      BytesLike,
+      CallOptionsStruct,
+      RevertOptionsStruct
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "call(bytes,address,bytes,uint256,(address,bool,address,bytes,uint256))",
+    values: [
+      BytesLike,
+      AddressLike,
+      BytesLike,
+      BigNumberish,
+      RevertOptionsStruct
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "deposit",
@@ -297,6 +319,14 @@ export interface GatewayZEVMUpgradeTestInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "UPGRADE_INTERFACE_VERSION",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "call(bytes,address,bytes,(uint256,bool),(address,bool,address,bytes,uint256))",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "call(bytes,address,bytes,uint256,(address,bool,address,bytes,uint256))",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
@@ -690,6 +720,30 @@ export interface GatewayZEVMUpgradeTest extends BaseContract {
 
   UPGRADE_INTERFACE_VERSION: TypedContractMethod<[], [string], "view">;
 
+  "call(bytes,address,bytes,(uint256,bool),(address,bool,address,bytes,uint256))": TypedContractMethod<
+    [
+      receiver: BytesLike,
+      zrc20: AddressLike,
+      message: BytesLike,
+      callOptions: CallOptionsStruct,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "nonpayable"
+  >;
+
+  "call(bytes,address,bytes,uint256,(address,bool,address,bytes,uint256))": TypedContractMethod<
+    [
+      receiver: BytesLike,
+      zrc20: AddressLike,
+      message: BytesLike,
+      gasLimit: BigNumberish,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "nonpayable"
+  >;
+
   deposit: TypedContractMethod<
     [zrc20: AddressLike, amount: BigNumberish, target: AddressLike],
     [void],
@@ -894,6 +948,32 @@ export interface GatewayZEVMUpgradeTest extends BaseContract {
   getFunction(
     nameOrSignature: "UPGRADE_INTERFACE_VERSION"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "call(bytes,address,bytes,(uint256,bool),(address,bool,address,bytes,uint256))"
+  ): TypedContractMethod<
+    [
+      receiver: BytesLike,
+      zrc20: AddressLike,
+      message: BytesLike,
+      callOptions: CallOptionsStruct,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "call(bytes,address,bytes,uint256,(address,bool,address,bytes,uint256))"
+  ): TypedContractMethod<
+    [
+      receiver: BytesLike,
+      zrc20: AddressLike,
+      message: BytesLike,
+      gasLimit: BigNumberish,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "deposit"
   ): TypedContractMethod<

@@ -23,6 +23,38 @@ import type {
   TypedContractMethod,
 } from "../common";
 
+export type CallOptionsStruct = {
+  gasLimit: BigNumberish;
+  isArbitraryCall: boolean;
+};
+
+export type CallOptionsStructOutput = [
+  gasLimit: bigint,
+  isArbitraryCall: boolean
+] & { gasLimit: bigint; isArbitraryCall: boolean };
+
+export type RevertOptionsStruct = {
+  revertAddress: AddressLike;
+  callOnRevert: boolean;
+  abortAddress: AddressLike;
+  revertMessage: BytesLike;
+  onRevertGasLimit: BigNumberish;
+};
+
+export type RevertOptionsStructOutput = [
+  revertAddress: string,
+  callOnRevert: boolean,
+  abortAddress: string,
+  revertMessage: string,
+  onRevertGasLimit: bigint
+] & {
+  revertAddress: string;
+  callOnRevert: boolean;
+  abortAddress: string;
+  revertMessage: string;
+  onRevertGasLimit: bigint;
+};
+
 export type MessageContextStruct = {
   sender: BytesLike;
   senderEVM: AddressLike;
@@ -49,41 +81,10 @@ export type RevertContextStructOutput = [
   revertMessage: string
 ] & { sender: string; asset: string; amount: bigint; revertMessage: string };
 
-export type RevertOptionsStruct = {
-  revertAddress: AddressLike;
-  callOnRevert: boolean;
-  abortAddress: AddressLike;
-  revertMessage: BytesLike;
-  onRevertGasLimit: BigNumberish;
-};
-
-export type RevertOptionsStructOutput = [
-  revertAddress: string,
-  callOnRevert: boolean,
-  abortAddress: string,
-  revertMessage: string,
-  onRevertGasLimit: bigint
-] & {
-  revertAddress: string;
-  callOnRevert: boolean;
-  abortAddress: string;
-  revertMessage: string;
-  onRevertGasLimit: bigint;
-};
-
-export type CallOptionsStruct = {
-  gasLimit: BigNumberish;
-  isArbitraryCall: boolean;
-};
-
-export type CallOptionsStructOutput = [
-  gasLimit: bigint,
-  isArbitraryCall: boolean
-] & { gasLimit: bigint; isArbitraryCall: boolean };
-
 export interface IGatewayZEVMInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "call"
       | "deposit"
       | "depositAndCall((bytes,address,uint256),uint256,address,bytes)"
       | "depositAndCall((bytes,address,uint256),address,uint256,address,bytes)"
@@ -100,6 +101,16 @@ export interface IGatewayZEVMInterface extends Interface {
     nameOrSignatureOrTopic: "Called" | "Withdrawn" | "WithdrawnAndCalled"
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "call",
+    values: [
+      BytesLike,
+      AddressLike,
+      BytesLike,
+      CallOptionsStruct,
+      RevertOptionsStruct
+    ]
+  ): string;
   encodeFunctionData(
     functionFragment: "deposit",
     values: [AddressLike, BigNumberish, AddressLike]
@@ -167,6 +178,7 @@ export interface IGatewayZEVMInterface extends Interface {
     ]
   ): string;
 
+  decodeFunctionResult(functionFragment: "call", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "depositAndCall((bytes,address,uint256),uint256,address,bytes)",
@@ -363,6 +375,18 @@ export interface IGatewayZEVM extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  call: TypedContractMethod<
+    [
+      receiver: BytesLike,
+      zrc20: AddressLike,
+      message: BytesLike,
+      callOptions: CallOptionsStruct,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "nonpayable"
+  >;
+
   deposit: TypedContractMethod<
     [zrc20: AddressLike, amount: BigNumberish, target: AddressLike],
     [void],
@@ -473,6 +497,19 @@ export interface IGatewayZEVM extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "call"
+  ): TypedContractMethod<
+    [
+      receiver: BytesLike,
+      zrc20: AddressLike,
+      message: BytesLike,
+      callOptions: CallOptionsStruct,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "deposit"
   ): TypedContractMethod<

@@ -11,11 +11,6 @@ import type {
 const _abi = [
   {
     type: "error",
-    name: "ArbitraryCallNotSupported",
-    inputs: [],
-  },
-  {
-    type: "error",
     name: "CallerIsNotProtocol",
     inputs: [],
   },

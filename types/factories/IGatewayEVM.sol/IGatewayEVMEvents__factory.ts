@@ -343,38 +343,6 @@ const _abi = [
   },
   {
     type: "event",
-    name: "UpdatedDepositAllowedAsset",
-    inputs: [
-      {
-        name: "asset",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "allowed",
-        type: "bool",
-        indexed: false,
-        internalType: "bool",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "UpdatedDepositPaused",
-    inputs: [
-      {
-        name: "paused",
-        type: "bool",
-        indexed: false,
-        internalType: "bool",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
     name: "UpdatedGatewayTSSAddress",
     inputs: [
       {

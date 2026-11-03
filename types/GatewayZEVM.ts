@@ -23,6 +23,38 @@ import type {
   TypedContractMethod,
 } from "./common";
 
+export type CallOptionsStruct = {
+  gasLimit: BigNumberish;
+  isArbitraryCall: boolean;
+};
+
+export type CallOptionsStructOutput = [
+  gasLimit: bigint,
+  isArbitraryCall: boolean
+] & { gasLimit: bigint; isArbitraryCall: boolean };
+
+export type RevertOptionsStruct = {
+  revertAddress: AddressLike;
+  callOnRevert: boolean;
+  abortAddress: AddressLike;
+  revertMessage: BytesLike;
+  onRevertGasLimit: BigNumberish;
+};
+
+export type RevertOptionsStructOutput = [
+  revertAddress: string,
+  callOnRevert: boolean,
+  abortAddress: string,
+  revertMessage: string,
+  onRevertGasLimit: bigint
+] & {
+  revertAddress: string;
+  callOnRevert: boolean;
+  abortAddress: string;
+  revertMessage: string;
+  onRevertGasLimit: bigint;
+};
+
 export type MessageContextStruct = {
   sender: BytesLike;
   senderEVM: AddressLike;
@@ -74,38 +106,6 @@ export type AbortContextStructOutput = [
   revertMessage: string;
 };
 
-export type RevertOptionsStruct = {
-  revertAddress: AddressLike;
-  callOnRevert: boolean;
-  abortAddress: AddressLike;
-  revertMessage: BytesLike;
-  onRevertGasLimit: BigNumberish;
-};
-
-export type RevertOptionsStructOutput = [
-  revertAddress: string,
-  callOnRevert: boolean,
-  abortAddress: string,
-  revertMessage: string,
-  onRevertGasLimit: bigint
-] & {
-  revertAddress: string;
-  callOnRevert: boolean;
-  abortAddress: string;
-  revertMessage: string;
-  onRevertGasLimit: bigint;
-};
-
-export type CallOptionsStruct = {
-  gasLimit: BigNumberish;
-  isArbitraryCall: boolean;
-};
-
-export type CallOptionsStructOutput = [
-  gasLimit: bigint,
-  isArbitraryCall: boolean
-] & { gasLimit: bigint; isArbitraryCall: boolean };
-
 export interface GatewayZEVMInterface extends Interface {
   getFunction(
     nameOrSignature:
@@ -115,6 +115,7 @@ export interface GatewayZEVMInterface extends Interface {
       | "PAUSER_ROLE"
       | "PROTOCOL_ADDRESS"
       | "UPGRADE_INTERFACE_VERSION"
+      | "call"
       | "deposit"
       | "depositAndCall((bytes,address,uint256),uint256,address,bytes)"
       | "depositAndCall((bytes,address,uint256),address,uint256,address,bytes)"
@@ -179,6 +180,16 @@ export interface GatewayZEVMInterface extends Interface {
   encodeFunctionData(
     functionFragment: "UPGRADE_INTERFACE_VERSION",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "call",
+    values: [
+      BytesLike,
+      AddressLike,
+      BytesLike,
+      CallOptionsStruct,
+      RevertOptionsStruct
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "deposit",
@@ -325,6 +336,7 @@ export interface GatewayZEVMInterface extends Interface {
     functionFragment: "UPGRADE_INTERFACE_VERSION",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "call", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "depositAndCall((bytes,address,uint256),uint256,address,bytes)",
@@ -675,6 +687,18 @@ export interface GatewayZEVM extends BaseContract {
 
   UPGRADE_INTERFACE_VERSION: TypedContractMethod<[], [string], "view">;
 
+  call: TypedContractMethod<
+    [
+      receiver: BytesLike,
+      zrc20: AddressLike,
+      message: BytesLike,
+      callOptions: CallOptionsStruct,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "nonpayable"
+  >;
+
   deposit: TypedContractMethod<
     [zrc20: AddressLike, amount: BigNumberish, target: AddressLike],
     [void],
@@ -875,6 +899,19 @@ export interface GatewayZEVM extends BaseContract {
   getFunction(
     nameOrSignature: "UPGRADE_INTERFACE_VERSION"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "call"
+  ): TypedContractMethod<
+    [
+      receiver: BytesLike,
+      zrc20: AddressLike,
+      message: BytesLike,
+      callOptions: CallOptionsStruct,
+      revertOptions: RevertOptionsStruct
+    ],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "deposit"
   ): TypedContractMethod<
