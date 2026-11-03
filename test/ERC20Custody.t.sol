@@ -434,6 +434,67 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         custody.withdraw(destination, address(token), amount);
     }
 
+    function testRefundStrandedFunds() public {
+        uint256 amount = 50_000;
+        uint256 balanceBefore = token.balanceOf(destination);
+        assertEq(balanceBefore, 0);
+        uint256 balanceBeforeCustody = token.balanceOf(address(custody));
+
+        bytes memory transferData = abi.encodeWithSignature("transfer(address,uint256)", address(destination), amount);
+        vm.expectCall(address(token), 0, transferData);
+        vm.expectEmit(true, true, true, true, address(custody));
+        emit StrandedFundsRefunded(destination, address(token), amount);
+        vm.prank(owner);
+        custody.refundStrandedFunds(destination, address(token), amount);
+
+        assertEq(token.balanceOf(destination), amount);
+        assertEq(token.balanceOf(address(custody)), balanceBeforeCustody - amount);
+    }
+
+    function testRefundStrandedFundsFailsIfSenderIsNotAdmin() public {
+        uint256 amount = 50_000;
+
+        vm.prank(tssAddress);
+        vm.expectRevert(
+            abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, tssAddress, DEFAULT_ADMIN_ROLE)
+        );
+        custody.refundStrandedFunds(destination, address(token), amount);
+
+        vm.prank(foo);
+        vm.expectRevert(abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, foo, DEFAULT_ADMIN_ROLE));
+        custody.refundStrandedFunds(destination, address(token), amount);
+    }
+
+    function testRefundStrandedFundsFailsIfToIsZeroAddress() public {
+        vm.prank(owner);
+        vm.expectRevert(ZeroAddress.selector);
+        custody.refundStrandedFunds(address(0), address(token), 1);
+    }
+
+    function testRefundStrandedFundsFailsIfTokenIsNotWhitelisted() public {
+        vm.startPrank(owner);
+        custody.unwhitelist(address(token));
+        vm.expectRevert(NotWhitelisted.selector);
+        custody.refundStrandedFunds(destination, address(token), 1);
+        vm.stopPrank();
+    }
+
+    function testRefundStrandedFundsFailsWhenPaused() public {
+        vm.startPrank(owner);
+        custody.pause();
+        vm.expectRevert(EnforcedPause.selector);
+        custody.refundStrandedFunds(destination, address(token), 1);
+        vm.stopPrank();
+    }
+
+    function testRefundStrandedFundsFailsIfInsufficientBalance() public {
+        uint256 custodyBalance = token.balanceOf(address(custody));
+
+        vm.prank(owner);
+        vm.expectRevert();
+        custody.refundStrandedFunds(destination, address(token), custodyBalance + 1);
+    }
+
     function testWithdrawAndRevertThroughCustody() public {
         uint256 amount = 100_000;
         bytes memory data = abi.encodePacked("hello");
@@ -565,5 +626,21 @@ contract ERC20CustodyTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IReceiv
         // Verify that gateway doesn't hold any tokens
         uint256 balanceGateway = token.balanceOf(address(gateway));
         assertEq(balanceGateway, 0);
+    }
+
+    function testUpgradeAndRefundStrandedFunds() public {
+        Upgrades.upgradeProxy(address(custody), "ERC20CustodyUpgradeTest.sol", "", owner);
+        ERC20CustodyUpgradeTest custodyV2 = ERC20CustodyUpgradeTest(address(custody));
+
+        uint256 amount = 50_000;
+        uint256 balanceBeforeCustody = token.balanceOf(address(custodyV2));
+
+        vm.expectEmit(true, true, true, true, address(custodyV2));
+        emit StrandedFundsRefunded(destination, address(token), amount);
+        vm.prank(owner);
+        custodyV2.refundStrandedFunds(destination, address(token), amount);
+
+        assertEq(token.balanceOf(destination), amount);
+        assertEq(token.balanceOf(address(custodyV2)), balanceBeforeCustody - amount);
     }
 }
