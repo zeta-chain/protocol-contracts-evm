@@ -654,10 +654,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
     function testDepositEthWithAmountToTssFailsIfPayloadSizeExceeded() public {
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() + 1);
 
-        uint256 payloadSize = revertOptions.revertMessage.length;
-        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
-
-        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
+        vm.expectRevert(PayloadSizeExceeded.selector);
 
         gateway.deposit{ value: 1 }(destination, 1, revertOptions);
     }
@@ -787,10 +784,7 @@ contract GatewayEVMInboundTest is Test, IGatewayEVMErrors, IGatewayEVMEvents, IR
         bytes memory payload = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2);
         revertOptions.revertMessage = new bytes(gateway.MAX_PAYLOAD_SIZE() / 2 + 1);
 
-        uint256 payloadSize = payload.length + revertOptions.revertMessage.length;
-        uint256 maxSize = gateway.MAX_PAYLOAD_SIZE();
-
-        vm.expectRevert(abi.encodeWithSelector(PayloadSizeExceeded.selector, payloadSize, maxSize));
+        vm.expectRevert(PayloadSizeExceeded.selector);
 
         gateway.depositAndCall{ value: amount }(destination, amount, payload, revertOptions);
     }

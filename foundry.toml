@@ -24,6 +24,8 @@ ast = true
 build_info = true
 extra_output = ["storageLayout"]
 evm_version = "cancun"
+# Keep several gateway calls in one test inside a single transaction so transient storage survives between them.
+isolate = false
 
 [fmt]
 bracket_spacing = true
