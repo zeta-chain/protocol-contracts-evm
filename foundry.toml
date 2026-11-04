@@ -25,6 +25,9 @@ ast = true
 build_info = true
 extra_output = ["storageLayout"]
 evm_version = "cancun"
+# Action fees use transient storage shared by every call in one transaction.
+# Foundry 1.8+ runs each top-level test call as its own transaction unless this is off.
+isolate = false
 
 [fmt]
 bracket_spacing = true
